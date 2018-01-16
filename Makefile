@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/16 19:18:34 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/16 19:29:32 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJ =		$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 FT =		./libft
 FT_LNK =	-L $(FT) -lft
-FT_INC =	-I $(addprefix $(FT),/includes)
+FT_INC =	-I $(FT)
 FT_LIB =	$(addprefix $(FT)/,libft.a)
 
 SDL =		./sdl/SDL2.framework/Headers
