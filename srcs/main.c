@@ -6,11 +6,16 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/17 18:21:48 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/17 21:33:39 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+/*
+**get_dist: a function that will return 0, 1 or 2 distances between a spere and
+**the screen. the distance(s) is written in envv
+*/
 
 int		get_dist(t_env *env, int x, int y, t_sphere obj)
 {
@@ -28,7 +33,7 @@ int		get_dist(t_env *env, int x, int y, t_sphere obj)
 	u1 = vect_add(r_ini, env->r);//pos pix - vcam*dist
 	r_ini = vect_add(env->r, vect_mult(env->vcam, DIST));//v cam->pix
 	env->r = vect_mult(u1, 1);//pos pix - vcam*dist
-//	env->r = vect_add(r_ini, env->pcam);
+	//	env->r = vect_add(r_ini, env->pcam);
 	u1 = vect_add(env->r, vect_mult(obj.o, -1));//rso
 	env->r2 = vect_mult(r_ini, 1 / vect_norm(r_ini));//v cam->pix unit
 	a = r_ini.x * r_ini.x + r_ini.y * r_ini.y + r_ini.z * r_ini.z;
@@ -44,6 +49,11 @@ int		get_dist(t_env *env, int x, int y, t_sphere obj)
 	}
 	return (1);
 }
+
+/*
+**get_dist: a function that will return 0, 1 or 2 distances between a spere and
+**the screen
+*/
 
 t_color		get_col(t_env *env, int x, int y)
 {
@@ -91,23 +101,28 @@ t_color		get_col(t_env *env, int x, int y)
 	}
 	else
 	{
-	//	col.r = env->objs[ob].col.r / env->objs[ob].dist * vect_norm(vect_add(env->objs[ob].o, vect_mult(env->pcam, -1)));
-	//	col.g = env->objs[ob].col.g / env->objs[ob].dist * vect_norm(vect_add(env->objs[ob].o, vect_mult(env->pcam, -1)));
-	//	col.b = env->objs[ob].col.b / env->objs[ob].dist * vect_norm(vect_add(env->objs[ob].o, vect_mult(env->pcam, -1)));
+		//	col.r = env->objs[ob].col.r / env->objs[ob].dist * vect_norm(vect_add(env->objs[ob].o, vect_mult(env->pcam, -1)));
+		//	col.g = env->objs[ob].col.g / env->objs[ob].dist * vect_norm(vect_add(env->objs[ob].o, vect_mult(env->pcam, -1)));
+		//	col.b = env->objs[ob].col.b / env->objs[ob].dist * vect_norm(vect_add(env->objs[ob].o, vect_mult(env->pcam, -1)));
 		norm = vect_add(env->objs[ob].o, vect_mult(vect_add(env->r, vect_mult(env->r2, env->objs[ob].dist)), -1));
 		norm = vect_mult(norm, 1 / vect_norm(norm));
 		norm2 = vect_add(env->r, vect_mult(env->r2, env->objs[ob].dist));
 		res = 90 - acos(M_PI * norm.x * norm2.x + norm.y * norm2.y + norm.z * norm2.z / (180 * vect_norm(norm) * vect_norm(norm2))) * 180 / M_PI;
 		res = (int)res % 360;
-	//	col.c.r = 255 * fabs(norm.x);
-	//	col.c.g = 255 * fabs(norm.y);
-	//	col.c.b = 255 * fabs(norm.z);
+		//	col.c.r = 255 * fabs(norm.x);
+		//	col.c.g = 255 * fabs(norm.y);
+		//	col.c.b = 255 * fabs(norm.z);
 		col.c.r = env->objs[ob].col.r / 90 * res;
 		col.c.g = env->objs[ob].col.g / 90 * res;
 		col.c.b = env->objs[ob].col.b / 90 * res;
 	}
 	return (col);
 }
+
+/*
+**get_dist: a function that will return 0, 1 or 2 distances between a spere and
+**the screen
+*/
 
 t_color		rays(t_env *env)
 {
@@ -201,7 +216,7 @@ int			main(int ac, char **av)
 	ft_memcpy(&env->objs[1], &env->sphere2, sizeof(t_sphere));
 	env->nb = 2;
 	fin = 0;
-//	event.type = SDL_USEREVENT;
+	//	event.type = SDL_USEREVENT;
 	while (!fin)
 	{
 		while (SDL_PollEvent(&event) != 0)
@@ -247,13 +262,13 @@ int			main(int ac, char **av)
 				env->vcam.x += 0.3;
 				env->vcam = vect_mult(env->vcam, 1 / vect_norm(env->vcam));
 			}
-		//	ft_putnbr(env->pcam.z);
-		//	ft_putstr(", ");
+			//	ft_putnbr(env->pcam.z);
+			//	ft_putstr(", ");
 		}
 		rays(env);
 	}
-//	SDL_DestroyTexture(env->textu);
-//	SDL_DestroyRenderer(env->render);
+	//	SDL_DestroyTexture(env->textu);
+	//	SDL_DestroyRenderer(env->render);
 	SDL_DestroyWindow(env->win);
 	free(env);
 	SDL_Quit();
