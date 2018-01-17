@@ -6,13 +6,14 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/16 19:29:32 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/01/17 21:59:05 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =		rtv1
 
 SRC =		main.c \
+			vector_math.c \
 
 CC =		gcc
 FLAGS =		-Wall -Wextra -Werror
