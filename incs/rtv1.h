@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2017/12/13 20:51:50 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/17 18:34:42 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,12 @@ typedef struct		s_env
 	t_sphere		sphere;
 	t_sphere		sphere2;
 }					t_env;
+
+
+double		vect_norm(t_v a);
+t_v			vect_mult(t_v a, double n);
+t_v			vect_add(t_v a, t_v b);
+double		vect_scal_prod(t_v a, t_v b);
+t_v			vect_prod(t_v a, t_v b);
 
 #endif
