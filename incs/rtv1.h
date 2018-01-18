@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/18 02:14:25 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/18 21:45:58 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 # include <sys/types.h>//read
 # include <sys/uio.h>//read
 # include <unistd.h>//read, write, close
-# include <stdlib.h> //malloc, free
-# include <stdio.h> //perror, strerror
-# include <string.h> //strerror
+# include <stdlib.h>//malloc, free
+# include <stdio.h>//perror, strerror
+# include <string.h>//strerror
 # include "SDL.h"
 # include <string.h>
 # include <stdbool.h>
@@ -30,57 +30,56 @@
 # define DIST 554
 # define BPP 32
 
-typedef union		u_color
+typedef union			u_color
 {
-	unsigned int	color;
+	unsigned int		color;
 	struct
 	{
 		unsigned char	r;
 		unsigned char	g;
 		unsigned char	b;
 		unsigned char	a;
-	}				c;
-}					t_color;
+	}					c;
+}						t_color;
 
-typedef struct		s_v
+typedef struct			s_v
 {
-	double			x;
-	double			y;
-	double			z;
-}					t_v;
+	double				x;
+	double				y;
+	double				z;
+}						t_v;
 
-typedef struct		s_sphere
+typedef struct			s_sphere
 {
-	double			radius;
-	t_v				o;
-	t_color			col;
-	double			dist;
-}					t_sphere;
+	double				radius;
+	t_v					o;
+	t_color				col;
+	double				dist;
+}						t_sphere;
 
-typedef struct		s_env
+typedef struct			s_env
 {
-	SDL_Window		*win;
-	SDL_Surface		*surf;
-	t_v				pos_lum;
-	t_v				pos_cam;
-	t_v				vcam;
-	t_v				v2cam;
-	t_v				v3cam;
-	t_v				r;
-	t_v				r2;
-	int				nb_obj;
-	double			v1;
-	double			v2;
-	t_sphere		objs[2];
-	t_sphere		sphere;
-	t_sphere		sphere2;
-}					t_env;
+	SDL_Window			*win;
+	SDL_Surface			*surf;
+	t_v					pos_lum;
+	t_v					pos_cam;
+	t_v					vcam;
+	t_v					v2cam;
+	t_v					v3cam;
+	t_v					r;
+	t_v					r2;
+	int					nb_obj;
+	double				v1;
+	double				v2;
+	t_sphere			objs[2];
+	t_sphere			sphere;
+	t_sphere			sphere2;
+}						t_env;
 
-
-double		vect_norm(t_v a);
-t_v			vect_mult(t_v a, double n);
-t_v			vect_add(t_v a, t_v b);
-double		vect_scal_prod(t_v a, t_v b);
-t_v			vect_prod(t_v a, t_v b);
+double					vect_norm(t_v a);
+t_v						vect_mult(t_v a, double n);
+t_v						vect_add(t_v a, t_v b);
+double					vect_scal_prod(t_v a, t_v b);
+t_v						vect_prod(t_v a, t_v b);
 
 #endif

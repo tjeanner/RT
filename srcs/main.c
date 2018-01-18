@@ -6,66 +6,82 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/18 03:31:31 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/18 22:27:19 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
 /*
- **get_dist: a function that will return 0, 1 or 2 distances between a sphere and
- **the pixel. the distance(s) is written in env->v1 and env->v2
- */
+**get_dist: a function that will return 0, 1 or 2 distances between a sphere and
+**the pixel. the distance(s) is written in env->v1 and env->v2
+*/
 
-int		get_dist(t_env *env, int x, int y, t_sphere obj)
+int			get_dist(t_env *env, int x, int y, t_sphere obj)
 {
-	t_v		u1;
-	t_v		r_ini;
-	double		a;
-	double		b;
-	double		c;
+//	t_v		u1;
+//	t_v		r_ini;
+	t_v		pos_pixel;
+	t_v		center_screen_2_pix;
+	t_v		cam_2_center_screen;
+	t_v		cam_2_pixel;
+	t_v		cam_2_pixel_norm;
+	t_v		pixel_2_sphere_center;
+	double	a;
+	double	b;
+	double	c;
 	double	tmp;
 
-	u1 = vect_mult(vect_prod(env->vcam, env->v2cam), -1);
-	r_ini = env->pos_cam;
-	env->r = vect_add(vect_mult(u1, (x - WIN_X / 2) / vect_norm(u1)),
+//env->v3cam is the "full right" camera vector (vcam is "full forward" and v2cam is "full up")
+	env->v3cam = vect_mult(vect_prod(env->vcam, env->v2cam), -1);
+//cam_2_center_screen is the vector from te camera to the center of the screen
+	cam_2_center_screen = vect_mult(env->vcam, DIST);
+//center_screen_2_pix is the vector from the center of the screen to the current pixel
+	center_screen_2_pix = vect_add(vect_mult(env->v3cam, (x - WIN_X / 2) / vect_norm(env->v3cam)),
 			vect_mult(env->v2cam, -1 * (y - WIN_Y / 2) / vect_norm(env->v2cam)));
-	u1 = vect_add(r_ini, env->r);//pos pix - vcam*dist
-	r_ini = vect_add(env->r, vect_mult(env->vcam, DIST));//v cam->pix
-	env->r = vect_mult(u1, 1);//pos pix - vcam*dist
-	//	env->r = vect_add(r_ini, env->pos_cam);
-	u1 = vect_add(env->r, vect_mult(obj.o, -1));//rso
-	env->r2 = vect_mult(r_ini, 1 / vect_norm(r_ini));//v cam->pix unit
-	a = vect_scal_prod(r_ini, r_ini);
-	b = 2 * vect_scal_prod(r_ini, u1);
-	c = vect_scal_prod(u1, u1) - obj.radius * obj.radius;
+		//u1 = vect_add(env->pos_cam, center_screen_2_pix);//pos pix - vcam*dist
+//cam_2_pixel is the vector from the camera to the current pixel
+	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
+//cam_2_pixel is the vector from the camera to the current pixel normalized so it's length is 1
+	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1 / vect_norm(cam_2_pixel));
+//pos_pixel is the postion in space of the current pixel
+	pos_pixel = vect_add(env->pos_cam, cam_2_pixel);
+		//r_ini = vect_add(env->r, vect_mult(env->vcam, DIST));//v cam->pix
+		//env->r = vect_mult(u1, 1);//pos pix - vcam*dist
+		//env->r = vect_add(r_ini, env->pos_cam);
+//pixel_2_sphere_center is the vector from the current pixel to the center of the sphere
+	pixel_2_sphere_center = vect_add(pos_pixel, vect_mult(obj.o, -1));
+	env->r = pos_pixel;
+	env->r2 = cam_2_pixel_norm;
+	a = vect_scal_prod(cam_2_pixel_norm, cam_2_pixel_norm);
+	b = 2 * vect_scal_prod(cam_2_pixel_norm, pixel_2_sphere_center);
+	c = vect_scal_prod(pixel_2_sphere_center, pixel_2_sphere_center) - obj.radius * obj.radius;
 	tmp = b * b - 4 * a * c;
-	if (tmp < 0)
+	if (tmp < 0)//case where there's no solution for the equation, so no collision
 		return (0);
-	else
+	else//case where there's one solution (if tmp == 0) or 2 of them (tmp > 0)
 	{
-		env->v1 = (-b + sqrt(tmp)) / (2 * a);
-		env->v2 = (-b - sqrt(tmp)) / (2 * a);
+		env->v1 = (-b + sqrt(tmp)) / (2 * a);//if tmp == 0
+		env->v2 = (-b - sqrt(tmp)) / (2 * a);//env->v2 will be the same as env->v1
 	}
 	return (1);
 }
 
 /*
- **get_col: a function that will return a col structure containing color
- **corresponding for desired pixel (specified by x & y)
- */
+**get_col: a function that will return a col structure containing color
+**corresponding for desired pixel (specified by x & y)
+*/
 
 t_color		get_col(t_env *env, int x, int y)
 {
-	int		i;
-	int		ob;
-	double	res;
+	int		i;//index that run through all objects
+	int		ob;//to store the value of the index i when we find the object
+	double	res;//to store the value of the distance when we find the object
 	t_color	col;
 	t_v		norm;
-//	t_v		norm2;
 
 	i = -1;
-	while (++i < env->nb_obj)
+	while (++i < env->nb_obj)//we search a collision between the ray and each objects
 	{
 		if (get_dist(env, x, y, env->objs[i]) == 1 && (env->v1 >= 0 || env->v2 >= 0))
 		{
@@ -79,7 +95,7 @@ t_color		get_col(t_env *env, int x, int y)
 	}
 	i = -1;
 	ob = 0;
-	while (++i < env->nb_obj)
+	while (++i < env->nb_obj)//we select the shortest distance in all the one we have
 	{
 		if (i == 0)
 			res = env->objs[i].dist;
@@ -93,7 +109,7 @@ t_color		get_col(t_env *env, int x, int y)
 		}
 	}
 	col.c.a = 0;
-	if (res == -1)
+	if (res == -1)//there has been no collision with any object
 	{
 		col.c.r = 0;
 		col.c.g = 0;
@@ -101,32 +117,32 @@ t_color		get_col(t_env *env, int x, int y)
 	}
 	else
 	{
-		norm = vect_add(env->objs[ob].o, vect_mult(vect_add(env->r, vect_mult(env->r2, env->objs[ob].dist)), -1));
+		norm = vect_add(env->objs[ob].o, vect_mult(env->r, -1));
 		norm = vect_mult(norm, 1 / vect_norm(norm));
-			col.c.r = 255 * fabs(norm.x);
-			col.c.g = 255 * fabs(norm.y);
-			col.c.b = 255 * fabs(norm.z);
+		col.c.r = 255 * fabs(norm.x);
+		col.c.g = 255 * fabs(norm.y);
+		col.c.b = 255 * fabs(norm.z);
 	}
 	return (col);
 }
 
 /*
- **rays: a function that call get_col for each pixel and update window surface
- */
+**rays: a function that call get_col for each pixel and update window surface
+*/
 
 t_color		rays(t_env *env)
 {
-	int		a;
-	int		b;
+	int		a;//go through each row
+	int		b;//go through each pixel in eah row
 	t_color	col;
 
 	a = -1;
-	while (++a < WIN_Y && (b = -1) == -1)
+	while (++a < WIN_Y && (b = -1) == -1)//for each row in the img
 	{
-		while (++b < WIN_X)
+		while (++b < WIN_X)//for each pixel in the row
 		{
-			col = get_col(env, b, a);
-			((int *)env->surf->pixels)[b + a * env->surf->w] = col.color;
+			col = get_col(env, b, a);//col is set with desired color for current pixel
+			((int *)env->surf->pixels)[b + a * env->surf->w] = col.color;//we draw the color in the pixel
 		}
 	}
 	SDL_UpdateWindowSurface(env->win);
@@ -134,10 +150,10 @@ t_color		rays(t_env *env)
 }
 
 /*
- **init: initialise la sdl, malloc et rempli la structure de donnees
- */
+**init: initialise sdl, malloc and fill the data struct (here: env)
+*/
 
-t_env		*init()
+t_env		*init(void)
 {
 	t_env	*env;
 
@@ -161,7 +177,7 @@ t_env		*init()
 		}
 		env->pos_cam.x = 0;
 		env->pos_cam.y = 0;
-		env->pos_cam.z = 0;
+		env->pos_cam.z = -554;
 		env->vcam.x = 0;
 		env->vcam.y = 0;
 		env->vcam.z = 1;
@@ -254,6 +270,8 @@ int			main(int ac, char **av)
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_e)
 			{
 				env->vcam.x += 0.3;
+				if (env->vcam.z < 1 && env->vcam.z >= 0)
+					env->vcam.z = -1;
 				env->vcam = vect_mult(env->vcam, 1 / vect_norm(env->vcam));
 			}
 		}
