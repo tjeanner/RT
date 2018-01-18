@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/17 18:57:51 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/18 02:14:25 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define DIST 554
 # define BPP 32
 
-typedef union		s_color
+typedef union		u_color
 {
 	unsigned int	color;
 	struct
@@ -42,14 +42,6 @@ typedef union		s_color
 	}				c;
 }					t_color;
 
-typedef struct		s_col
-{
-	int				r;
-	int				g;
-	int				b;
-	int				a;
-}					t_col;
-
 typedef struct		s_v
 {
 	double			x;
@@ -59,9 +51,9 @@ typedef struct		s_v
 
 typedef struct		s_sphere
 {
-	double			r;
+	double			radius;
 	t_v				o;
-	t_col			col;
+	t_color			col;
 	double			dist;
 }					t_sphere;
 
@@ -69,14 +61,14 @@ typedef struct		s_env
 {
 	SDL_Window		*win;
 	SDL_Surface		*surf;
-	t_v				plum;
-	t_v				pcam;
+	t_v				pos_lum;
+	t_v				pos_cam;
 	t_v				vcam;
 	t_v				v2cam;
 	t_v				v3cam;
 	t_v				r;
 	t_v				r2;
-	int				nb;
+	int				nb_obj;
 	double			v1;
 	double			v2;
 	t_sphere		objs[2];

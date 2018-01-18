@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 18:20:50 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/17 18:58:19 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/18 01:22:17 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ double		vect_scal_prod(t_v a, t_v b)
 {
 	double	n;
 
-	n = a.x * b.x + a.y * b.y + a.z * b.z; 
+	n = a.x * b.x + a.y * b.y + a.z * b.z;
 	return (n);
 }
 
