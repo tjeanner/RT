@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/18 22:27:19 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/18 23:42:28 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 
 int			get_dist(t_env *env, int x, int y, t_sphere obj)
 {
-//	t_v		u1;
-//	t_v		r_ini;
 	t_v		pos_pixel;
 	t_v		center_screen_2_pix;
 	t_v		cam_2_center_screen;
@@ -117,11 +115,24 @@ t_color		get_col(t_env *env, int x, int y)
 	}
 	else
 	{
-		norm = vect_add(env->objs[ob].o, vect_mult(env->r, -1));
+		norm = vect_add(env->objs[ob].o, vect_mult(vect_add(env->r, vect_mult(env->r2, env->objs[ob].dist)), -1));
 		norm = vect_mult(norm, 1 / vect_norm(norm));
-		col.c.r = 255 * fabs(norm.x);
-		col.c.g = 255 * fabs(norm.y);
-		col.c.b = 255 * fabs(norm.z);
+		col.c.r = 255.001 * fabs(norm.x);
+		col.c.g = 255.001 * fabs(norm.y);
+		col.c.b = 255.001 * fabs(norm.z);
+		if (x == 320 && y == 240)
+		{
+			ft_putstr("100norm : x:");
+			ft_putnbr(norm.x * 100);
+			ft_putstr(", y:");
+			ft_putnbr(norm.y * 100);
+			ft_putstr(", z:");
+			ft_putnbr(norm.z * 100);
+			ft_putstr("\n");
+			col.c.r = 255;
+			col.c.g = 255;
+			col.c.b = 255;
+		}
 	}
 	return (col);
 }
@@ -270,8 +281,6 @@ int			main(int ac, char **av)
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_e)
 			{
 				env->vcam.x += 0.3;
-				if (env->vcam.z < 1 && env->vcam.z >= 0)
-					env->vcam.z = -1;
 				env->vcam = vect_mult(env->vcam, 1 / vect_norm(env->vcam));
 			}
 		}
