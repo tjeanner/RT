@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/18 23:45:20 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/19 09:27:55 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@
 
 # define WIN_X 640
 # define WIN_Y 480
-# define DIST 554
+//# define WIN_X 1920
+//# define WIN_Y 1080
+# define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
 
 typedef union			u_color
@@ -51,8 +53,11 @@ typedef struct			s_v
 
 typedef struct			s_sphere
 {
+	char				type;
 	double				radius;
 	t_v					o;
+	t_v					colo;
+	t_v					norm;
 	t_color				col;
 	double				dist;
 }						t_sphere;
@@ -69,11 +74,16 @@ typedef struct			s_env
 	t_v					r;
 	t_v					r2;
 	int					nb_obj;
+	int					anti_alias;
+	float				flou;
 	double				v1;
 	double				v2;
-	t_sphere			objs[2];
+	t_sphere			objs[4];
 	t_sphere			sphere;
 	t_sphere			sphere2;
+	t_sphere			sphere3;
+	t_sphere			plan;
+	t_sphere			plan2;
 }						t_env;
 
 double					vect_norm(t_v a);
