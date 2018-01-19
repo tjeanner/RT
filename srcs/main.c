@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/18 23:42:28 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/19 03:43:17 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,12 @@ int			get_dist(t_env *env, int x, int y, t_sphere obj)
 //center_screen_2_pix is the vector from the center of the screen to the current pixel
 	center_screen_2_pix = vect_add(vect_mult(env->v3cam, (x - WIN_X / 2) / vect_norm(env->v3cam)),
 			vect_mult(env->v2cam, -1 * (y - WIN_Y / 2) / vect_norm(env->v2cam)));
-		//u1 = vect_add(env->pos_cam, center_screen_2_pix);//pos pix - vcam*dist
 //cam_2_pixel is the vector from the camera to the current pixel
 	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
 //cam_2_pixel is the vector from the camera to the current pixel normalized so it's length is 1
 	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1 / vect_norm(cam_2_pixel));
 //pos_pixel is the postion in space of the current pixel
 	pos_pixel = vect_add(env->pos_cam, cam_2_pixel);
-		//r_ini = vect_add(env->r, vect_mult(env->vcam, DIST));//v cam->pix
-		//env->r = vect_mult(u1, 1);//pos pix - vcam*dist
-		//env->r = vect_add(r_ini, env->pos_cam);
 //pixel_2_sphere_center is the vector from the current pixel to the center of the sphere
 	pixel_2_sphere_center = vect_add(pos_pixel, vect_mult(obj.o, -1));
 	env->r = pos_pixel;
@@ -77,6 +73,8 @@ t_color		get_col(t_env *env, int x, int y)
 	double	res;//to store the value of the distance when we find the object
 	t_color	col;
 	t_v		norm;
+	t_v		pos_collision;
+	t_v		lum_2_collision;
 
 	i = -1;
 	while (++i < env->nb_obj)//we search a collision between the ray and each objects
@@ -115,24 +113,18 @@ t_color		get_col(t_env *env, int x, int y)
 	}
 	else
 	{
-		norm = vect_add(env->objs[ob].o, vect_mult(vect_add(env->r, vect_mult(env->r2, env->objs[ob].dist)), -1));
-		norm = vect_mult(norm, 1 / vect_norm(norm));
-		col.c.r = 255.001 * fabs(norm.x);
-		col.c.g = 255.001 * fabs(norm.y);
-		col.c.b = 255.001 * fabs(norm.z);
-		if (x == 320 && y == 240)
-		{
-			ft_putstr("100norm : x:");
-			ft_putnbr(norm.x * 100);
-			ft_putstr(", y:");
-			ft_putnbr(norm.y * 100);
-			ft_putstr(", z:");
-			ft_putnbr(norm.z * 100);
-			ft_putstr("\n");
-			col.c.r = 255;
-			col.c.g = 255;
-			col.c.b = 255;
-		}
+		pos_collision = vect_add(env->r, vect_mult(env->r2, env->objs[ob].dist));//pos toucher
+		norm = vect_add(env->objs[ob].o, vect_mult(pos_collision, -1.0));
+		norm = vect_mult(norm, 1 / vect_norm(norm));//vect norm a toucher
+		lum_2_collision = vect_add(env->pos_lum, vect_mult(pos_collision, -1.0));
+	//	res = 90.0 - acos(3.1415 * vect_scal_prod(norm, lum_2_collision) / (180.0 * vect_norm(norm) * vect_norm(lum_2_collision))) / 3.1415 * 180.0;
+		res = 90.0 - acos(3.1415 * (norm.x * lum_2_collision.x + norm.y * lum_2_collision.y + norm.z * lum_2_collision.z) / (180.0 * vect_norm(norm) * vect_norm(lum_2_collision))) / 3.1415 * 180.0;
+		col.c.r = res * 2.83333;
+		col.c.g = res * 2.83333;
+		col.c.b = res * 2.83333;
+		col.c.r = 255 * fabs(norm.x);
+		col.c.g = 255 * fabs(norm.y);
+		col.c.b = 255 * fabs(norm.z);
 	}
 	return (col);
 }
@@ -188,7 +180,7 @@ t_env		*init(void)
 		}
 		env->pos_cam.x = 0;
 		env->pos_cam.y = 0;
-		env->pos_cam.z = -554;
+		env->pos_cam.z = -1000;
 		env->vcam.x = 0;
 		env->vcam.y = 0;
 		env->vcam.z = 1;
@@ -196,8 +188,8 @@ t_env		*init(void)
 		env->v2cam.y = 1;
 		env->v2cam.z = 0;
 		env->pos_lum.x = 0;
-		env->pos_lum.y = 1;
-		env->pos_lum.z = 0;
+		env->pos_lum.y = 1000;
+		env->pos_lum.z = -554;
 		env->sphere.o.x = 0;
 		env->sphere.o.y = 0;
 		env->sphere.o.z = 800;
@@ -249,29 +241,29 @@ int			main(int ac, char **av)
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_w)
 			{
-				env->pos_cam.x += env->vcam.x * 10;
-				env->pos_cam.y += env->vcam.y * 10;
-				env->pos_cam.z += env->vcam.z * 10;
+				env->pos_cam.x += env->vcam.x * 30;
+				env->pos_cam.y += env->vcam.y * 30;
+				env->pos_cam.z += env->vcam.z * 30;
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
 			{
-				env->pos_cam.x -= env->vcam.x * 10;
-				env->pos_cam.y -= env->vcam.y * 10;
-				env->pos_cam.z -= env->vcam.z * 10;
+				env->pos_cam.x -= env->vcam.x * 30;
+				env->pos_cam.y -= env->vcam.y * 30;
+				env->pos_cam.z -= env->vcam.z * 30;
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_a)
 			{
 				env->v3cam = vect_prod(env->vcam, env->v2cam);
-				env->pos_cam.x += env->v3cam.x * 10;
-				env->pos_cam.y += env->v3cam.y * 10;
-				env->pos_cam.z += env->v3cam.z * 10;
+				env->pos_cam.x += env->v3cam.x * 30;
+				env->pos_cam.y += env->v3cam.y * 30;
+				env->pos_cam.z += env->v3cam.z * 30;
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_d)
 			{
 				env->v3cam = vect_prod(env->vcam, env->v2cam);
-				env->pos_cam.x -= env->v3cam.x * 10;
-				env->pos_cam.y -= env->v3cam.y * 10;
-				env->pos_cam.z -= env->v3cam.z * 10;
+				env->pos_cam.x -= env->v3cam.x * 30;
+				env->pos_cam.y -= env->v3cam.y * 30;
+				env->pos_cam.z -= env->v3cam.z * 30;
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q)
 			{
@@ -282,6 +274,14 @@ int			main(int ac, char **av)
 			{
 				env->vcam.x += 0.3;
 				env->vcam = vect_mult(env->vcam, 1 / vect_norm(env->vcam));
+			}
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
+			{
+				env->pos_lum.y += 100;
+			}
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f)
+			{
+				env->pos_lum.y -= 100;
 			}
 		}
 		rays(env);
