@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/19 02:04:09 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/20 23:10:41 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC =		main.c \
 			vector_math.c \
 
 CC =		gcc
-FLAGS =		-Wall -Wextra -Werror
+FLAGS =		-Wall -Wextra -Werror -g3
 
 SRCDIR =	./srcs
 INCDIR =	./incs

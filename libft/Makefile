@@ -6,13 +6,13 @@
 #    By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2017/09/07 06:41:57 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/01/20 21:51:01 by tjeanner         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME	=	libft.a
 CC		=	gcc
-CFLAGS =	-Wall -Wextra -Werror
+CFLAGS =	-Wall -Wextra -Werror #-g3
 SRC		=	ft_memset.c					\
 			ft_freedoublearray.c		\
 			ft_bzero.c					\
