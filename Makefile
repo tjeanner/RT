@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/20 23:10:41 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/22 00:40:50 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME =		rtv1
 
 SRC =		main.c \
 			vector_math.c \
+			useless_functions.c \
 
 CC =		gcc
 FLAGS =		-Wall -Wextra -Werror -g3

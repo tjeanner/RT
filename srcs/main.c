@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/21 06:42:15 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/22 00:47:55 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,12 +278,10 @@ int		rays(t_env *env)
 	float	a;//go through each row
 	float	b;//go through each pixel in eah row
 	int		c;
-	int		r;
-	int		g;
-	int		b0;
 	t_color	*col;
+	t_v		colo;
 
-	if (env->flou >= 1)
+	if ((a = 0) == 0 && env->flou >= 1)
 	{
 		if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))
 			return (0);
@@ -291,40 +289,27 @@ int		rays(t_env *env)
 	else
 		if (!(col = (t_color *)malloc(sizeof(t_color) * 1 / (env->flou * env->flou))))
 			return (0);
-	a = 0;
-	while (a < WIN_Y)//for each row in the img
+	while ((b = 0) == 0 && a < WIN_Y)//for each row in the img
 	{
-		b = 0;
 		while (b < WIN_X)//for each pixel in the row
 		{
-			if (env->flou >= 1)
-				col[0] = get_col(env, b, a);//col is set with desired color for current pixel
-			else
+			c = ((int)1.0 / (env->flou * env->flou) * (a - (int)a)) + ((int)1.0 / env->flou * (b - (int)b));//col is set with desired color for current pixel
+			col[c] = get_col(env, b + env->flou / 2.0, a + env->flou / 2.0);//col is set with desired color for current pixel
+			if (env->flou < 1 && c + 1 == 1 / (env->flou * env->flou) && (c = 0) == 0)
 			{
-				c = ((int)1.0 / (env->flou * env->flou) * (a - (int)a)) + ((int)1.0 / env->flou * (b - (int)b));//col is set with desired color for current pixel
-				col[c] = get_col(env, b - env->flou / 2.0, a - env->flou / 2.0);//col is set with desired color for current pixel
-			}
-			if (env->flou < 1 && c + 1 == 1 / (env->flou * env->flou))
-			{
-				c = 1;
-				r = col[0].c.r;
-				g = col[0].c.g;
-				b0 = col[0].c.b;
-				while (c < 1.0 / (env->flou * env->flou))
+				colo.x = col[0].c.r * env->flou * env->flou;
+				colo.y = col[0].c.g * env->flou * env->flou;
+				colo.z = col[0].c.b * env->flou * env->flou;
+				while (++c < 1.0 / (env->flou * env->flou))
 				{
-					r += col[c].c.r;
-					g += col[c].c.g;
-					b0 += col[c].c.b;
-					c++;
+					colo.x += col[c].c.r * env->flou * env->flou;
+					colo.y += col[c].c.g * env->flou * env->flou;
+					colo.z += col[c].c.b * env->flou * env->flou;
 				}
-				r = r * env->flou * env->flou;
-				g = g * env->flou * env->flou;
-				b0 = b0 * env->flou * env->flou;
-//				d /= 1 / (env->flou * env->flou);
+				col[0].c.r = colo.x;
+				col[0].c.g = colo.y;
+				col[0].c.b = colo.z;
 				c = ((int)b + env->flou - 1) + ((int)(a + env->flou - 1) * env->surf->w);
-				col[0].c.g = g;
-				col[0].c.r = r;
-				col[0].c.b = b0;
 				((int *)env->surf->pixels)[c] = col[0].color;//we draw the color in the pixel
 			}
 			c = 0;
@@ -343,8 +328,6 @@ int		rays(t_env *env)
 		}
 		a += (env->flou < 1) ? 1 : env->flou;
 	}
-	if (env->flou == 0.25)
-		ft_putendl("salut''''''''''''''''''''''''''''''''''''''''");
 	free(col);
 	SDL_UpdateWindowSurface(env->win);
 	return (1);
@@ -376,97 +359,7 @@ t_env		*init(void)
 				return (NULL);
 			}
 		}
-		env->flou = 2;
-		env->pos_cam.x = 0;
-		env->pos_cam.y = 0;
-		env->pos_cam.z = -1000;
-		env->vcam.x = 0;
-		env->vcam.y = 0;
-		env->vcam.z = 1;
-		env->v2cam.x = 0;
-		env->v2cam.y = 1;
-		env->v2cam.z = 0;
-		env->pos_lum.x = 0;
-		env->pos_lum.y = 1000;
-		env->pos_lum.z = -554;
-		env->sphere.type = 's';
-		env->sphere.o.x = 0;
-		env->sphere.o.y = 0;
-		env->sphere.o.z = 800;
-		env->sphere.radius = 800;
-		env->sphere.col.c.r = 255;
-		env->sphere.col.c.g = 255;
-		env->sphere.col.c.b = 255;
-		env->sphere.col.c.a = 0;
-		ft_memcpy(&env->objs[0], &env->sphere, sizeof(t_sphere));
-		env->sphere2.type = 's';
-		env->sphere2.o.x = 0;
-		env->sphere2.o.y = 0;
-		env->sphere2.o.z = 50;
-		env->sphere2.radius = 300;
-		env->sphere2.col.c.r = 255;
-		env->sphere2.col.c.g = 0;
-		env->sphere2.col.c.b = 0;
-		env->sphere2.col.c.a = 0;
-		ft_memcpy(&env->objs[1], &env->sphere2, sizeof(t_sphere));
-		env->sphere3.type = 's';
-		env->sphere3.o.x = 0;
-		env->sphere3.o.y = -300;
-		env->sphere3.o.z = 200;
-		env->sphere3.radius = 250;
-		env->sphere3.col.c.r = 0;
-		env->sphere3.col.c.g = 255;
-		env->sphere3.col.c.b = 0;
-		env->sphere3.col.c.a = 0;
-		ft_memcpy(&env->objs[2], &env->sphere3, sizeof(t_sphere));
-		env->plan.type = 'p';
-		env->plan.o.x = 2000;
-		env->plan.o.y = 0;
-		env->plan.o.z = 0;
-		env->plan.colo.x = -1;
-		env->plan.colo.y = 0;
-		env->plan.colo.z = 0;
-		env->plan.norm.x = -1;
-		env->plan.norm.y = 0;
-		env->plan.norm.z = 0;
-		ft_memcpy(&env->objs[3], &env->plan, sizeof(t_sphere));
-		env->plan2.type = 'p';
-		env->plan2.o.x = 0;
-		env->plan2.o.y = 0;
-		env->plan2.o.z = 1500;
-		env->plan2.colo.x = 0;
-		env->plan2.colo.y = 1;
-		env->plan2.colo.z = 1;
-		env->plan2.norm.x = 0;
-		env->plan2.norm.y = 1;
-		env->plan2.norm.z = 1;
-		ft_memcpy(&env->objs[4], &env->plan2, sizeof(t_sphere));
-		env->sphere3.type = 't';
-		env->sphere3.o.x = 0;
-		env->sphere3.o.y = -500;
-		env->sphere3.o.z = 200;
-		env->sphere3.radius = 50;
-		env->sphere3.norm.x = 400;
-		env->sphere3.norm.y = -500;
-		env->sphere3.norm.z = 0;
-		env->sphere3.colo.x = 1;
-		env->sphere3.colo.y = 0;
-		env->sphere3.colo.z = 1;
-		ft_memcpy(&env->objs[5], &env->sphere3, sizeof(t_sphere));
-		env->sphere3.type = 'c';
-		env->sphere3.o.x = 0;
-		env->sphere3.o.y = -500;
-		env->sphere3.o.z = 200;
-		env->sphere3.radius = 550;
-		env->sphere3.norm.x = 400;
-		env->sphere3.norm.y = 200;
-		env->sphere3.norm.z = 0;
-		env->sphere3.colo.x = 0;
-		env->sphere3.colo.y = 1;
-		env->sphere3.colo.z = 0;
-		ft_memcpy(&env->objs[6], &env->sphere3, sizeof(t_sphere));
-		env->nb_obj = 7;
-		return (env);
+		return (fill_env(env));
 	}
 	ft_putendl("error in init");
 	return (NULL);
@@ -543,12 +436,14 @@ int			main(int ac, char **av)
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
 			{
 				env->flou = (env->flou * 16 > WIN_Y) ? env->flou: env->flou * 2;
-				ft_putnbr(env->flou * 100000);
+				ft_putnbr(env->flou * 1000000000);
+				ft_putchar('\n');
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
 			{
 				env->flou = env->flou / 2;
-				ft_putnbr(env->flou * 100000);
+				ft_putnbr(env->flou * 1000000000);
+				ft_putchar('\n');
 			}
 		}
 		rays(env);
