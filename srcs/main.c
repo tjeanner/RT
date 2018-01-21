@@ -6,20 +6,28 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/21 02:54:21 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/21 06:42:15 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-int			get_dist_tube(t_env *env, float x, float y, t_sphere obj)
+int			get_dist_cone(t_env *env, float x, float y, t_sphere obj)
 {
 	t_v		pos_pixel;
 	t_v		center_screen_2_pix;
 	t_v		cam_2_center_screen;
 	t_v		cam_2_pixel;
 	t_v		cam_2_pixel_norm;
-	t_v		pixel_2_sphere_center;
+//	t_v		pixel_2_sphere_center;
+	t_v		ra0;
+	t_v		s;
+	t_v		va;
+	double	h;
+	double	hh;
+	double	h0;
+	double	vs;
+	double	w;
 	double	a;
 	double	b;
 	double	c;
@@ -32,12 +40,62 @@ int			get_dist_tube(t_env *env, float x, float y, t_sphere obj)
 	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
 	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1 / vect_norm(cam_2_pixel));
 	pos_pixel = vect_add(env->pos_cam, cam_2_pixel);
-	pixel_2_sphere_center = vect_add(pos_pixel, vect_mult(obj.o, -1));
+//	pixel_2_sphere_center = vect_add(pos_pixel, vect_mult(obj.o, -1));
 	env->r = pos_pixel;
 	env->r2 = cam_2_pixel_norm;
-	a = vect_scal_prod(cam_2_pixel_norm, cam_2_pixel_norm);
-	b = 2 * vect_scal_prod(cam_2_pixel_norm, pixel_2_sphere_center);
-	c = vect_scal_prod(pixel_2_sphere_center, pixel_2_sphere_center) - obj.radius * obj.radius;
+	s = vect_add(obj.o, vect_mult(obj.norm, -1.0));
+	s = vect_mult(s, 1.0 / vect_norm(s));
+	h0 = vect_scal_prod(s, vect_add(pos_pixel, vect_mult(obj.norm, -1.0)));
+	vs = vect_scal_prod(cam_2_pixel_norm, s);
+	hh = vect_norm(vect_add(obj.o, vect_mult(obj.norm, -1.0)));
+	h = vect_scal_prod(s, vect_add(cam_2_pixel_norm, vect_mult(obj.norm, -1.0)));
+	va = vect_prod(vect_prod(s, cam_2_pixel_norm), s);
+	w = 500.0 - h0;
+	ra0 = vect_prod(vect_prod(s, vect_add(pos_pixel, vect_mult(obj.norm, -1.0))), s);
+	a = vect_scal_prod(va, va) - vs * vs * obj.radius * obj.radius / (hh * hh);
+	b = 2 * vect_scal_prod(ra0, va) + 2 * w * vs * obj.radius * obj.radius / (hh * hh);
+	c = vect_scal_prod(ra0, ra0) - w * w * obj.radius * obj.radius / (hh * hh);
+	tmp = b * b - 4 * a * c;
+	if (tmp < 0)//case where there's no solution for the equation, so no collision
+		return (0);
+	else//case where there's one solution (if tmp == 0) or 2 of them (tmp > 0)
+	{
+		env->v1 = (-b + sqrt(tmp)) / (2 * a);//if tmp == 0
+		env->v2 = (-b - sqrt(tmp)) / (2 * a);//env->v2 will be the same as env->v1
+	}
+	return (1);
+}
+
+int			get_dist_tube(t_env *env, float x, float y, t_sphere obj)
+{
+	t_v		pos_pixel;
+	t_v		center_screen_2_pix;
+	t_v		cam_2_center_screen;
+	t_v		cam_2_pixel;
+	t_v		cam_2_pixel_norm;
+	t_v		s;
+	double	a;
+	double	b;
+	double	c;
+	double	tmp;
+
+	s = vect_add(obj.o, vect_mult(obj.norm, -1.0));
+	s = vect_mult(s, 1.0 / vect_norm(s));
+	env->v3cam = vect_mult(vect_prod(env->vcam, env->v2cam), -1);
+	cam_2_center_screen = vect_mult(env->vcam, DIST);
+	center_screen_2_pix = vect_add(vect_mult(env->v3cam, (x - WIN_X / 2) / vect_norm(env->v3cam)),
+			vect_mult(env->v2cam, -1 * (y - WIN_Y / 2) / vect_norm(env->v2cam)));
+	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
+	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1 / vect_norm(cam_2_pixel));
+	cam_2_center_screen = vect_prod(vect_prod(s, cam_2_pixel_norm), s);//Va
+	pos_pixel = vect_add(env->pos_cam, cam_2_pixel);
+	cam_2_pixel = vect_prod(vect_prod(s, vect_add(pos_pixel, vect_mult(obj.norm, -1.0))), s);//Ra0
+//	pixel_2_sphere_center = vect_add(pos_pixel, vect_mult(obj.o, -1));
+	env->r = pos_pixel;
+	env->r2 = cam_2_pixel_norm;
+	a = vect_scal_prod(cam_2_center_screen, cam_2_center_screen);
+	b = 2 * vect_scal_prod(cam_2_center_screen, cam_2_pixel);
+	c = vect_scal_prod(cam_2_pixel, cam_2_pixel) - obj.radius * obj.radius;
 	tmp = b * b - 4 * a * c;
 	if (tmp < 0)
 		return (0);
@@ -151,7 +209,14 @@ t_color		get_col(t_env *env, float x, float y)
 			else
 				env->objs[i].dist = (env->v1 >= 0) ? env->v1 : env->v2;
 		}
-		else if (env->objs[i].type == 't' && get_dist_plan(env, x, y, env->objs[i]) == 1 && (env->v1 >= 0 || env->v2 >= 0))
+		else if (env->objs[i].type == 't' && get_dist_tube(env, x, y, env->objs[i]) == 1 && (env->v1 >= 0 || env->v2 >= 0))
+		{
+			if (env->v1 >= 0 && env->v2 >= 0)
+				env->objs[i].dist = (env->v1 < env->v2) ? env->v1 : env->v2;
+			else
+				env->objs[i].dist = (env->v1 >= 0) ? env->v1 : env->v2;
+		}
+		else if (env->objs[i].type == 'c' && get_dist_cone(env, x, y, env->objs[i]) == 1 && (env->v1 >= 0 || env->v2 >= 0))
 		{
 			if (env->v1 >= 0 && env->v2 >= 0)
 				env->objs[i].dist = (env->v1 < env->v2) ? env->v1 : env->v2;
@@ -237,7 +302,7 @@ int		rays(t_env *env)
 			else
 			{
 				c = ((int)1.0 / (env->flou * env->flou) * (a - (int)a)) + ((int)1.0 / env->flou * (b - (int)b));//col is set with desired color for current pixel
-				col[c] = get_col(env, b + env->flou / 2.0, a + env->flou / 2.0);//col is set with desired color for current pixel
+				col[c] = get_col(env, b - env->flou / 2.0, a - env->flou / 2.0);//col is set with desired color for current pixel
 			}
 			if (env->flou < 1 && c + 1 == 1 / (env->flou * env->flou))
 			{
@@ -275,8 +340,6 @@ int		rays(t_env *env)
 			}
 			else
 				b += env->flou;
-	//		b = (((int)(10.0 * b + 10.0 * env->flou)) % 10 == 0 && !(((int)(10.0 * a + 10.0 * env->flou)) % 10 == 0)) ? (int)b - 1 : b + env->flou;
-//			a = (((int)(10.0 * b + 10.0 * env->flou)) % 10 == 0) ? a + env->flou : a;
 		}
 		a += (env->flou < 1) ? 1 : env->flou;
 	}
@@ -383,16 +446,26 @@ t_env		*init(void)
 		env->sphere3.o.y = -500;
 		env->sphere3.o.z = 200;
 		env->sphere3.radius = 50;
-		env->sphere3.norm.x = -1;
-		env->sphere3.norm.y = 0;
+		env->sphere3.norm.x = 400;
+		env->sphere3.norm.y = -500;
 		env->sphere3.norm.z = 0;
-		env->sphere3.col.c.r = 0;
-		env->sphere3.col.c.g = 255;
-		env->sphere3.col.c.b = 0;
-		env->sphere3.col.c.a = 0;
+		env->sphere3.colo.x = 1;
+		env->sphere3.colo.y = 0;
+		env->sphere3.colo.z = 1;
 		ft_memcpy(&env->objs[5], &env->sphere3, sizeof(t_sphere));
-		env->plan.type = 'p';
-		env->nb_obj = 5;
+		env->sphere3.type = 'c';
+		env->sphere3.o.x = 0;
+		env->sphere3.o.y = -500;
+		env->sphere3.o.z = 200;
+		env->sphere3.radius = 550;
+		env->sphere3.norm.x = 400;
+		env->sphere3.norm.y = 200;
+		env->sphere3.norm.z = 0;
+		env->sphere3.colo.x = 0;
+		env->sphere3.colo.y = 1;
+		env->sphere3.colo.z = 0;
+		ft_memcpy(&env->objs[6], &env->sphere3, sizeof(t_sphere));
+		env->nb_obj = 7;
 		return (env);
 	}
 	ft_putendl("error in init");
@@ -470,10 +543,12 @@ int			main(int ac, char **av)
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
 			{
 				env->flou = (env->flou * 16 > WIN_Y) ? env->flou: env->flou * 2;
+				ft_putnbr(env->flou * 100000);
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
 			{
-				env->flou = (env->flou == 0.25) ? 0.25 : env->flou / 2;
+				env->flou = env->flou / 2;
+				ft_putnbr(env->flou * 100000);
 			}
 		}
 		rays(env);

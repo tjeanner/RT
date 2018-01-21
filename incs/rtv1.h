@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/21 03:01:24 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/21 06:07:31 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct			s_env
 	float				flou;
 	double				v1;
 	double				v2;
-	t_sphere			objs[5];
+	t_sphere			objs[6];
 	t_sphere			sphere;
 	t_sphere			sphere2;
 	t_sphere			sphere3;
