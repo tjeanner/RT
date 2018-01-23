@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/23 14:47:22 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/23 23:56:56 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,16 @@ static void		move_events(t_env *env, SDL_Event event)
 		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->v2cam, 50));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
 		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->v2cam, -50));
-	else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != env->oldy)
+	else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != 0)
 	{
-		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->vcam, 5 * (env->oldy - event.wheel.y)));
+		env->pos_cam = vect_add(env->pos_cam,
+				vect_mult(env->vcam, -10 * event.wheel.y));
 		event.wheel.y = 0;
 	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_UP)
+		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->vcam, 100));
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN)
+		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->vcam, -100));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_a)
 	{
 		env->v3cam = vect_prod(env->vcam, env->v2cam);
@@ -64,9 +69,13 @@ void			events(t_env *env)
 	while (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
-			env->pos_lum.y += 100;
+			env->pos_lum.z += (env->pos_lum.z > 1000) ? 0 : 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f)
-			env->pos_lum.y -= 100;
+			env->pos_lum.z -= (env->pos_lum.z < -1000) ? 0 : 50;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c)
+			env->pos_lum.x -= (env->pos_lum.x < -1000) ? 0 : 50;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v)
+			env->pos_lum.x += (env->pos_lum.x > 1000) ? 0 : 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
 		{
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;
@@ -75,7 +84,7 @@ void			events(t_env *env)
 		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
 		{
-			env->flou = env->flou / 2;
+			env->flou /= (env->flou == 0.125) ? 1 : 2;
 			ft_putnbr(which_pow(env->flou, 2));
 			ft_putchar('\n');
 		}
