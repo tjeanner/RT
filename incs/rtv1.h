@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/22 00:47:14 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/23 18:18:12 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@
 # include <string.h>
 # include <stdbool.h>
 
-# define WIN_X 640
-# define WIN_Y 480
 //# define WIN_X 1920
 //# define WIN_Y 1080
+# define WIN_X 640
+# define WIN_Y 480
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
+# define INC "sptc"
 
 typedef union			u_color
 {
@@ -51,7 +52,7 @@ typedef struct			s_v
 	double				z;
 }						t_v;
 
-typedef struct			s_sphere
+typedef struct			s_obj
 {
 	char				type;
 	double				radius;
@@ -60,7 +61,7 @@ typedef struct			s_sphere
 	t_v					norm;
 	t_color				col;
 	double				dist;
-}						t_sphere;
+}						t_obj;
 
 typedef struct			s_env
 {
@@ -74,17 +75,18 @@ typedef struct			s_env
 	t_v					r;
 	t_v					r2;
 	int					nb_obj;
+	int					state;
 	int					anti_alias;
 	float				flou;
 	double				v1;
 	double				v2;
-	t_sphere			objs[6];
-	t_sphere			sphere;
-	t_sphere			sphere2;
-	t_sphere			sphere3;
-	t_sphere			plan;
-	t_sphere			plan2;
+	t_obj				objs[100];
+	int					oldy;
 }						t_env;
+
+/*
+**main.c
+*/
 
 /*
 **vector_math.c
@@ -96,12 +98,22 @@ double					vect_scal_prod(t_v a, t_v b);
 t_v						vect_prod(t_v a, t_v b);
 
 /*
+**color_math.c
+*/
+void					set_black(t_color *c);
+t_color					add_color(t_color a, t_color b);
+t_color					mult_color(t_color a, float n);
+int						average_color(t_color *col, float flou);
+
+/*
 **useless_functions.c
 */
 t_env					*fill_env(t_env *env);
+double					which_pow(double num, double pow);
+t_color					get_black(void);
 
 /*
-**main.c
+**events.c
 */
-
+void					events(t_env *env);
 #endif

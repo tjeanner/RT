@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/22 00:40:50 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/22 07:58:15 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,8 @@ NAME =		rtv1
 SRC =		main.c \
 			vector_math.c \
 			useless_functions.c \
+			events.c \
+			color_math.c \
 
 CC =		gcc
 FLAGS =		-Wall -Wextra -Werror -g3
@@ -49,10 +51,12 @@ $(NAME): $(FT_LIB) obj $(OBJ)
 	$(CC) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME)
 
 norme:
-	@norminette $(FT)/srcs
-	@norminette $(FT)/includes
+	ls $(SRCDIR)
 	@norminette $(addprefix $(SRCDIR)/,$(SRC))
+	@echo "--------------------------------------------\n"
+	ls $(INCDIR)
 	@norminette $(addprefix $(INCDIR)/,$(NAME).h)
+	@echo "--------------------------------------------\n"
 	cat -e auteur
 
 clean:
