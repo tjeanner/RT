@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/23 23:56:56 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/24 01:12:37 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ void			events(t_env *env)
 	while (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
-			env->pos_lum.z += (env->pos_lum.z > 1000) ? 0 : 50;
+			env->pos_lum.z += (env->pos_lum.z > 1000) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f)
-			env->pos_lum.z -= (env->pos_lum.z < -1000) ? 0 : 50;
+			env->pos_lum.z -= (env->pos_lum.z < -5000) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c)
-			env->pos_lum.x -= (env->pos_lum.x < -1000) ? 0 : 50;
+			env->pos_lum.x -= (env->pos_lum.x < -800) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v)
-			env->pos_lum.x += (env->pos_lum.x > 1000) ? 0 : 50;
+			env->pos_lum.x += (env->pos_lum.x > 800) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
 		{
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;

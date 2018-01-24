@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/23 18:24:48 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/24 02:52:25 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int			get_dist_cone(t_env *env, t_obj obj)
 	t_v		va;
 	double	h;
 	double	hh;
-	double	h0;
 	double	vs;
 	double	w;
 	double	a;
@@ -29,16 +28,16 @@ int			get_dist_cone(t_env *env, t_obj obj)
 
 	s = vect_add(obj.o, vect_mult(obj.norm, -1.0));
 	s = vect_mult(s, 1.0 / vect_norm(s));
-	h0 = vect_scal_prod(s, vect_add(env->r, vect_mult(obj.norm, -1.0)));
 	vs = vect_scal_prod(env->r2, s);
 	hh = vect_norm(vect_add(obj.o, vect_mult(obj.norm, -1.0)));
+	hh = obj.radius * obj.radius / (hh * hh);
 	h = vect_scal_prod(s, vect_add(env->r2, vect_mult(obj.norm, -1.0)));
 	va = vect_prod(vect_prod(s, env->r2), s);
-	w = 50.0 - h0;
+	w = 50.0 - vect_scal_prod(s, vect_add(env->r, vect_mult(obj.norm, -1.0)));
 	ra0 = vect_prod(vect_prod(s, vect_add(env->r, vect_mult(obj.norm, -1.0))), s);
-	a = vect_scal_prod(va, va) - vs * vs * obj.radius * obj.radius / (hh * hh);
-	b = 2 * vect_scal_prod(ra0, va) + 2 * w * vs * obj.radius * obj.radius / (hh * hh);
-	c = vect_scal_prod(ra0, ra0) - w * w * obj.radius * obj.radius / (hh * hh);
+	a = vect_scal_prod(va, va) - vs * vs * hh;
+	b = 2 * vect_scal_prod(ra0, va) + 2 * w * vs * hh;
+	c = vect_scal_prod(ra0, ra0) - w * w * hh;
 	tmp = b * b - 4 * a * c;
 	if (tmp < 0)//case where there's no solution for the equation, so no collision
 		return (0);
@@ -118,7 +117,7 @@ int			get_dist_sphere(t_env *env, t_obj obj)
 **corresponding for desired pixel (specified by x & y)
 */
 
-void		init_ray(t_env *env, float x, float y)
+int		init_ray(t_env *env, float x, float y)
 {
 	t_v		center_screen_2_pix;
 	t_v		cam_2_center_screen;
@@ -134,9 +133,10 @@ void		init_ray(t_env *env, float x, float y)
 //	env->r = vect_add(env->pos_cam, cam_2_pixel);
 	env->r = env->pos_cam;
 	env->r2 = cam_2_pixel_norm;
+	return (1);
 }
 
-t_color		get_col(t_env *env)
+t_color		get_col(t_env *env, float x, float y)
 {
 	int		i;//index that run through all objects
 	int		ob;//to store the value of the index i when we find the object
@@ -184,21 +184,40 @@ t_color		get_col(t_env *env)
 		set_black(&col);
 	else
 	{
+	//	(void)x;
+	//	(void)y;
 		pos_collision = vect_add(env->r, vect_mult(env->r2, env->objs[ob].dist));//pos toucher
-		norm = vect_add(env->objs[ob].o, vect_mult(pos_collision, -1.0));
+		norm = vect_add(pos_collision, vect_mult(env->objs[ob].o, -1.0));
 		norm = vect_mult(norm, 1 / vect_norm(norm));//vect norm a toucher
 		if (env->objs[ob].type != 's')
 			norm = env->objs[ob].norm;
 		lum_2_collision = vect_add(env->pos_lum, vect_mult(pos_collision, -1.0));
-	//	lum_2_collision = vect_mult(vect_add(env->pos_lum, vect_mult(pos_collision, -1.0)), 1.0);
-	//	res = 90.0 - acos(3.1415 * vect_scal_prod(norm, lum_2_collision) / (180.0 * vect_norm(norm) * vect_norm(lum_2_collision))) / 3.1415 * 180.0;
-	//	res = 90.0 - acos(3.1415 * (norm.x * lum_2_collision.x + norm.y * lum_2_collision.y + norm.z * lum_2_collision.z) / (180.0 * vect_norm(norm) * vect_norm(lum_2_collision))) / 3.1415 * 180.0;
-		col.c.r = 1 / res;
-		col.c.g = 1 / res;
-		col.c.b = 1 / res;
+		lum_2_collision = vect_mult(lum_2_collision, 1 / vect_norm(lum_2_collision));
+	//	res = vect_scal_prod(env->pos_lum, vect_mult(pos_collision, -1.0));
+		res = vect_scal_prod(env->objs[ob].norm, lum_2_collision);
 		col.c.r = 255 * fabs(norm.x);
 		col.c.g = 255 * fabs(norm.y);
 		col.c.b = 255 * fabs(norm.z);
+		if (env->objs[ob].type == 'p')
+		{
+			col.c.b = env->objs[ob].col.c.b * res / 1;
+			col.c.g = env->objs[ob].col.c.g * res / 1;
+			col.c.r = env->objs[ob].col.c.r * res / 1;
+		}
+		else if (env->objs[ob].type == 's')
+		{
+			res = vect_scal_prod(norm, lum_2_collision);
+			col.c.b = env->objs[ob].col.c.b * res / 1;
+			col.c.g = env->objs[ob].col.c.g * res / 1;
+			col.c.r = env->objs[ob].col.c.r * res / 1;
+			env->r2 = lum_2_collision;
+			env->r = pos_collision;
+			env->v1 = 0;
+			env->v2 = 0;
+			if (get_dist_sphere(env, env->objs[ob]) == 1 && (env->v1 > 1 || env->v2 > 1))
+				set_black(&col);
+			init_ray(env, x, y);
+		}
 	}
 	return (col);
 }
@@ -222,23 +241,26 @@ int			rays(t_env *env)
 	a = 0;
 	while ((b = 0) == 0 && a < WIN_Y)//for each row in the img
 	{
-		while (b < WIN_X)//for each pixel in the row
+			c = -1;
+		while (++c > -1 && b < WIN_X && init_ray(env, b, a))//for each pixel in the row
 		{
-			init_ray(env, b, a);
-			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 / env->flou * (b - (int)b));//col is set with desired color for current pixel
-		//	col[c] = get_col(env, b + env->flou / 2.0, a + env->flou / 2.0);//col is set with desired color for current pixel
-			col[c] = get_col(env);//col is set with desired color for current pixel
+			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 /
+					env->flou * (b - (int)b));//col is set with desired color for current pixel
+			col[c] = get_col(env, b, a);//col is set with desired color for current pixel
 			if (env->flou < 1 && c + 1 == 1 / flou_square &&
 					average_color(col, env->flou))
 				((int *)env->surf->pixels)[((int)((int)b + env->flou - 1) +
 					((int)(a + env->flou - 1) * env->surf->w))] = col[0].color;
 			c = -1;
 			while (env->flou >= 1 && ++c < flou_square)
-				((int *)env->surf->pixels)[(int)b + ((int)c % (int)env->flou) + ((int)a + (int)c / (int)env->flou) * env->surf->w] = col[0].color;//we draw the color in the pixel
+				((int *)env->surf->pixels)[(int)b + ((int)c % (int)env->flou)
+		+ ((int)a + (int)c / (int)env->flou) * env->surf->w] = col[0].color;//we draw the color in the pixel
 			if (((int)(10.0 * b + 10.0 * env->flou)) % 10 == 0)
 			{
-				b = (((int)(10.0 * a + 10.0 * env->flou)) % 10 == 0) ? b + env->flou : (int)b;
-				a = (((int)(10.0 * a + 10.0 * env->flou)) % 10 == 0) ? (int)a : a + env->flou;
+				b = (((int)(10.0 * a + 10.0 * env->flou)) % 10 == 0) ? b +
+					env->flou : (int)b;
+				a = (((int)(10.0 * a + 10.0 * env->flou)) % 10 == 0) ? (int)a
+					: a + env->flou;
 			}
 			else
 				b += env->flou;
