@@ -18,6 +18,7 @@ SRC =		main.c \
 			events.c \
 			color_math.c \
 			distances_functions.c \
+			parser.c \
 
 CC =		gcc
 FLAGS =		-Wall -Wextra -Werror -g3

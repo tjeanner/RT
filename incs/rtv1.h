@@ -129,7 +129,8 @@ void					events(t_env *env);
 /*
 **parser.c
 */
-void					init_scene(t_env env, char *scene);
+void					init_scene(t_env *env, char *scene);
+t_color					get_color(char *hexa);
 
 
 /*

@@ -203,13 +203,15 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
-	(void)ac;
-	(void)av;
+//	(void)av;
+//	(void)ac;
 	if (!(env = init()))
 	{
 		ft_putendl("error in init");
 		return (0);
 	}
+	if (ac == 2)
+		init_scene(env, av[1]);
 	env->state = 0;
 	//	event.type = SDL_USEREVENT;
 	while (!env->state)
