@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:47:24 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 01:59:51 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define WIN_Y 480
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
-# define INC "sptc"
+# define FCTS "sptc"
 
 typedef union			u_color
 {
@@ -91,7 +91,7 @@ typedef struct			s_env
 	float				flou;
 	t_obj				objs[100];
 	t_ray				init_rays;
-	int					(*col_fcts[4])(t_ray init_rays, t_obj obj);
+	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;
 
 /*

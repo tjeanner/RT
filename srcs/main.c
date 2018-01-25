@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:54:25 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 02:01:26 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,30 +148,31 @@ t_color		get_col(t_env *env, float x, float y)
 
 	i = -1;
 	while (++i < env->nb_obj && (env->objs[i].dist = -1) == -1)//we search a collision between the ray and each objects
-		if (env->objs[i].type == 's' && get_dist_sphere(&env->init_rays,
+	//	if (env->objs[i].type == 's' && get_dist_sphere(&env->init_rays,
+		if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](&env->init_rays,
 					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
 			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
 				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
 			else
 				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
-		else if (env->objs[i].type == 'p' && get_dist_plan(&env->init_rays,
-					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
-			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
-				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
-			else
-				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
-		else if (env->objs[i].type == 't' && get_dist_tube(&env->init_rays,
-					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
-			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
-				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
-			else
-				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
-		else if (env->objs[i].type == 'c' && get_dist_cone(&env->init_rays,
-					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
-			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
-				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
-			else
-				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
+//		else if (env->objs[i].type == 'p' && get_dist_plan(&env->init_rays,
+//					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
+//			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
+//				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
+//			else
+//				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
+//		else if (env->objs[i].type == 't' && get_dist_tube(&env->init_rays,
+//					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
+//			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
+//				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
+//			else
+//				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
+//		else if (env->objs[i].type == 'c' && get_dist_cone(&env->init_rays,
+//					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
+//			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
+//				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
+//			else
+//				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
 		else
 			env->objs[i].dist = -1;
 	i = -1;
@@ -298,6 +299,10 @@ t_env		*init(void)
 				return (NULL);
 			}
 		}
+		env->col_fcts[0] = get_dist_sphere;
+		env->col_fcts[1] = get_dist_plan;
+		env->col_fcts[2] = get_dist_tube;
+		env->col_fcts[3] = get_dist_cone;
 		return (fill_env(env));
 	}
 	ft_putendl("error in init");
