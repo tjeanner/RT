@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 05:53:44 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 22:21:33 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ typedef union			u_color
 	unsigned int		color;
 	struct
 	{
-		unsigned char	r;
-		unsigned char	g;
 		unsigned char	b;
+		unsigned char	g;
+		unsigned char	r;
 		unsigned char	a;
 	}					c;
 }						t_color;
