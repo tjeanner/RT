@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/24 02:57:26 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 01:19:33 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,18 @@ t_env	*fill_env(t_env *env)
 	t_obj	obj;
 
 	env->flou = 2;
-	env->pos_cam.x = 0;
-	env->pos_cam.y = 0;
-	env->pos_cam.z = -8000;
+	env->cam.pos_cam.x = 0;
+	env->cam.pos_cam.y = 0;
+	env->cam.pos_cam.z = -8000;
 	env->pos_lum.x = 0;
 	env->pos_lum.y = 400;
 	env->pos_lum.z = -800;
-	env->vcam.x = 0;
-	env->vcam.y = 0;
-	env->vcam.z = 1;
-	env->v2cam.x = 0;
-	env->v2cam.y = 1;
-	env->v2cam.z = 0;
+	env->cam.vcam.x = 0;
+	env->cam.vcam.y = 0;
+	env->cam.vcam.z = 1;
+	env->cam.v2cam.x = 0;
+	env->cam.v2cam.y = 1;
+	env->cam.v2cam.z = 0;
 	env->pos_lum.x = 0;
 	env->pos_lum.y = 0;
 	env->pos_lum.z = 0;

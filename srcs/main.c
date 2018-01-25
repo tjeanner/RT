@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/24 02:52:25 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 01:18:29 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,14 +124,14 @@ int		init_ray(t_env *env, float x, float y)
 	t_v		cam_2_pixel;
 	t_v		cam_2_pixel_norm;
 
-	env->v3cam = vect_mult(vect_prod(env->vcam, env->v2cam), -1);
-	cam_2_center_screen = vect_mult(env->vcam, DIST);
-	center_screen_2_pix = vect_add(vect_mult(env->v3cam, (x - WIN_X / 2) / vect_norm(env->v3cam)),
-			vect_mult(env->v2cam, -1 * (y - WIN_Y / 2) / vect_norm(env->v2cam)));
+	env->cam.v3cam = vect_mult(vect_prod(env->cam.vcam, env->cam.v2cam), -1);
+	cam_2_center_screen = vect_mult(env->cam.vcam, DIST);
+	center_screen_2_pix = vect_add(vect_mult(env->cam.v3cam, (x - WIN_X / 2) / vect_norm(env->cam.v3cam)),
+			vect_mult(env->cam.v2cam, -1 * (y - WIN_Y / 2) / vect_norm(env->cam.v2cam)));
 	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
 	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1 / vect_norm(cam_2_pixel));
-//	env->r = vect_add(env->pos_cam, cam_2_pixel);
-	env->r = env->pos_cam;
+//	env->r = vect_add(env->cam.pos_cam, cam_2_pixel);
+	env->r = env->cam.pos_cam;
 	env->r2 = cam_2_pixel_norm;
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/24 01:12:37 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 01:21:33 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ static void		rotate_events(t_env *env, SDL_Event event)
 {
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q)
 	{
-		env->vcam.x -= 0.1;
-		env->vcam = vect_mult(env->vcam, 1 / vect_norm(env->vcam));
+		env->cam.vcam.x -= 0.1;
+		env->cam.vcam = vect_mult(env->cam.vcam, 1 / vect_norm(env->cam.vcam));
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_e)
 	{
-		env->vcam.x += 0.1;
-		env->vcam = vect_mult(env->vcam, 1 / vect_norm(env->vcam));
+		env->cam.vcam.x += 0.1;
+		env->cam.vcam = vect_mult(env->cam.vcam, 1 / vect_norm(env->cam.vcam));
 	}
 }
 
@@ -35,28 +35,28 @@ static void		move_events(t_env *env, SDL_Event event)
 		env->state = 1;
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_w)
-		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->v2cam, 50));
+		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v2cam, 50));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
-		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->v2cam, -50));
+		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v2cam, -50));
 	else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != 0)
 	{
-		env->pos_cam = vect_add(env->pos_cam,
-				vect_mult(env->vcam, -10 * event.wheel.y));
+		env->cam.pos_cam = vect_add(env->cam.pos_cam,
+				vect_mult(env->cam.vcam, -10 * event.wheel.y));
 		event.wheel.y = 0;
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_UP)
-		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->vcam, 100));
+		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.vcam, 100));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN)
-		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->vcam, -100));
+		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.vcam, -100));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_a)
 	{
-		env->v3cam = vect_prod(env->vcam, env->v2cam);
-		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->v3cam, 50));
+		env->cam.v3cam = vect_prod(env->cam.vcam, env->cam.v2cam);
+		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v3cam, 50));
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_d)
 	{
-		env->v3cam = vect_prod(env->vcam, env->v2cam);
-		env->pos_cam = vect_add(env->pos_cam, vect_mult(env->v3cam, -50));
+		env->cam.v3cam = vect_prod(env->cam.vcam, env->cam.v2cam);
+		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v3cam, -50));
 	}
 	else
 		rotate_events(env, event);
