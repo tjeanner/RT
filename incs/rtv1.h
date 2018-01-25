@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/24 02:56:14 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/25 21:41:29 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void					events(t_env *env);
 /*
 **parser.c
 */
-void					init_scene(t_env env, char *scene);
+void					init_scene(t_env *env, char *scene);
+t_color					get_color(char *hexa);
 
 #endif

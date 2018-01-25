@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:18:29 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 03:59:17 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,13 +308,15 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
-	(void)ac;
-	(void)av;
+//	(void)av;
+//	(void)ac;
 	if (!(env = init()))
 	{
 		ft_putendl("error in init");
 		return (0);
 	}
+	if (ac == 2)
+		init_scene(env, av[1]);
 	env->state = 0;
 	//	event.type = SDL_USEREVENT;
 	while (!env->state)

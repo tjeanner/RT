@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:19:33 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 21:53:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_env	*fill_env(t_env *env)
 	env->pos_lum.x = 0;
 	env->pos_lum.y = 0;
 	env->pos_lum.z = 0;
+// ----------------------------
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = 0;
@@ -67,7 +68,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[0], &obj, sizeof(t_obj));
+//	ft_memcpy(&env->objs[0], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 1000;
 	obj.o.y = 0;
@@ -79,7 +80,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[1], &obj, sizeof(t_obj));
+//	ft_memcpy(&env->objs[1], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = -1000;
 	obj.o.y = 0;
@@ -91,7 +92,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[2], &obj, sizeof(t_obj));
+//	ft_memcpy(&env->objs[2], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = 1000;
@@ -103,7 +104,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[3], &obj, sizeof(t_obj));
+//	ft_memcpy(&env->objs[3], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = -1000;
@@ -115,7 +116,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[4], &obj, sizeof(t_obj));
+//	ft_memcpy(&env->objs[4], &obj, sizeof(t_obj));
 	obj.type = 't';
 	obj.radius = 100;
 	obj.o.x = 11;
@@ -124,11 +125,11 @@ t_env	*fill_env(t_env *env)
 	obj.norm.x = 1;
 	obj.norm.y = 0;
 	obj.norm.z = 1;
-	obj.col.c.r = 255;
+	obj.col.c.r = 0;
 	obj.col.c.g = 0;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[5], &obj, sizeof(t_obj));
+//	ft_memcpy(&env->objs[5], &obj, sizeof(t_obj));
 	obj.type = 's';
 	obj.o.x = 0;
 	obj.o.y = 0;
@@ -138,16 +139,16 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[6], &obj, sizeof(t_obj));
-	/*obj.type = 'c';
+//	ft_memcpy(&env->objs[6], &obj, sizeof(t_obj));
+	obj.type = 'c';
 	obj.radius = 2;
 	obj.o.x = 1;
 	obj.o.y = 10;
 	obj.o.z = 0;
 	obj.norm.x = 1;
 	obj.norm.y = 1;
-	obj.norm.z = 0;*/
-	ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
-	env->nb_obj = 7;
+	obj.norm.z = 0;
+//	ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
+//	env->nb_obj = 7;
 	return (env);
 }
