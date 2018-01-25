@@ -6,7 +6,7 @@
 #    By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2018/01/20 21:51:01 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/24 03:01:19 by hbouchet         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -77,7 +77,9 @@ SRC		=	ft_memset.c					\
 			ft_putnbrbase.c				\
 			ft_itoabase.c				\
 			ft_sqrt.c					\
-			ft_bubble_sort.c
+			ft_bubble_sort.c			\
+			get_next_line.c
+
 
 HEADER	=	libft.h
 OBJ		=	$(SRC:.c=.o)

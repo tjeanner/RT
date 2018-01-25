@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/23 18:18:12 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/24 02:56:14 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,22 @@ typedef struct			s_obj
 	double				dist;
 }						t_obj;
 
+typedef struct			s_cam
+{
+	t_v					pos_cam;
+	t_v					vcam;
+	t_v					v2cam;
+	t_v					v3cam;	
+}						t_cam;
+
 typedef struct			s_env
 {
 	SDL_Window			*win;
 	SDL_Surface			*surf;
 	t_v					pos_lum;
-	t_v					pos_cam;
-	t_v					vcam;
-	t_v					v2cam;
-	t_v					v3cam;
 	t_v					r;
 	t_v					r2;
+	t_cam				cam;
 	int					nb_obj;
 	int					state;
 	int					anti_alias;
@@ -81,7 +86,7 @@ typedef struct			s_env
 	double				v1;
 	double				v2;
 	t_obj				objs[100];
-	int					oldy;
+//	int					oldy;
 }						t_env;
 
 /*
@@ -116,4 +121,10 @@ t_color					get_black(void);
 **events.c
 */
 void					events(t_env *env);
+
+/*
+**parser.c
+*/
+void					init_scene(t_env env, char *scene);
+
 #endif
