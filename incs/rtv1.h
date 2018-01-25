@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/24 02:56:14 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/25 01:41:09 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,22 +71,26 @@ typedef struct			s_cam
 	t_v					v3cam;	
 }						t_cam;
 
+typedef struct			s_ray
+{
+	double				v1;
+	double				v2;
+	t_v					r;
+	t_v					r2;
+}						t_ray;
+
 typedef struct			s_env
 {
 	SDL_Window			*win;
 	SDL_Surface			*surf;
 	t_v					pos_lum;
-	t_v					r;
-	t_v					r2;
 	t_cam				cam;
 	int					nb_obj;
 	int					state;
 	int					anti_alias;
 	float				flou;
-	double				v1;
-	double				v2;
 	t_obj				objs[100];
-//	int					oldy;
+	t_ray				init_rays;
 }						t_env;
 
 /*

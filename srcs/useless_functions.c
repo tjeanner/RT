@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:19:33 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 01:42:09 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,6 @@ t_env	*fill_env(t_env *env)
 	env->cam.v2cam.x = 0;
 	env->cam.v2cam.y = 1;
 	env->cam.v2cam.z = 0;
-	env->pos_lum.x = 0;
-	env->pos_lum.y = 0;
-	env->pos_lum.z = 0;
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = 0;
