@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/22 07:58:15 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/25 03:14:49 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SRC =		main.c \
 			useless_functions.c \
 			events.c \
 			color_math.c \
+			distances_functions.c \
 
 CC =		gcc
 FLAGS =		-Wall -Wextra -Werror -g3

@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:59:51 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 05:53:44 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct			s_obj
 	char				type;
 	double				radius;
 	t_v					o;
-	t_v					colo;
 	t_v					norm;
 	t_color				col;
 	double				dist;
@@ -87,16 +86,16 @@ typedef struct			s_env
 	t_cam				cam;
 	int					nb_obj;
 	int					state;
-	int					anti_alias;
 	float				flou;
 	t_obj				objs[100];
-	t_ray				init_rays;
+	t_ray				*init_rays;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;
 
 /*
 **main.c
 */
+int						rays(t_env *env);
 
 /*
 **vector_math.c
@@ -131,5 +130,15 @@ void					events(t_env *env);
 **parser.c
 */
 void					init_scene(t_env env, char *scene);
+
+
+/*
+**distances_functions.c
+*/
+int						get_dist_cone(t_ray *init_rays, t_obj obj);
+int						get_dist_tube(t_ray *init_rays, t_obj obj);
+int						get_dist_plan(t_ray *init_rays, t_obj obj);
+int						get_dist_sphere(t_ray *init_rays, t_obj obj);
+
 
 #endif

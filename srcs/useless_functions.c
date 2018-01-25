@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:42:09 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 05:54:12 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,8 @@ t_env	*fill_env(t_env *env)
 	obj.norm.x = 1;
 	obj.norm.y = 0;
 	obj.norm.z = 1;
-	obj.col.c.r = 255;
-	obj.col.c.g = 0;
+	obj.col.c.r = 0;
+	obj.col.c.g = 255;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
 	ft_memcpy(&env->objs[5], &obj, sizeof(t_obj));
@@ -136,15 +136,21 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
 	ft_memcpy(&env->objs[6], &obj, sizeof(t_obj));
-	/*obj.type = 'c';
-	obj.radius = 2;
-	obj.o.x = 1;
+	obj.type = 'c';
+	obj.radius = 5;
+	obj.o.x = -11;
 	obj.o.y = 10;
-	obj.o.z = 0;
+	obj.o.z = -10;
 	obj.norm.x = 1;
-	obj.norm.y = 1;
-	obj.norm.z = 0;*/
+	obj.norm.y = 0;
+	obj.norm.z = 1;
+	obj.col.c.r = 255;
+	obj.col.c.g = 0;
+	obj.col.c.b = 255;
+	obj.col.c.a = 0;
 	ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
-	env->nb_obj = 7;
+	if (!(env->init_rays = (t_ray *)malloc(sizeof(t_ray) * 1)))
+		return (0);
+	env->nb_obj = 8;
 	return (env);
 }

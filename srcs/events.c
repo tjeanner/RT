@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 01:21:33 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/25 03:03:34 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,5 @@ void			events(t_env *env)
 		else
 			move_events(env, event);
 	}
+	rays(env);
 }
