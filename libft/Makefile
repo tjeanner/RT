@@ -6,13 +6,13 @@
 #    By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2018/01/24 03:01:19 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/01/26 02:00:59 by tjeanner         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME	=	libft.a
 CC		=	gcc
-CFLAGS =	-Wall -Wextra -Werror #-g3
+CFLAGS =	-Wall -Wextra -Werror -g3
 SRC		=	ft_memset.c					\
 			ft_freedoublearray.c		\
 			ft_bzero.c					\
@@ -78,7 +78,9 @@ SRC		=	ft_memset.c					\
 			ft_itoabase.c				\
 			ft_sqrt.c					\
 			ft_bubble_sort.c			\
-			get_next_line.c
+			get_next_line.c				\
+			ft_pow.c					\
+			ft_atof.c					\
 
 
 HEADER	=	libft.h

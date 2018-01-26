@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 02:46:25 by hbouchet          #+#    #+#             */
-/*   Updated: 2017/12/23 02:06:43 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/26 02:21:54 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,7 @@ void				ft_putnbrbase(int n, int base);
 char				*ft_itoabase(int n, int base);
 void				ft_bubble_sort(int ac, char **av);
 int					ft_sqrt(int nb);
+double				ft_pow(int n, int pow);
+double				ft_atof(char *s);
 
 #endif
