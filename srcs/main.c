@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 05:57:11 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 02:57:48 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int			init_ray(t_env *env, float x, float y)
 			vect_mult(env->cam.v2cam, -1 * (y - WIN_Y / 2) / vect_norm(env->cam.v2cam)));
 	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
 	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1 / vect_norm(cam_2_pixel));
-	//	init_rays->r = vect_add(env->cam.pos_cam, cam_2_pixel);
-	env->init_rays->r = env->cam.pos_cam;
-	env->init_rays->r2 = cam_2_pixel_norm;
+	//	init_rays.r = vect_add(env->cam.pos_cam, cam_2_pixel);
+	env->init_rays.r = env->cam.pos_cam;
+	env->init_rays.r2 = cam_2_pixel_norm;
 	return (1);
 }
 
@@ -49,44 +49,48 @@ t_color		get_col(t_env *env)
 
 	i = -1;
 	while (++i < env->nb_obj && (env->objs[i].dist = -1) == -1)//we search a collision between the ray and each objects
-		if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](env->init_rays,
-					env->objs[i]) == 1 && (env->init_rays->v1 >= 0 || env->init_rays->v2 >= 0))
-			if (env->init_rays->v1 >= 0 && env->init_rays->v2 >= 0)
-				env->objs[i].dist = (env->init_rays->v1 < env->init_rays->v2) ? env->init_rays->v1 : env->init_rays->v2;
+		if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](&env->init_rays,
+					env->objs[i]) == 1 && (env->init_rays.v1 >= 0 || env->init_rays.v2 >= 0))
+			if (env->init_rays.v1 >= 0 && env->init_rays.v2 >= 0)
+				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ? env->init_rays.v1 : env->init_rays.v2;
 			else
-				env->objs[i].dist = (env->init_rays->v1 >= 0) ? env->init_rays->v1 : env->init_rays->v2;
+				env->objs[i].dist = (env->init_rays.v1 >= 0) ? env->init_rays.v1 : env->init_rays.v2;
 		else
 			env->objs[i].dist = -1;
 	i = -1;
 	while (++i < env->nb_obj)//we select the shortest distance in all the one we have
+	{
 		if ((i == 0 || (env->objs[i].dist > 0 && (res == -1 || res > env->objs[i].dist))))
 		{
 			res = env->objs[i].dist;
 			ob = i;
 		}
-	if ((col.c.a = 0) != 0 && env->objs[ob].dist < 0)//there has been no collision with any object
+	}
+	if ((col.c.a = 0) != 0 || env->objs[ob].dist < 0)//there has been no collision with any object
 		set_black(&col);
 	else
 	{
-		pos_collision = vect_add(env->init_rays->r, vect_mult(env->init_rays->r2, env->objs[ob].dist));//pos toucher
-		env->init_rays->r = pos_collision;
+		pos_collision = vect_add(env->init_rays.r, vect_mult(env->init_rays.r2, env->objs[ob].dist));//pos toucher
 		collision_2_lum = vect_add(env->pos_lum, vect_mult(pos_collision, -1.0));
 		collision_2_lum = vect_mult(collision_2_lum, 1 / vect_norm(collision_2_lum));
-		env->init_rays->r2 = collision_2_lum;
+		env->init_rays.r = pos_collision;
+//		ft_memcpy(((void *)&env->init_rays.r), ((void *)&pos_collision), sizeof(t_v));
+		env->init_rays.r2 = collision_2_lum;
+//		ft_memcpy(((void *)&env->init_rays.r2), ((void *)&collision_2_lum), sizeof(t_v));
 		i = -1;
 		while (env->objs[ob].type == 's' && ++i < env->nb_obj)//we search an object between the collision and the light source
 		{
-			env->init_rays->v1 = -1;
-			env->init_rays->v2 = -1;
-		//	if (get_dist_sphere(&env->init_rays, env->objs[i]) == 1 && ((env->init_rays->v1 > 1 && env->init_rays->v1 < vect_norm(collision_2_lum)) || (env->init_rays->v2 > 1 && env->init_rays->v2 < vect_norm(collision_2_lum))))
-			if (get_dist_sphere(env->init_rays, env->objs[i]) == 1 && (env->init_rays->v1 > 1 || env->init_rays->v2 > 1))
-		//	if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](env->init_rays,
-//					env->objs[i]) == 1 && (env->init_rays->v1 > 1 || env->init_rays->v2 > 1))
-		//	if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](&env->init_rays, env->objs[i]) == 1 && (env->init_rays->v1 > 1 || env->init_rays->v2 > 1))
+			env->init_rays.v1 = -1;
+			env->init_rays.v2 = -1;
+//			if (get_dist_sphere(&env->init_rays, env->objs[i]) == 1 && ((env->init_rays.v1 > 1 && env->init_rays.v1 < vect_norm(collision_2_lum)) || (env->init_rays.v2 > 1 && env->init_rays.v2 < vect_norm(collision_2_lum))))
+			if (get_dist_sphere(&env->init_rays, env->objs[i]) == 1 && (env->init_rays.v1 > 1 || env->init_rays.v2 > 1))
+		//	if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](&env->init_rays,
+		//			env->objs[i]) == 1 && (env->init_rays.v1 > 1 || env->init_rays.v2 > 1))
+		//	if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](&env->init_rays, env->objs[i]) == 1 && (env->init_rays.v1 > 1 || env->init_rays.v2 > 1))
 //			if (env->col_fcts[ft_strchr(FCTS, env->objs[ob].type) - FCTS](&env->init_rays,
-//				env->objs[ob]) == 1 && ((env->init_rays->v1 > 1 && env->init_rays->v1
-//			< vect_norm(collision_2_lum)) || (env->init_rays->v2 > 1 &&
-//			env->init_rays->v2 < vect_norm(collision_2_lum))))
+//				env->objs[ob]) == 1 && ((env->init_rays.v1 > 1 && env->init_rays.v1
+//			< vect_norm(collision_2_lum)) || (env->init_rays.v2 > 1 &&
+//			env->init_rays.v2 < vect_norm(collision_2_lum))))
 			{
 				set_black(&col);
 				return (col);
@@ -203,7 +207,7 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
-//	(void)av;
+	(void)av;
 //	(void)ac;
 	if (!(env = init()))
 	{

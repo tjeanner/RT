@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 05:54:12 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 03:03:05 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ t_env	*fill_env(t_env *env)
 	env->cam.pos_cam.x = 0;
 	env->cam.pos_cam.y = 0;
 	env->cam.pos_cam.z = -8000;
-	env->pos_lum.x = 0;
-	env->pos_lum.y = 400;
-	env->pos_lum.z = -800;
+	env->lum.pos_lum.x = 0;
+	env->lum.pos_lum.y = 400;
+	env->lum.pos_lum.z = -800;
+	env->lum.coef = 1.0;
+	set_white(&env->lum.col);
 	env->cam.vcam.x = 0;
 	env->cam.vcam.y = 0;
 	env->cam.vcam.z = 1;
@@ -149,8 +151,8 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
 	ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
-	if (!(env->init_rays = (t_ray *)malloc(sizeof(t_ray) * 1)))
-		return (0);
+//	if (!(env->init_rays = (t_ray *)malloc(sizeof(t_ray) * 1)))
+//		return (0);
 	env->nb_obj = 8;
 	return (env);
 }
