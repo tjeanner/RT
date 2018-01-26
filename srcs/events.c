@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 06:15:27 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 18:45:47 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,16 @@ void			events(t_env *env)
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v)
 			env->lums[0].pos_lum.x += (env->lums[0].pos_lum.x > 800) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
+			env->lums[0].pos_lum.y += 100;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
+			env->lums[0].pos_lum.y -= 100;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_MINUS)
 		{
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;
 			ft_putnbr(which_pow(env->flou, 2));
 			ft_putchar('\n');
 		}
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_PLUS)
 		{
 			env->flou /= (env->flou == 0.125) ? 1 : 2;
 			ft_putnbr(which_pow(env->flou, 2));
