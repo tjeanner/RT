@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 03:22:52 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 04:40:30 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_color		get_col(t_env *env)
 	t_v		norm;
 	t_v		pos_collision;
 	t_v		collision_2_lum;
+	t_v		collision_2_lum_norm;
 
 	i = -1;
 	while (++i < env->nb_obj && (env->objs[i].dist = -1) == -1)//we search a collision between the ray and each objects
@@ -72,10 +73,13 @@ t_color		get_col(t_env *env)
 	{
 		pos_collision = vect_add(env->init_rays.r, vect_mult(env->init_rays.r2, env->objs[ob].dist));//pos toucher
 		collision_2_lum = vect_add(env->lum.pos_lum, vect_mult(pos_collision, -1.0));
-		collision_2_lum = vect_mult(collision_2_lum, 1 / vect_norm(collision_2_lum));
+//		if (vect_norm(collision_2_lum) != env->objs[ob].dist)
+//			ft_putstr("fail");
+//		collision_2_lum = vect_mult(collision_2_lum, 1 / vect_norm(collision_2_lum));
 		env->init_rays.r = pos_collision;
 //		ft_memcpy(((void *)&env->init_rays.r), ((void *)&pos_collision), sizeof(t_v));
-		env->init_rays.r2 = collision_2_lum;
+		collision_2_lum_norm = vect_mult(collision_2_lum, 1.0 / vect_norm(collision_2_lum));
+		env->init_rays.r2 = collision_2_lum_norm;
 //		ft_memcpy(((void *)&env->init_rays.r2), ((void *)&collision_2_lum), sizeof(t_v));
 		i = -1;
 	//	while (env->objs[ob].type == 's' && ++i < env->nb_obj)//we search an object between the collision and the light source
@@ -83,8 +87,8 @@ t_color		get_col(t_env *env)
 		{
 			env->init_rays.v1 = -1;
 			env->init_rays.v2 = -1;
-//			if (get_dist_sphere(&env->init_rays, env->objs[i]) == 1 && ((env->init_rays.v1 > 1 && env->init_rays.v1 < vect_norm(collision_2_lum)) || (env->init_rays.v2 > 1 && env->init_rays.v2 < vect_norm(collision_2_lum))))
-			if (get_dist_sphere(&env->init_rays, env->objs[i]) == 1 && (env->init_rays.v1 > 1 || env->init_rays.v2 > 1))
+			if (get_dist_sphere(&env->init_rays, env->objs[i]) == 1 && ((env->init_rays.v1 > 1 && env->init_rays.v1 < vect_norm(collision_2_lum)) || ((env->init_rays.v2 > 1 && env->init_rays.v2 < vect_norm(collision_2_lum)))))
+//			if (get_dist_sphere(&env->init_rays, env->objs[i]) == 1 && (env->init_rays.v1 > 1 || env->init_rays.v2 > 1))
 		//	if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](&env->init_rays,
 		//			env->objs[i]) == 1 && (env->init_rays.v1 > 1 || env->init_rays.v2 > 1))
 		//	if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](&env->init_rays, env->objs[i]) == 1 && (env->init_rays.v1 > 1 || env->init_rays.v2 > 1))
@@ -101,12 +105,12 @@ t_color		get_col(t_env *env)
 		{
 			norm = vect_add(pos_collision, vect_mult(env->objs[ob].o, -1.0));
 			norm = vect_mult(norm, 1 / vect_norm(norm));//vect norm a toucher
-			res = vect_scal_prod(norm, collision_2_lum);
+			res = vect_scal_prod(norm, collision_2_lum_norm);
 			col = mult_color(env->objs[ob].col, res);
 		}
 		else if (env->objs[ob].type == 'p')
 		{
-			res = vect_scal_prod(env->objs[ob].norm, collision_2_lum);
+			res = vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm);
 			col = mult_color(env->objs[ob].col, res);
 		}
 		else
@@ -208,6 +212,8 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
+	(void)av;
+//	(void)ac;
 	if (!(env = init()))
 	{
 		ft_putendl("error in init");
