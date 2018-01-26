@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 05:57:11 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 01:13:29 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,8 +203,6 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
-//	(void)av;
-//	(void)ac;
 	if (!(env = init()))
 	{
 		ft_putendl("error in init");
