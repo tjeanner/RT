@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/26 06:18:01 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 23:53:31 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 t_color	get_color(char *hexa)
 {
 	t_color	col;
-//	char *tmp;
 	char *s;
 	int tmp;
 
@@ -32,67 +31,6 @@ t_color	get_color(char *hexa)
 	return (col);
 }
 
-/*t_obj	get_plane(char **arr)
-{
-	t_obj	objet;
-
-	objet.type = 'p';
-	objet.o.x = ft_atoi(arr[1]);
-	objet.o.y = ft_atoi(arr[2]);
-	objet.o.z = ft_atoi(arr[3]);
-	objet.norm.x = ft_atoi(arr[4]);
-	objet.norm.y = ft_atoi(arr[5]);
-	objet.norm.z = ft_atoi(arr[6]);
-	objet.col = get_color(arr[11]);
-	return (objet);
-}
-
-t_obj	get_tube(char **arr)
-{
-	t_obj	objet;
-
-	objet.type = 't';
-	objet.o.x = ft_atoi(arr[1]);
-	objet.o.y = ft_atoi(arr[2]);
-	objet.o.z = ft_atoi(arr[3]);
-	objet.norm.x = ft_atoi(arr[4]);
-	objet.norm.y = ft_atoi(arr[5]);
-	objet.norm.z = ft_atoi(arr[6]);
-	objet.radius = ft_atoi(arr[10]);
-	objet.col = get_color(arr[11]);
-	return (objet);
-}
-
-t_obj	get_sphere(char **arr)
-{
-	t_obj	objet;
-
-	objet.type = 's';
-	objet.o.x = ft_atoi(arr[1]);
-	objet.o.y = ft_atoi(arr[2]);
-	objet.o.z = ft_atoi(arr[3]);
-	objet.col = get_color(arr[11]);
-	objet.radius = ft_atoi(arr[10]);
-	return (objet);
-}
-
-t_obj	get_cone(char **arr)
-{
-	t_obj	objet;
-
-	objet.type = 'c';
-	objet.o.x = ft_atoi(arr[1]);
-	objet.o.y = ft_atoi(arr[2]);
-	objet.o.z = ft_atoi(arr[3]);
-	objet.norm.x = ft_atoi(arr[4]);
-	objet.norm.y = ft_atoi(arr[5]);
-	objet.norm.z = ft_atoi(arr[6]);
-	objet.radius = ft_atoi(arr[10]);
-	objet.col = get_color(arr[11]);
-	return (objet);
-}
-*/
-
 t_obj	get_obj(char **arr)
 {
 	t_obj	objet;
@@ -107,16 +45,6 @@ t_obj	get_obj(char **arr)
 	objet.radius = ft_atof(arr[10]);
 	objet.col = get_color(arr[11]);
 	return (objet);
-
-/*	if (ft_strstr(arr[0], "plane"))
-		return (get_plane(arr));
-	else if (ft_strstr(arr[0], "tube"))
-		return (get_tube(arr));
-	else if (ft_strstr(arr[0], "cone"))
-		return (get_cone(arr));
-	else
-		return (get_sphere(arr));
-*/
 }
 
 t_lum	get_lum(char **arr)
@@ -127,7 +55,7 @@ t_lum	get_lum(char **arr)
 	lum.pos_lum.y = ft_atof(arr[2]);
 	lum.pos_lum.z = ft_atof(arr[3]);
 	lum.coef = 1.0;
-	set_white(&lum.col);
+	set_white(&lum.col); //
 	return (lum);
 }
 
@@ -152,7 +80,6 @@ void	init_scene(t_env *env, char *scene)
 	int		fd;
 	int		ret;
 	char	*line;
-//	t_obj	*obj;
 	char	**tmp;
 	int		i = 0;
 	char	flag;
@@ -199,6 +126,7 @@ void	init_scene(t_env *env, char *scene)
 			else if (flag == 'l' && ft_strstr(tmp[0], "lum"))
 			{
 				env->lums[0] = get_lum(tmp);
+				printf("%f\n", env->lums[0].pos_lum.x);
 				i++;
 			}
 		}
