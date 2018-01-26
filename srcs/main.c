@@ -208,8 +208,6 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
-	(void)av;
-//	(void)ac;
 	if (!(env = init()))
 	{
 		ft_putendl("error in init");
