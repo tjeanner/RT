@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/26 23:53:31 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/27 00:18:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,22 +91,26 @@ void	init_scene(t_env *env)
 		if (ft_strstr(line, "#OBJ# "))
 		{
 			flag = 'o';
+			i = 0;
 			env->nb_obj = ft_atoi(line + 6);
-			if (!(env->objs = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj + 1)))
+			if (!(env->objs = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj)))
 				exit (0);
 		}
 		else if (ft_strstr(line, "#CAM#"))
 		{
 			flag = 'c';
+			i = 0;
 			env->nb_cam = ft_atoi(line + 6);
-			if (!(env->cams = (t_cam *)malloc(sizeof(t_cam) * env->nb_cam) + 1))
+			printf("nb_cam : %d\n", env->nb_cam);
+			if (!(env->cams = (t_cam *)malloc(sizeof(t_cam) * env->nb_cam)))
 				exit (0);
 		}
 		else if (ft_strstr(line, "#LUM#"))
 		{
+			i = 0;
 			flag = 'l';
 			env->nb_lum = ft_atoi(line + 6);
-			if (!(env->lums = (t_lum *)malloc(sizeof(t_lum) * env->nb_lum) + 1))
+			if (!(env->lums = (t_lum *)malloc(sizeof(t_lum) * env->nb_lum)))
 				exit (0);
 		}
 		else
@@ -120,13 +124,12 @@ void	init_scene(t_env *env)
 			}
 			else if (flag == 'c' && ft_strstr(tmp[0], "cam"))
 			{
-				env->cams[0] = get_cam(tmp);
+				env->cams[i] = get_cam(tmp);
 				i++;
 			}
 			else if (flag == 'l' && ft_strstr(tmp[0], "lum"))
 			{
-				env->lums[0] = get_lum(tmp);
-				printf("%f\n", env->lums[0].pos_lum.x);
+				env->lums[i] = get_lum(tmp);
 				i++;
 			}
 		}
