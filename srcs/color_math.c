@@ -6,11 +6,19 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 04:51:14 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 04:00:58 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 03:01:19 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+void		set_white(t_color *c)
+{
+	c->c.r = 255;
+	c->c.g = 255;
+	c->c.b = 255;
+	c->c.a = 0;
+}
 
 void		set_black(t_color *c)
 {

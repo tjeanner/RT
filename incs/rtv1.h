@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/25 22:21:33 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 03:02:43 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,13 @@ typedef struct			s_cam
 	t_v					v3cam;	
 }						t_cam;
 
+typedef struct			s_lum
+{
+	t_v					pos_lum;
+	float				coef;
+	t_color				col;
+}						t_lum;
+
 typedef struct			s_ray
 {
 	double				v1;
@@ -84,11 +91,12 @@ typedef struct			s_env
 	SDL_Surface			*surf;
 	t_v					pos_lum;
 	t_cam				cam;
+	t_lum				lum;
 	int					nb_obj;
 	int					state;
 	float				flou;
 	t_obj				objs[100];
-	t_ray				*init_rays;
+	t_ray				init_rays;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;
 
@@ -109,6 +117,7 @@ t_v						vect_prod(t_v a, t_v b);
 /*
 **color_math.c
 */
+void					set_white(t_color *c);
 void					set_black(t_color *c);
 t_color					add_color(t_color a, t_color b);
 t_color					mult_color(t_color a, float n);
