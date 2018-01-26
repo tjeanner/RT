@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 18:45:47 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 23:56:58 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,13 @@ void			events(t_env *env)
 			env->lums[0].pos_lum.y += 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
 			env->lums[0].pos_lum.y -= 100;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m)
+		{
+			ft_memdel((void **)&env->objs);
+			ft_memdel((void **)&env->cams);
+			ft_memdel((void **)&env->lums);
+			init_scene(env);
+		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_MINUS)
 		{
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;

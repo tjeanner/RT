@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 18:05:53 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 23:50:34 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct			s_env
 	t_lum				*lums;
 	t_ray				init_rays;
 	float				flou;
+	char				file[256];
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;
 
@@ -139,7 +140,7 @@ void					events(t_env *env);
 /*
 **parser.c
 */
-void					init_scene(t_env *env, char *scene);
+void					init_scene(t_env *env);
 t_color					get_color(char *hexa);
 
 

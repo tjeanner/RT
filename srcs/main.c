@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 18:39:02 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 23:51:59 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ t_color		*get_col(t_env *env)
 		{
 			s = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
 			s = vect_mult(s, 1.0 / vect_norm(s));
-			res = (s.x * (env->init_rays.r.x + env->objs[ob].o.x) + s.y * (env->init_rays.r.y + env->objs[ob].o.y) + s.z * (env->init_rays.r.z + env->objs[ob].o.z)) / (s.x * s.x + s.y * s.y + s.z * s.z);
+			res = ((double)(s.x * (env->init_rays.r.x + env->objs[ob].o.x) + s.y * (env->init_rays.r.y + env->objs[ob].o.y) + s.z * (env->init_rays.r.z + env->objs[ob].o.z)) / (s.x * s.x + s.y * s.y + s.z * s.z));
 			norm = vect_add(env->objs[ob].o, vect_mult(s, res));
-			norm = vect_add(env->init_rays.r, vect_mult(norm, -1));
-			norm = vect_mult(norm, 1 / vect_norm(norm));
+			norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));
+			norm = vect_mult(norm, 1.0 / vect_norm(norm));
 			res = vect_scal_prod(norm, collision_2_lum_norm);
 			*col = mult_color(env->objs[ob].col, res);
 		}
@@ -226,7 +226,10 @@ int			main(int ac, char **av)
 		return (0);
 	}
 	if (ac == 2)
-		init_scene(env, av[1]);
+	{
+		ft_strcpy(env->file, av[1]);
+		init_scene(env);
+	}
 	env->state = 0;
 	//	event.type = SDL_USEREVENT;
 	while (!env->state)
