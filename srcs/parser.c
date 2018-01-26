@@ -75,7 +75,7 @@ t_cam	get_cam(char **arr)
 	return (cam);
 }
 
-void	init_scene(t_env *env, char *scene)
+void	init_scene(t_env *env)
 {
 	int		fd;
 	int		ret;
@@ -84,7 +84,7 @@ void	init_scene(t_env *env, char *scene)
 	int		i = 0;
 	char	flag;
 
-	if ((fd = open(scene, O_RDONLY)) == -1)
+	if ((fd = open(env->file, O_RDONLY)) == -1)
 		exit(0);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
@@ -107,7 +107,7 @@ void	init_scene(t_env *env, char *scene)
 			flag = 'l';
 			env->nb_lum = ft_atoi(line + 6);
 			if (!(env->lums = (t_lum *)malloc(sizeof(t_lum) * env->nb_lum) + 1))
-				exit (0);		
+				exit (0);
 		}
 		else
 		{
