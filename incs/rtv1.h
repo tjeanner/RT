@@ -89,15 +89,15 @@ typedef struct			s_env
 {
 	SDL_Window			*win;
 	SDL_Surface			*surf;
-	t_cam				cam;
-	t_lum				lum;
-	int					nb_obj;
-	int					nb_lum;
-	int					nb_cam;
 	int					state;
-	float				flou;
+	int					nb_obj;
+	int					nb_cam;
+	int					nb_lum;
 	t_obj				*objs;
+	t_cam				*cams;
+	t_lum				*lums;
 	t_ray				init_rays;
+	float				flou;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;
 

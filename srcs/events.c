@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 03:25:03 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 06:15:27 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ static void		rotate_events(t_env *env, SDL_Event event)
 {
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q)
 	{
-		env->cam.vcam.x -= 0.1;
-		env->cam.vcam = vect_mult(env->cam.vcam, 1 / vect_norm(env->cam.vcam));
+		env->cams[0].vcam.x -= 0.1;
+		env->cams[0].vcam = vect_mult(env->cams[0].vcam, 1 / vect_norm(env->cams[0].vcam));
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_e)
 	{
-		env->cam.vcam.x += 0.1;
-		env->cam.vcam = vect_mult(env->cam.vcam, 1 / vect_norm(env->cam.vcam));
+		env->cams[0].vcam.x += 0.1;
+		env->cams[0].vcam = vect_mult(env->cams[0].vcam, 1 / vect_norm(env->cams[0].vcam));
 	}
 }
 
@@ -35,28 +35,28 @@ static void		move_events(t_env *env, SDL_Event event)
 		env->state = 1;
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_w)
-		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v2cam, 50));
+		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].v2cam, 50));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
-		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v2cam, -50));
+		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].v2cam, -50));
 	else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != 0)
 	{
-		env->cam.pos_cam = vect_add(env->cam.pos_cam,
-				vect_mult(env->cam.vcam, -10 * event.wheel.y));
+		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam,
+				vect_mult(env->cams[0].vcam, -10 * event.wheel.y));
 		event.wheel.y = 0;
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_UP)
-		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.vcam, 100));
+		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].vcam, 100));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN)
-		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.vcam, -100));
+		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].vcam, -100));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_a)
 	{
-		env->cam.v3cam = vect_prod(env->cam.vcam, env->cam.v2cam);
-		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v3cam, 50));
+		env->cams[0].v3cam = vect_prod(env->cams[0].vcam, env->cams[0].v2cam);
+		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].v3cam, 50));
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_d)
 	{
-		env->cam.v3cam = vect_prod(env->cam.vcam, env->cam.v2cam);
-		env->cam.pos_cam = vect_add(env->cam.pos_cam, vect_mult(env->cam.v3cam, -50));
+		env->cams[0].v3cam = vect_prod(env->cams[0].vcam, env->cams[0].v2cam);
+		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].v3cam, -50));
 	}
 	else
 		rotate_events(env, event);
@@ -69,13 +69,13 @@ void			events(t_env *env)
 	while (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
-			env->lum.pos_lum.z += (env->lum.pos_lum.z > 1000) ? 0 : 100;
+			env->lums[0].pos_lum.z += (env->lums[0].pos_lum.z > 1000) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f)
-			env->lum.pos_lum.z -= (env->lum.pos_lum.z < -5000) ? 0 : 100;
+			env->lums[0].pos_lum.z -= (env->lums[0].pos_lum.z < -5000) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c)
-			env->lum.pos_lum.x -= (env->lum.pos_lum.x < -800) ? 0 : 100;
+			env->lums[0].pos_lum.x -= (env->lums[0].pos_lum.x < -800) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v)
-			env->lum.pos_lum.x += (env->lum.pos_lum.x > 800) ? 0 : 100;
+			env->lums[0].pos_lum.x += (env->lums[0].pos_lum.x > 800) ? 0 : 100;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
 		{
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;

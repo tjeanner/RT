@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/26 06:14:29 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/26 06:18:01 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,14 +172,14 @@ void	init_scene(t_env *env, char *scene)
 		{
 			flag = 'c';
 			env->nb_cam = ft_atoi(line + 6);
-			if (!(env->cams = (t_obj *)malloc(sizeof(t_obj) * env->nb_cam) + 1))
+			if (!(env->cams = (t_cam *)malloc(sizeof(t_cam) * env->nb_cam) + 1))
 				exit (0);
 		}
 		else if (ft_strstr(line, "#LUM#"))
 		{
 			flag = 'l';
 			env->nb_lum = ft_atoi(line + 6);
-			if (!(env->lums = (t_obj *)malloc(sizeof(t_obj) * env->nb_lum) + 1))
+			if (!(env->lums = (t_lum *)malloc(sizeof(t_lum) * env->nb_lum) + 1))
 				exit (0);		
 		}
 		else
