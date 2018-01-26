@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 06:33:32 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 06:43:38 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ double	which_pow(double num, double pow)
 
 t_env	*fill_env(t_env *env)
 {
-	t_obj	obj;
+//	t_obj	obj;
 
-	env->cams[0].pos_cam.x = 0;
+	(void)env;
+	/*env->cams[0].pos_cam.x = 0;
 	env->cams[0].pos_cam.y = 0;
 	env->cams[0].pos_cam.z = -8000;
 	env->lums[0].pos_lum.x = 0;
@@ -152,6 +153,6 @@ t_env	*fill_env(t_env *env)
 	ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
 //	if (!(env->init_rays = (t_ray *)malloc(sizeof(t_ray) * 1)))
 //		return (0);
-	env->nb_obj = 8;
+	env->nb_obj = 8;*/
 	return (env);
 }
