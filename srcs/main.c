@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 08:01:48 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 18:39:02 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_color		*get_col(t_env *env)
 	double	res;//to store the value of the distance when we find the object
 	t_color	*col;
 	t_v		norm;
+	t_v		s;
 	t_v		pos_collision;
 	t_v		collision_2_lum;
 	t_v		collision_2_lum_norm;
@@ -110,11 +111,17 @@ t_color		*get_col(t_env *env)
 			res = vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm);
 			*col = mult_color(env->objs[ob].col, res);
 		}
-//		else if (env->objs[ob].type == 't')
-//		{
-//			res = vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm);
-//			*col = mult_color(env->objs[ob].col, res);
-//		}
+		else if (env->objs[ob].type == 't')
+		{
+			s = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
+			s = vect_mult(s, 1.0 / vect_norm(s));
+			res = (s.x * (env->init_rays.r.x + env->objs[ob].o.x) + s.y * (env->init_rays.r.y + env->objs[ob].o.y) + s.z * (env->init_rays.r.z + env->objs[ob].o.z)) / (s.x * s.x + s.y * s.y + s.z * s.z);
+			norm = vect_add(env->objs[ob].o, vect_mult(s, res));
+			norm = vect_add(env->init_rays.r, vect_mult(norm, -1));
+			norm = vect_mult(norm, 1 / vect_norm(norm));
+			res = vect_scal_prod(norm, collision_2_lum_norm);
+			*col = mult_color(env->objs[ob].col, res);
+		}
 		else
 		{
 			col->c.b = env->objs[ob].col.c.b;
@@ -212,7 +219,7 @@ int			main(int ac, char **av)
 	t_env		*env;
 
 	(void)av;
-//	(void)ac;
+	//	(void)ac;
 	if (!(env = init()))
 	{
 		ft_putendl("error in init");
