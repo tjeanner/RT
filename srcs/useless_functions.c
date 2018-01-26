@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 04:29:06 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 05:24:06 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[0], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[0], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 1000;
 	obj.o.y = 0;
@@ -78,7 +78,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[1], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[1], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = -1000;
 	obj.o.y = 0;
@@ -90,7 +90,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[2], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[2], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = 1000;
@@ -102,7 +102,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[3], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[3], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = -1000;
@@ -114,7 +114,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[4], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[4], &obj, sizeof(t_obj));
 	obj.type = 't';
 	obj.radius = 100;
 	obj.o.x = 11;
@@ -127,7 +127,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[5], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[5], &obj, sizeof(t_obj));
 	obj.type = 's';
 	obj.o.x = 0;
 	obj.o.y = 0;
@@ -137,7 +137,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[6], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[6], &obj, sizeof(t_obj));
 	obj.type = 'c';
 	obj.radius = 5;
 	obj.o.x = -11;
@@ -150,7 +150,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
 //	if (!(env->init_rays = (t_ray *)malloc(sizeof(t_ray) * 1)))
 //		return (0);
 	env->nb_obj = 8;

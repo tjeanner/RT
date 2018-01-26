@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 04:29:12 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 05:28:59 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,11 @@ typedef struct			s_env
 	t_cam				cam;
 	t_lum				lum;
 	int					nb_obj;
+	int					nb_lum;
+	int					nb_cam;
 	int					state;
 	float				flou;
-	t_obj				objs[100];
+	t_obj				*objs;
 	t_ray				init_rays;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;
