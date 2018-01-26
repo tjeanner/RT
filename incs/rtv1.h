@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 04:29:12 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 06:10:56 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,15 @@ typedef struct			s_env
 {
 	SDL_Window			*win;
 	SDL_Surface			*surf;
-	t_cam				cam;
-	t_lum				lum;
-	int					nb_obj;
 	int					state;
-	float				flou;
-	t_obj				objs[100];
+	int					nb_obj;
+	int					nb_cam;
+	int					nb_lum;
+	t_obj				*objs;
+	t_cam				*cams;
+	t_lum				*lums;
 	t_ray				init_rays;
+	float				flou;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;
 

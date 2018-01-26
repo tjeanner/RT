@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 04:29:06 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 06:14:35 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,20 @@ t_env	*fill_env(t_env *env)
 	t_obj	obj;
 
 	env->flou = 2;
-	env->cam.pos_cam.x = 0;
-	env->cam.pos_cam.y = 0;
-	env->cam.pos_cam.z = -8000;
-	env->lum.pos_lum.x = 0;
-	env->lum.pos_lum.y = 400;
-	env->lum.pos_lum.z = -800;
-	env->lum.coef = 1.0;
-	set_white(&env->lum.col);
-	env->cam.vcam.x = 0;
-	env->cam.vcam.y = 0;
-	env->cam.vcam.z = 1;
-	env->cam.v2cam.x = 0;
-	env->cam.v2cam.y = 1;
-	env->cam.v2cam.z = 0;
+	env->cams[0].pos_cam.x = 0;
+	env->cams[0].pos_cam.y = 0;
+	env->cams[0].pos_cam.z = -8000;
+	env->lums[0].pos_lum.x = 0;
+	env->lums[0].pos_lum.y = 400;
+	env->lums[0].pos_lum.z = -800;
+	env->lums[0].coef = 1.0;
+	set_white(&env->lums[0].col);
+	env->cams[0].vcam.x = 0;
+	env->cams[0].vcam.y = 0;
+	env->cams[0].vcam.z = 1;
+	env->cams[0].v2cam.x = 0;
+	env->cams[0].v2cam.y = 1;
+	env->cams[0].v2cam.z = 0;
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = 0;
