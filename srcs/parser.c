@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/26 03:30:13 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 06:14:29 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,9 +152,10 @@ void	init_scene(t_env *env, char *scene)
 	int		fd;
 	int		ret;
 	char	*line;
-	t_obj	*obj;
+//	t_obj	*obj;
 	char	**tmp;
 	int		i = 0;
+	char	flag;
 
 	if ((fd = open(scene, O_RDONLY)) == -1)
 		exit(0);
@@ -162,27 +163,42 @@ void	init_scene(t_env *env, char *scene)
 	{
 		if (ft_strstr(line, "#OBJ# "))
 		{
+			flag = 'o';
 			env->nb_obj = ft_atoi(line + 6);
-			if (!(obj = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj) + 1))
+			if (!(env->objs = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj + 1)))
 				exit (0);
+		}
+		else if (ft_strstr(line, "#CAM#"))
+		{
+			flag = 'c';
+			env->nb_cam = ft_atoi(line + 6);
+			if (!(env->cams = (t_obj *)malloc(sizeof(t_obj) * env->nb_cam) + 1))
+				exit (0);
+		}
+		else if (ft_strstr(line, "#LUM#"))
+		{
+			flag = 'l';
+			env->nb_lum = ft_atoi(line + 6);
+			if (!(env->lums = (t_obj *)malloc(sizeof(t_obj) * env->nb_lum) + 1))
+				exit (0);		
 		}
 		else
 		{
 			tmp = ft_strsplit(line, '\t');
-			if (ft_strstr(tmp[0], "tube") || ft_strstr(tmp[0], "plane")
-				|| ft_strstr(tmp[0], "sphere") || ft_strstr(tmp[0], "cone"))
+			if (flag == 'o' && (ft_strstr(tmp[0], "tube") || ft_strstr(tmp[0], "plane")
+					 || ft_strstr(tmp[0], "sphere") || ft_strstr(tmp[0], "cone")))
 			{
 				env->objs[i] = get_obj(tmp);
 				i++;
 			}
-			else if (ft_strstr(tmp[0], "cam"))
+			else if (flag == 'c' && ft_strstr(tmp[0], "cam"))
 			{
-				env->cam = get_cam(tmp);
+				env->cams[0] = get_cam(tmp);
 				i++;
 			}
-			else if (ft_strstr(tmp[0], "lum"))
+			else if (flag == 'l' && ft_strstr(tmp[0], "lum"))
 			{
-				env->lum = get_lum(tmp);
+				env->lums[0] = get_lum(tmp);
 				i++;
 			}
 		}
