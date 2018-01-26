@@ -1,9 +1,13 @@
-## 8
+#OBJ# 8
 plane	0	0	1200	0	0	-1	0	0	0	0	FF0000
 plane	1000	0	0	-1	0	0	0	0	0	0	FFFFFF
 plane	-1000	0	0	1	0	0	0	0	0	0	FFAA05
 plane	0	1000	0	0	-1	0	0	0	0	0	649B88
-plane	0	-1000	0	0	1	0	0	0	0	0	f4428c
-tube	15	10	10	1	0	0	0	0	0	100	FFFFFF
+plane	0	-1000	0	0	1	0	0	0	0	0	F4428C
+tube	15	10	10	1	0	0	0	0	0	100	FF0067
 sphere	0	0	0	0	0	0	0	0	0	500	2EB82E
-cone	1	10	0	1	1	0	0	0	0	2	FFFFFF
+cone	-10	10	0	1	1	0	0	0	0	2	00FF55
+#CAM# 1
+cam	  0	0	-8000	0	0	1	0	1	0	
+#LUM# 1
+lum	  0	100	-800

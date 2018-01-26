@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/25 21:52:38 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/26 02:37:37 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,24 @@
 t_color	get_color(char *hexa)
 {
 	t_color	col;
-	char *tmp;
+//	char *tmp;
+	char *s;
+	int tmp;
 
-	tmp = ft_strsub(hexa, 0, 2);
-	col.c.r = (int)strtol(tmp, NULL, 16); //-42
-	tmp = ft_strsub(hexa, 2, 2);
-	col.c.g = (int)strtol(tmp, NULL, 16);
-	tmp = ft_strsub(hexa, 4, 2);
-	col.c.b = (int)strtol(tmp, NULL, 16);
-	col.c.a = 0;
-
-//	printf("h : %d\n", (int)strtol(tmp, NULL, 16));
+	s = ft_strdup("0123456789ABCDEF");
+	tmp = (int)(ft_strchr(s, hexa[0]) - s) * 16
+		+ (int)(ft_strchr(s, hexa[1]) - s);
+	col.c.r = tmp;
+	tmp = (int)(ft_strchr(s, hexa[2]) - s) * 16
+		+ (int)(ft_strchr(s, hexa[3]) - s);
+	col.c.g = tmp;
+	tmp = (int)(ft_strchr(s, hexa[4]) - s) * 16
+		+ (int)(ft_strchr(s, hexa[5]) - s);
+	col.c.b = tmp;
 	return (col);
 }
 
-t_obj	get_plane(char **arr)
+/*t_obj	get_plane(char **arr)
 {
 	t_obj	objet;
 
@@ -85,13 +88,27 @@ t_obj	get_cone(char **arr)
 	objet.norm.y = ft_atoi(arr[5]);
 	objet.norm.z = ft_atoi(arr[6]);
 	objet.radius = ft_atoi(arr[10]);
-//	objet.col = get_color(arr[11]);
+	objet.col = get_color(arr[11]);
 	return (objet);
 }
+*/
 
 t_obj	get_obj(char **arr)
 {
-	if (ft_strstr(arr[0], "plane"))
+	t_obj	objet;
+
+	objet.type = arr[0][0];
+	objet.o.x = ft_atof(arr[1]);
+	objet.o.y = ft_atof(arr[2]);
+	objet.o.z = ft_atof(arr[3]);
+	objet.norm.x = ft_atof(arr[4]);
+	objet.norm.y = ft_atof(arr[5]);
+	objet.norm.z = ft_atof(arr[6]);
+	objet.radius = ft_atof(arr[10]);
+	objet.col = get_color(arr[11]);
+	return (objet);
+
+/*	if (ft_strstr(arr[0], "plane"))
 		return (get_plane(arr));
 	else if (ft_strstr(arr[0], "tube"))
 		return (get_tube(arr));
@@ -99,6 +116,33 @@ t_obj	get_obj(char **arr)
 		return (get_cone(arr));
 	else
 		return (get_sphere(arr));
+*/
+}
+
+t_v		get_lum(char **arr)
+{
+	t_v	pos_lum;
+
+	pos_lum.x = ft_atof(arr[1]);
+	pos_lum.y = ft_atof(arr[2]);
+	pos_lum.z = ft_atof(arr[3]);
+	return (pos_lum);
+}
+
+t_cam	get_cam(char **arr)
+{
+	t_cam	cam;
+
+	cam.pos_cam.x = ft_atof(arr[1]);
+	cam.pos_cam.y = ft_atof(arr[2]);
+	cam.pos_cam.z = ft_atof(arr[3]);
+	cam.vcam.x = ft_atof(arr[4]);
+	cam.vcam.y = ft_atof(arr[5]);
+	cam.vcam.z = ft_atof(arr[6]);
+	cam.v2cam.x = ft_atof(arr[7]);
+	cam.v2cam.y = ft_atof(arr[8]);
+	cam.v2cam.z = ft_atof(arr[9]);
+	return (cam);
 }
 
 void	init_scene(t_env *env, char *scene)
@@ -107,17 +151,17 @@ void	init_scene(t_env *env, char *scene)
 	int		ret;
 	char	*line;
 	t_obj	*obj;
-	char **tmp;
-	int		i = 1;
+	char	**tmp;
+	int		i = 0;
 
 	if ((fd = open(scene, O_RDONLY)) == -1)
 		exit(0);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		if (ft_strstr(line, "## "))
+		if (ft_strstr(line, "#OBJ# "))
 		{
-			env->nb_obj = ft_atoi(line + 3) + 1;
-			if (!(obj = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj)))
+			env->nb_obj = ft_atoi(line + 6);
+			if (!(obj = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj) + 1))
 				exit (0);
 		}
 		else
@@ -127,8 +171,16 @@ void	init_scene(t_env *env, char *scene)
 				|| ft_strstr(tmp[0], "sphere") || ft_strstr(tmp[0], "cone"))
 			{
 				env->objs[i] = get_obj(tmp);
-//				if (ft_strstr(tmp[0], "sphere"))				
-//					printf("-- %d : %f\n", i, env->objs[i].o.x);
+				i++;
+			}
+			else if (ft_strstr(tmp[0], "cam"))
+			{
+				env->cam = get_cam(tmp);
+				i++;
+			}
+			else if (ft_strstr(tmp[0], "lum"))
+			{
+				env->pos_lum = get_lum(tmp);
 				i++;
 			}
 		}
