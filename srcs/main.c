@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 06:13:38 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 06:22:07 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,8 @@ int			rays(t_env *env)
 		{
 			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 /
 					env->flou * (b - (int)b));//col is set with desired color for current pixel
-			ft_memcpy(col, get_col(env), sizeof(t_color));//col is set with desired color for current pixel
-	//		col[c] = *get_col(env);//col is set with desired color for current pixel
+		//	ft_memcpy(col, get_col(env), sizeof(t_color));//col is set with desired color for current pixel
+			col = get_col(env);//col is set with desired color for current pixel
 			if (env->flou < 1 && c + 1 == 1 / flou_square &&
 					average_color(col, env->flou))
 				((int *)env->surf->pixels)[((int)((int)b + env->flou - 1) +
@@ -210,7 +210,8 @@ t_env		*init(void)
 		env->col_fcts[1] = get_dist_plan;
 		env->col_fcts[2] = get_dist_tube;
 		env->col_fcts[3] = get_dist_cone;
-		return (fill_env(env));
+		env->flou = 2;
+		return (env);
 	}
 	ft_putendl("error in init");
 	return (NULL);
