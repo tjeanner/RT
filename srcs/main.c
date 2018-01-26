@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 02:57:48 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 03:22:52 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,15 @@ t_color		get_col(t_env *env)
 	else
 	{
 		pos_collision = vect_add(env->init_rays.r, vect_mult(env->init_rays.r2, env->objs[ob].dist));//pos toucher
-		collision_2_lum = vect_add(env->pos_lum, vect_mult(pos_collision, -1.0));
+		collision_2_lum = vect_add(env->lum.pos_lum, vect_mult(pos_collision, -1.0));
 		collision_2_lum = vect_mult(collision_2_lum, 1 / vect_norm(collision_2_lum));
 		env->init_rays.r = pos_collision;
 //		ft_memcpy(((void *)&env->init_rays.r), ((void *)&pos_collision), sizeof(t_v));
 		env->init_rays.r2 = collision_2_lum;
 //		ft_memcpy(((void *)&env->init_rays.r2), ((void *)&collision_2_lum), sizeof(t_v));
 		i = -1;
-		while (env->objs[ob].type == 's' && ++i < env->nb_obj)//we search an object between the collision and the light source
+	//	while (env->objs[ob].type == 's' && ++i < env->nb_obj)//we search an object between the collision and the light source
+		while (++i < env->nb_obj)//we search an object between the collision and the light source
 		{
 			env->init_rays.v1 = -1;
 			env->init_rays.v2 = -1;

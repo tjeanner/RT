@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/26 02:37:37 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/26 03:30:13 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,16 @@ t_obj	get_obj(char **arr)
 */
 }
 
-t_v		get_lum(char **arr)
+t_lum	get_lum(char **arr)
 {
-	t_v	pos_lum;
+	t_lum	lum;
 
-	pos_lum.x = ft_atof(arr[1]);
-	pos_lum.y = ft_atof(arr[2]);
-	pos_lum.z = ft_atof(arr[3]);
-	return (pos_lum);
+	lum.pos_lum.x = ft_atof(arr[1]);
+	lum.pos_lum.y = ft_atof(arr[2]);
+	lum.pos_lum.z = ft_atof(arr[3]);
+	lum.coef = 1.0;
+	set_white(&lum.col);
+	return (lum);
 }
 
 t_cam	get_cam(char **arr)
@@ -180,7 +182,7 @@ void	init_scene(t_env *env, char *scene)
 			}
 			else if (ft_strstr(tmp[0], "lum"))
 			{
-				env->pos_lum = get_lum(tmp);
+				env->lum = get_lum(tmp);
 				i++;
 			}
 		}

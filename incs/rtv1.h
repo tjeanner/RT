@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 03:02:43 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/26 03:24:45 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ typedef struct			s_env
 {
 	SDL_Window			*win;
 	SDL_Surface			*surf;
-	t_v					pos_lum;
 	t_cam				cam;
 	t_lum				lum;
 	int					nb_obj;
