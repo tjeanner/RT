@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/25 03:14:49 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/27 01:26:58 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,13 @@ SRC =		main.c \
 			parser.c \
 
 CC =		gcc
-FLAGS =		-Wall -Wextra -Werror -g3
+FLAGS =		-Wall -Wextra -Werror -g3 -fsanitize=address
 
 SRCDIR =	./srcs
 INCDIR =	./incs
 OBJDIR =	./obj
+
+INCFILE = $(addprefix $(INCDIR)/,$(NAME).h)
 
 OBJ =		$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
@@ -41,7 +43,7 @@ SDL_INC =	-I $(SDL)
 all: $(NAME)
 
 $(FT_LIB) :
-	@make -C $(FT)
+	make -C $(FT)
 
 obj:
 	mkdir -p $(OBJDIR)
@@ -49,8 +51,8 @@ obj:
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(FLAGS) $(FT_INC) -I $(INCDIR) $(SDL_INC) -o $@ -c $<
 
-$(NAME): $(FT_LIB) obj $(OBJ)
-	$(CC) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME)
+$(NAME): $(FT_LIB) obj $(OBJ) $(INCFILE)
+	$(CC) $(FLAGS) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME)
 
 norme:
 	ls $(SRCDIR)

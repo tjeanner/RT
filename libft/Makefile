@@ -6,13 +6,16 @@
 #    By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2018/01/26 02:00:59 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/27 01:21:48 by tjeanner         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME	=	libft.a
+
 CC		=	gcc
-CFLAGS =	-Wall -Wextra -Werror -g3
+
+CFLAGS =	-Wall -Wextra -Werror -g3 -fsanitize=address
+
 SRC		=	ft_memset.c					\
 			ft_freedoublearray.c		\
 			ft_bzero.c					\
@@ -84,19 +87,23 @@ SRC		=	ft_memset.c					\
 
 
 HEADER	=	libft.h
+INCDIR =	./incs
+
 OBJ		=	$(SRC:.c=.o)
 
 all		:	$(NAME)
 
-$(NAME)	:	
-			@$(CC) $(CFLAGS) -c $(SRC)
-			@ar rc $(NAME) $(OBJ)
-			@ranlib $(NAME)
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(NAME)	: $(OBJ) $(HEADER)
+			ar rc $(NAME) $(OBJ)
+			ranlib $(NAME)
 
 clean	:
-			@rm -f $(OBJ)
+			rm -f $(OBJ)
 
 fclean	:	clean
-			@rm -f $(NAME)
+			rm -f $(NAME)
 
 re 		:	fclean all
