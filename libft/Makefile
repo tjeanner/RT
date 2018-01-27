@@ -6,7 +6,7 @@
 #    By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2018/01/27 01:21:48 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/27 04:14:47 by hbouchet         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -84,7 +84,7 @@ SRC		=	ft_memset.c					\
 			get_next_line.c				\
 			ft_pow.c					\
 			ft_atof.c					\
-
+			ft_puterr.c					\
 
 HEADER	=	libft.h
 INCDIR =	./incs
