@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 02:46:25 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/27 04:14:13 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/28 00:26:57 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+
 # define BUFF_SIZE 600
+# define EOL '\n'
 
 typedef struct		s_list
 {

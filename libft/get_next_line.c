@@ -5,67 +5,56 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/10 11:39:00 by tjeanner          #+#    #+#             */
-/*   Updated: 2017/10/10 11:50:23 by tjeanner         ###   ########.fr       */
+/*   Created: 2017/08/30 10:17:49 by tjeanner          #+#    #+#             */
+/*   Updated: 2018/01/28 00:26:18 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_read_line(int fd, char *str, int *eof, int *cpt)
+int		ft_strjoin_f(char **s1, char *s2)
 {
-	char	*buff;
-	char	*buff2;
+	char	*tmp;
 
-	if ((buff = (char *)(malloc(sizeof(char) * (BUFF_SIZE + 1)))) == NULL)
-		return (NULL);
-	*eof = read(fd, buff, BUFF_SIZE);
-	*cpt += (*eof != 0) ? 1 : 0;
-	buff[*eof] = '\0';
-	buff2 = str;
-	str = ft_strjoin(str, buff);
-	ft_strdel(&buff2);
-	free(buff);
-	return (str);
+	if (*s1)
+	{
+		if (!(tmp = ft_strdup(*s1)))
+			return (0);
+		free(*s1);
+		if (!(*s1 = ft_strjoin(tmp, s2)))
+			return (0);
+		free(tmp);
+	}
+	else if (!(*s1 = ft_strdup(s2)))
+		return (0);
+	return (1);
 }
 
-static int	ft_get_line(char *tmp, char *p_tmp, char **line)
+int		get_next_line(const int fd, char **line)
 {
-	if ((p_tmp = ft_strchr(tmp, '\n')))
-	{
-		*p_tmp = '\0';
-		*line = ft_strdup(tmp);
-		ft_memmove(tmp, p_tmp + 1, ft_strlen(p_tmp + 1) + 1);
-		return (1);
-	}
-	return (0);
-}
+	static char		*rest = NULL;
+	char			buf[BUFF_SIZE + 1];
+	int				rd;
+	char			*pos;
 
-int			get_next_line(const int fd, char **line)
-{
-	static char	*tmp = NULL;
-	char		*p_tmp;
-	int			eof;
-	int			cpt;
-
-	if ((cpt = 0) != -1 && (!line || fd < 0 || BUFF_SIZE < 1))
+	if (fd < 0 || BUFF_SIZE <= 0 || !line)
 		return (-1);
-	eof = 1;
-	p_tmp = NULL;
-	tmp = (tmp == NULL) ? ft_strnew(0) : tmp;
-	while (eof > 0)
-	{
-		if (ft_get_line(tmp, p_tmp, line))
-			return (1);
-		tmp = ft_read_line(fd, tmp, &eof, &cpt);
-	}
-	*line = ft_strdup(tmp);
-	if (ft_strlen(tmp) > 1 && eof == 0)
-	{
-		ft_memmove(tmp, "\0", ft_strlen(tmp));
-		return (1);
-	}
-	if (eof == -1)
+	rd = BUFF_SIZE;
+	if (!(*line = (rest) ? ft_strdup(rest) : NULL) && rest)
 		return (-1);
-	return ((cpt != 0) ? 1 : 0);
+	if (rest)
+		free(rest);
+	while (!(pos = (*line) ? ft_strchr(*line, EOL) : NULL) && rd != 0)
+	{
+		if ((rd = read(fd, buf, BUFF_SIZE)) < 0)
+			return (-1);
+		buf[rd] = '\0';
+		if (!ft_strjoin_f(line, buf))
+			return (-1);
+	}
+	if (pos && !(*pos = '\0'))
+		rest = ft_strdup(pos + 1);
+	else
+		rest = (!pos && rest) ? NULL : rest;
+	return (rd = (ft_strlen(*line) || pos) ? 1 : 0);
 }
