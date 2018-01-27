@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/27 04:11:30 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/27 04:56:10 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_color		*get_col(t_env *env)
 	//		res = (res < 0.2) ? 0.2 : res;
 			*col = mult_color(env->objs[ob].col, res);
 		}
-		else if (env->objs[ob].type == 't')
+		else if (env->objs[ob].type == 't' || env->objs[ob].type == 'c')
 		{
 			s = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
 			s = vect_mult(s, 1.0 / vect_norm(s));
