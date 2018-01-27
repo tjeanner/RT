@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 23:51:59 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/27 04:11:30 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ t_color		*get_col(t_env *env)
 		0.1 && env->init_rays.v2 < vect_norm(collision_2_lum)))))
 			{
 				set_black(col);
+	//			*col = mult_color(env->objs[ob].col, 0.2);
 				return (col);
 			}
 		}
@@ -104,22 +105,28 @@ t_color		*get_col(t_env *env)
 			norm = vect_add(pos_collision, vect_mult(env->objs[ob].o, -1.0));
 			norm = vect_mult(norm, 1 / vect_norm(norm));//vect norm a toucher
 			res = vect_scal_prod(norm, collision_2_lum_norm);
+	//		res = (res < 0.2) ? 0.2 : res;
 			*col = mult_color(env->objs[ob].col, res);
 		}
 		else if (env->objs[ob].type == 'p')
 		{
 			res = vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm);
+	//		res = (res < 0.2) ? 0.2 : res;
 			*col = mult_color(env->objs[ob].col, res);
 		}
 		else if (env->objs[ob].type == 't')
 		{
 			s = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
 			s = vect_mult(s, 1.0 / vect_norm(s));
-			res = ((double)(s.x * (env->init_rays.r.x + env->objs[ob].o.x) + s.y * (env->init_rays.r.y + env->objs[ob].o.y) + s.z * (env->init_rays.r.z + env->objs[ob].o.z)) / (s.x * s.x + s.y * s.y + s.z * s.z));
+			res = ((double)(s.x * (env->init_rays.r.x + env->objs[ob].o.x) +
+						s.y * (env->init_rays.r.y + env->objs[ob].o.y) +
+						s.z * (env->init_rays.r.z + env->objs[ob].o.z)) /
+					(s.x * s.x + s.y * s.y + s.z * s.z));
 			norm = vect_add(env->objs[ob].o, vect_mult(s, res));
 			norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));
 			norm = vect_mult(norm, 1.0 / vect_norm(norm));
 			res = vect_scal_prod(norm, collision_2_lum_norm);
+			res = (res < 0.0) ? 0.0 : res;
 			*col = mult_color(env->objs[ob].col, res);
 		}
 		else
