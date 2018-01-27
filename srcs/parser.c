@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/27 00:18:13 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/27 03:11:27 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	init_scene(t_env *env)
 			if (!(env->lums = (t_lum *)malloc(sizeof(t_lum) * env->nb_lum)))
 				exit (0);
 		}
-		else
+		else if (ft_strlen(line) != 0)
 		{
 			tmp = ft_strsplit(line, '\t');
 			if (flag == 'o' && (ft_strstr(tmp[0], "tube") || ft_strstr(tmp[0], "plane")
@@ -133,5 +133,6 @@ void	init_scene(t_env *env)
 				i++;
 			}
 		}
+		ft_memdel((void **)&line);
 	}
 }
