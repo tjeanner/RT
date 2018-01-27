@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/27 01:26:58 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/27 05:37:17 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRC =		main.c \
 			color_math.c \
 			distances_functions.c \
 			parser.c \
+			fill_env.c \
 
 CC =		gcc
 FLAGS =		-Wall -Wextra -Werror -g3 -fsanitize=address

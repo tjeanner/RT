@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 23:50:34 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/27 05:24:37 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int						average_color(t_color *col, float flou);
 /*
 **useless_functions.c
 */
-t_env					*fill_env(t_env *env);
+//t_env					*fill_env(t_env *env);
 double					which_pow(double num, double pow);
 t_color					get_black(void);
 
@@ -142,7 +142,12 @@ void					events(t_env *env);
 */
 void					init_scene(t_env *env);
 t_color					get_color(char *hexa);
+t_obj					get_obj(char **arr);
+t_cam					get_cam(char **arr);
+t_lum					get_lum(char **arr);
 
+int						fill_env(char flag, char **tmp, t_env *e, int i);
+char					init_struct(char *line, t_env *env);
 
 /*
 **distances_functions.c

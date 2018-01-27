@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/27 03:11:27 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/27 05:34:40 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 t_color	get_color(char *hexa)
 {
 	t_color	col;
-	char *s;
-	int tmp;
+	char	*s;
+	int		tmp;
 
 	s = ft_strdup("0123456789ABCDEF");
 	tmp = (int)(ft_strchr(s, hexa[0]) - s) * 16
@@ -81,57 +81,22 @@ void	init_scene(t_env *env)
 	int		ret;
 	char	*line;
 	char	**tmp;
-	int		i = 0;
+	int		i;
 	char	flag;
 
 	if ((fd = open(env->file, O_RDONLY)) == -1)
 		exit(0);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		if (ft_strstr(line, "#OBJ# "))
-		{
-			flag = 'o';
-			i = 0;
-			env->nb_obj = ft_atoi(line + 6);
-			if (!(env->objs = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj)))
-				exit (0);
-		}
-		else if (ft_strstr(line, "#CAM#"))
-		{
-			flag = 'c';
-			i = 0;
-			env->nb_cam = ft_atoi(line + 6);
-			printf("nb_cam : %d\n", env->nb_cam);
-			if (!(env->cams = (t_cam *)malloc(sizeof(t_cam) * env->nb_cam)))
-				exit (0);
-		}
-		else if (ft_strstr(line, "#LUM#"))
+		if (line[0] == '#')
 		{
 			i = 0;
-			flag = 'l';
-			env->nb_lum = ft_atoi(line + 6);
-			if (!(env->lums = (t_lum *)malloc(sizeof(t_lum) * env->nb_lum)))
-				exit (0);
+			flag = init_struct(line, env);
 		}
 		else if (ft_strlen(line) != 0)
 		{
 			tmp = ft_strsplit(line, '\t');
-			if (flag == 'o' && (ft_strstr(tmp[0], "tube") || ft_strstr(tmp[0], "plane")
-					 || ft_strstr(tmp[0], "sphere") || ft_strstr(tmp[0], "cone")))
-			{
-				env->objs[i] = get_obj(tmp);
-				i++;
-			}
-			else if (flag == 'c' && ft_strstr(tmp[0], "cam"))
-			{
-				env->cams[i] = get_cam(tmp);
-				i++;
-			}
-			else if (flag == 'l' && ft_strstr(tmp[0], "lum"))
-			{
-				env->lums[i] = get_lum(tmp);
-				i++;
-			}
+			i = fill_env(flag, tmp, env, i);
 		}
 		ft_memdel((void **)&line);
 	}
