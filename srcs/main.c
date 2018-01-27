@@ -225,18 +225,12 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
-	(void)av;
-	//	(void)ac;
 	if (!(env = init()))
-	{
-		ft_putendl("error in init");
-		return (0);
-	}
-	if (ac == 2)
-	{
-		ft_strcpy(env->file, av[1]);
-		init_scene(env);
-	}
+		ft_put_err("error in init");
+	if (ac != 2)
+		ft_put_err("usage : ./rtv1 <scene>");
+	ft_strcpy(env->file, av[1]);
+	init_scene(env);
 	env->state = 0;
 	//	event.type = SDL_USEREVENT;
 	while (!env->state)

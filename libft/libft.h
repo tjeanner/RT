@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 02:46:25 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/26 02:21:54 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/27 04:14:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct		s_gnl
 	int				ret;
 }					t_gnl;
 
+void				ft_put_err(char *str);
 int					get_next_line(const int fd, char **line);
 void				ft_freedoublearray(char **array);
 void				*ft_memset(void *b, int c, size_t len);
