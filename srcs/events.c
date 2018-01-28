@@ -6,13 +6,13 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 23:56:58 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/28 00:48:38 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-static void		rotate_events(t_env *env, SDL_Event event)
+static int		rotate_events(t_env *env, SDL_Event event)
 {
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_q)
 	{
@@ -24,9 +24,12 @@ static void		rotate_events(t_env *env, SDL_Event event)
 		env->cams[0].vcam.x += 0.1;
 		env->cams[0].vcam = vect_mult(env->cams[0].vcam, 1 / vect_norm(env->cams[0].vcam));
 	}
+	else
+		return (0);
+	return (1);
 }
 
-static void		move_events(t_env *env, SDL_Event event)
+static int		move_events(t_env *env, SDL_Event event)
 {
 	if ((event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
 			|| event.type == SDL_QUIT)
@@ -58,15 +61,16 @@ static void		move_events(t_env *env, SDL_Event event)
 		env->cams[0].v3cam = vect_prod(env->cams[0].vcam, env->cams[0].v2cam);
 		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].v3cam, -50));
 	}
-	else
-		rotate_events(env, event);
+	else if (!rotate_events(env, event))
+		return (0);
+	return (1);
 }
 
-void			events(t_env *env)
+int				events(t_env *env)
 {
 	SDL_Event	event;
 
-	while (SDL_PollEvent(&event) != 0)
+	if (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
 			env->lums[0].pos_lum.z += (env->lums[0].pos_lum.z > 1000) ? 0 : 100;
@@ -99,8 +103,9 @@ void			events(t_env *env)
 			ft_putnbr(which_pow(env->flou, 2));
 			ft_putchar('\n');
 		}
-		else
-			move_events(env, event);
+		else if (!move_events(env, event))
+			return (0);
+		rays(env);
 	}
-	rays(env);
+	return (1);
 }
