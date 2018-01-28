@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/27 05:24:37 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/28 00:46:38 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ t_color					get_black(void);
 /*
 **events.c
 */
-void					events(t_env *env);
+int						events(t_env *env);
 
 /*
 **parser.c
