@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/28 00:48:38 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/28 01:41:06 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static int		move_events(t_env *env, SDL_Event event)
 	{
 		ft_putendl("yolo");
 		env->state = 1;
+		return (0);
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_w)
 		env->cams[0].pos_cam = vect_add(env->cams[0].pos_cam, vect_mult(env->cams[0].v2cam, 50));
