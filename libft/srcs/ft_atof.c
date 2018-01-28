@@ -1,43 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pow.c                                           :+:      :+:    :+:   */
+/*   ft_atof.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/26 01:40:30 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/26 02:04:28 by tjeanner         ###   ########.fr       */
+/*   Created: 2018/01/26 01:24:43 by tjeanner          #+#    #+#             */
+/*   Updated: 2018/01/28 04:24:53 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-double	ft_pow(int n, int pow)
+double		ft_atof(char *s)
 {
 	int		i;
+	int		j;
 	double	res;
-	int		neg;
 
-	i = 0;
-	neg = 0;
-	res = n;
-	if (pow == 1)
-		return (n);
-	else if (n == 0)
-		return (0);
-	else if (pow == 0)
-		return (1);
-	else
+	res = (double)atoi(s);
+	if (ft_strchr(s, '.') && (i = ft_strchr(s, '.') - s) != 0)
 	{
-		if (pow < 0)
+		j = 1;
+		while (s[++i] && ft_isdigit(s[i]))
 		{
-			neg = 1;
-			pow *= -1;
+			res += (res >= 0) ? ((double)(s[i] - '0') * ft_pow(10, 0 - j)) :
+				-1.0 * ((double)(s[i] - '0') * ft_pow(10, 0 - j));
+			j++;
 		}
-		while (++i < pow)
-		{
-			res *= n;
-		}
-		return (res = (neg == 0) ? res : 1.0 / res);
 	}
+	return (res);
 }

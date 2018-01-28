@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/10 04:18:39 by hbouchet          #+#    #+#             */
-/*   Updated: 2016/11/10 04:25:13 by hbouchet         ###   ########.fr       */
+/*   Created: 2016/11/10 04:05:08 by hbouchet          #+#    #+#             */
+/*   Updated: 2018/01/28 07:59:37 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_atoi(const char *str)
-{
-	int multi;
-	int result;
+#include "libft.h"
 
-	result = 0;
-	multi = 1;
-	while ((*str == ' ') || (*str >= '\t' && *str <= '\r'))
-		str++;
-	if (*str == '-')
-		multi = -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
-	{
-		result *= 10;
-		result += *str - '0';
-		str++;
-	}
-	return (result * multi);
+char	*ft_strdup(const char *s1)
+{
+	char	*str;
+
+	str = (char*)malloc(sizeof(char) * (ft_strlen(s1) + 1));
+	if (str == 0)
+		return (0);
+	str = ft_strcpy(str, s1);
+	return (str);
 }
