@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/28 00:46:38 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/28 02:49:09 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,11 +142,12 @@ int						events(t_env *env);
 */
 void					init_scene(t_env *env);
 t_color					get_color(char *hexa);
-t_obj					get_obj(char **arr);
+void					get_obj(char **arr, t_obj *objet);
 t_cam					get_cam(char **arr);
 t_lum					get_lum(char **arr);
 
 int						fill_env(char flag, char **tmp, t_env *e, int i);
+//int						fill_env(char flag, char **tmp, t_env *e, int i);
 char					init_struct(char *line, t_env *env);
 
 /*
