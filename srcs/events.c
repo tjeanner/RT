@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/28 01:41:06 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/28 11:06:42 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,35 @@ int				events(t_env *env)
 			ft_memdel((void **)&env->lums);
 			init_scene(env);
 		}
+		else if (event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_KP_0 || event.key.keysym.sym == SDLK_KP_1 || event.key.keysym.sym == SDLK_KP_2 || event.key.keysym.sym == SDLK_KP_3 || event.key.keysym.sym == SDLK_KP_4 || event.key.keysym.sym == SDLK_KP_5 || event.key.keysym.sym == SDLK_KP_6 || event.key.keysym.sym == SDLK_KP_7 || event.key.keysym.sym == SDLK_KP_8 || event.key.keysym.sym == SDLK_KP_9))
+		{
+			if (event.key.keysym.sym == SDLK_KP_0 && env->curr_cam != 0)
+				env->curr_cam = 0;
+			else if (event.key.keysym.sym == SDLK_KP_1 && env->nb_cam > 1 && env->curr_cam != 1)
+				env->curr_cam = 1;
+			else if (event.key.keysym.sym == SDLK_KP_2 && env->nb_cam > 2 && env->curr_cam != 2)
+				env->curr_cam = 2;
+			else if (event.key.keysym.sym == SDLK_KP_3 && env->nb_cam > 3 && env->curr_cam != 3)
+				env->curr_cam = 3;
+			else if (event.key.keysym.sym == SDLK_KP_4 && env->nb_cam > 4 && env->curr_cam != 4)
+				env->curr_cam = 4;
+			else if (event.key.keysym.sym == SDLK_KP_5 && env->nb_cam > 5 && env->curr_cam != 5)
+				env->curr_cam = 5;
+			else if (event.key.keysym.sym == SDLK_KP_6 && env->nb_cam > 6 && env->curr_cam != 6)
+				env->curr_cam = 6;
+			else if (event.key.keysym.sym == SDLK_KP_7 && env->nb_cam > 7 && env->curr_cam != 7)
+				env->curr_cam = 7;
+			else if (event.key.keysym.sym == SDLK_KP_8 && env->nb_cam > 8 && env->curr_cam != 8)
+				env->curr_cam = 8;
+			else if (event.key.keysym.sym == SDLK_KP_9 && env->nb_cam > 9 && env->curr_cam != 9)
+				env->curr_cam = 9;
+			else
+				return (0);
+		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_MINUS)
-		{
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;
-			ft_putnbr(which_pow(env->flou, 2));
-			ft_putchar('\n');
-		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_PLUS)
-		{
 			env->flou /= (env->flou == 0.125) ? 1 : 2;
-			ft_putnbr(which_pow(env->flou, 2));
-			ft_putchar('\n');
-		}
 		else if (!move_events(env, event))
 			return (0);
 		rays(env);
