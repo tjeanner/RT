@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/27 04:56:10 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/28 01:19:51 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_color		*get_col(t_env *env)
 	double	res;//to store the value of the distance when we find the object
 	t_color	*col;
 	t_v		norm;
+	t_v		tmp;
 	t_v		s;
 	t_v		pos_collision;
 	t_v		collision_2_lum;
@@ -84,6 +85,7 @@ t_color		*get_col(t_env *env)
 		env->init_rays.r = pos_collision;
 		collision_2_lum_norm = vect_mult(collision_2_lum,
 				1.0 / vect_norm(collision_2_lum));
+		tmp = env->init_rays.r2;
 		env->init_rays.r2 = collision_2_lum_norm;
 		i = -1;
 		while (++i < env->nb_obj)//we search an object between the collision and the light source
@@ -103,15 +105,16 @@ t_color		*get_col(t_env *env)
 		if (env->objs[ob].type == 's')
 		{
 			norm = vect_add(pos_collision, vect_mult(env->objs[ob].o, -1.0));
-			norm = vect_mult(norm, 1 / vect_norm(norm));//vect norm a toucher
+			norm = vect_mult(norm, 1.0 / vect_norm(norm));//vect norm a toucher
 			res = vect_scal_prod(norm, collision_2_lum_norm);
-	//		res = (res < 0.2) ? 0.2 : res;
+			res = (res < 0.0) ? 0.0 : res;
 			*col = mult_color(env->objs[ob].col, res);
 		}
 		else if (env->objs[ob].type == 'p')
 		{
 			res = vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm);
-	//		res = (res < 0.2) ? 0.2 : res;
+			res = (vect_scal_prod(env->objs[ob].norm, tmp) >= 0) ? 0.0 : res;
+			res = (res < 0.0) ? 0.0 : res;
 			*col = mult_color(env->objs[ob].col, res);
 		}
 		else if (env->objs[ob].type == 't' || env->objs[ob].type == 'c')
@@ -121,19 +124,15 @@ t_color		*get_col(t_env *env)
 			res = ((double)(s.x * (env->init_rays.r.x + env->objs[ob].o.x) +
 						s.y * (env->init_rays.r.y + env->objs[ob].o.y) +
 						s.z * (env->init_rays.r.z + env->objs[ob].o.z)) /
-					(s.x * s.x + s.y * s.y + s.z * s.z));
+					vect_scal_prod(s, s));
+			
 			norm = vect_add(env->objs[ob].o, vect_mult(s, res));
 			norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));
 			norm = vect_mult(norm, 1.0 / vect_norm(norm));
 			res = vect_scal_prod(norm, collision_2_lum_norm);
 			res = (res < 0.0) ? 0.0 : res;
+			res = (vect_scal_prod(collision_2_lum_norm, tmp) > 0) ? 0.0 : res;
 			*col = mult_color(env->objs[ob].col, res);
-		}
-		else
-		{
-			col->c.b = env->objs[ob].col.c.b;
-			col->c.g = env->objs[ob].col.c.g;
-			col->c.r = env->objs[ob].col.c.r;
 		}
 	}
 	return (col);
@@ -151,6 +150,7 @@ int			rays(t_env *env)
 	int		c;
 	t_color	col[64];
 
+	ft_putendl("1, ");
 	flou_square = env->flou * env->flou;
 	a = 0;
 	while ((b = 0) == 0 && a < WIN_Y)//for each row in the img
@@ -233,6 +233,7 @@ int			main(int ac, char **av)
 	init_scene(env);
 	env->state = 0;
 	//	event.type = SDL_USEREVENT;
+	rays(env);
 	while (!env->state)
 	{
 		events(env);
