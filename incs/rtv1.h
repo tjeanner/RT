@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/28 10:18:43 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/01/29 01:35:35 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,13 @@ typedef struct			s_ray
 	t_v					r2;
 }						t_ray;
 
+typedef struct			s_par
+{
+	t_list				*lst_obj;
+	t_list				*lst_cam;
+	t_list				*lst_lum;
+}						t_par;
+
 typedef struct			s_env
 {
 	SDL_Window			*win;
@@ -129,7 +136,6 @@ int						average_color(t_color *col, float flou);
 /*
 **useless_functions.c
 */
-//t_env					*fill_env(t_env *env);
 double					which_pow(double num, double pow);
 t_color					get_black(void);
 
@@ -142,14 +148,24 @@ int						events(t_env *env);
 **parser.c
 */
 void					init_scene(t_env *env);
+
+/*
+**get_scene.c
+*/
 t_color					get_color(char *hexa);
 void					get_obj(char **arr, t_obj *objet);
-t_cam					get_cam(char **arr);
-t_lum					get_lum(char **arr);
+void					get_cam(char **arr, t_cam *cam);
+void					get_lum(char **arr, t_lum *lum);
+int						get_scenelen(t_env *env);
 
-int						fill_env(char flag, char **tmp, t_env *e, int i);
-//int						fill_env(char flag, char **tmp, t_env *e, int i);
-char					init_struct(char *line, t_env *env);
+/*
+**fill_env.c
+*/
+int						is_valid_obj(char **str);
+int						is_valid_lum(char **str);
+int						is_valid_cam(char **str);
+void					set_list(t_env *env, char *line, t_par *par);
+void					set_struct(t_env *env, t_par *par);
 
 /*
 **distances_functions.c
