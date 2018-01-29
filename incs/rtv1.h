@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/29 01:35:35 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/29 06:13:54 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int						events(t_env *env);
 **parser.c
 */
 void					init_scene(t_env *env);
+int						putlineerr(char *str, int i);
 
 /*
 **get_scene.c
@@ -161,10 +162,10 @@ int						get_scenelen(t_env *env);
 /*
 **fill_env.c
 */
-int						is_valid_obj(char **str);
-int						is_valid_lum(char **str);
-int						is_valid_cam(char **str);
-void					set_list(t_env *env, char *line, t_par *par);
+int						is_valid_obj(char **str, int n_line);
+int						is_valid_lum(char **str, int n_line);
+int						is_valid_cam(char **str, int n_line);
+void						set_list(t_env *env, char *line, t_par *par, int i);
 void					set_struct(t_env *env, t_par *par);
 
 /*
