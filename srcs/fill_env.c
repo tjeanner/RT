@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 05:36:57 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/29 08:28:01 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/29 08:40:05 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int			is_valid_cam(char **str, int n_line)
 	while (str[i])
 		i++;
 	if (i != 10)
-		return (putlineerr("invalid vector number (cam) line ", n_line));
+		return (putlineerr("invalid cam line ", n_line));
+	if ((ft_atoi(str[4]) == 0 && ft_atoi(str[5]) == 0 && ft_atoi(str[6]) == 0)
+	|| (ft_atoi(str[7]) == 0 && ft_atoi(str[8]) == 0 && ft_atoi(str[9]) == 0))
+		return (putlineerr("null vector line ", n_line));
 	return (1);
 }
 
@@ -36,7 +39,7 @@ int			is_valid_lum(char **str, int n_line)
 	while (str[i])
 		i++;
 	if (i != 4)
-		return (putlineerr("invalid vector number (lum) line ", n_line));
+		return (putlineerr("invalid lum line ", n_line));
 	return (1);
 }
 
@@ -53,7 +56,7 @@ int			is_valid_obj(char **str, int n_line)
 	while (str[i])
 		i++;
 	if (i != 12)
-		return (putlineerr("invalid vector number (obj) line ", n_line));
+		return (putlineerr("invalid obj line ", n_line));
 	if (!ft_strstr(str[0], "sphere") && ft_atoi(str[4]) == 0
 		&& ft_atoi(str[5]) == 0 && ft_atoi(str[6]) == 0)
 		return (putlineerr("null vector line ", n_line));
