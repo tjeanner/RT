@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/28 07:44:39 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/01/29 01:34:19 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC =		main.c \
 			distances_functions.c \
 			parser.c \
 			fill_env.c \
+			get_scene.c \
 
 CC =		gcc
 CFLAGS =		-Wall -Wextra -Werror -g3 -fsanitize=address
