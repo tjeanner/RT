@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/29 01:32:24 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/29 03:49:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ t_color	get_color(char *hexa)
 	int		tmp;
 
 	s = ft_strdup("0123456789ABCDEF");
-	tmp = (int)(ft_strchr(s, hexa[0]) - s) * 16
-		+ (int)(ft_strchr(s, hexa[1]) - s);
+	tmp = (int)(ft_strchr(s, ft_toupper(hexa[0])) - s) * 16
+		+ (int)(ft_strchr(s, ft_toupper(hexa[1])) - s);
 	col.c.r = tmp;
-	tmp = (int)(ft_strchr(s, hexa[2]) - s) * 16
-		+ (int)(ft_strchr(s, hexa[3]) - s);
+	tmp = (int)(ft_strchr(s, ft_toupper(hexa[2])) - s) * 16
+		+ (int)(ft_strchr(s, ft_toupper(hexa[3])) - s);
 	col.c.g = tmp;
-	tmp = (int)(ft_strchr(s, hexa[4]) - s) * 16
-		+ (int)(ft_strchr(s, hexa[5]) - s);
+	tmp = (int)(ft_strchr(s, ft_toupper(hexa[4])) - s) * 16
+		+ (int)(ft_strchr(s, ft_toupper(hexa[5])) - s);
 	col.c.b = tmp;
 	return (col);
 }
