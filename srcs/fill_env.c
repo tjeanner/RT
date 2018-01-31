@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 05:36:57 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/29 08:40:05 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/30 05:29:06 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,26 @@ int			is_valid_cam(char **str, int n_line)
 	int i;
 
 	i = 0;
+	if (!str[0])
+		return(0);
 	if (ft_strncmp(str[0], "cam", ft_strstr(str[0], "cam") - *str))
 		return (0);
 	while (str[i])
 		i++;
 	if (i != 10)
 		return (putlineerr("invalid cam line ", n_line));
-	if ((ft_atoi(str[4]) == 0 && ft_atoi(str[5]) == 0 && ft_atoi(str[6]) == 0)
-	|| (ft_atoi(str[7]) == 0 && ft_atoi(str[8]) == 0 && ft_atoi(str[9]) == 0))
-		return (putlineerr("null vector line ", n_line));
+	if ((ft_atof(str[4]) == 0 && ft_atof(str[5]) == 0 && ft_atof(str[6]) == 0)
+	|| (ft_atof(str[7]) == 0 && ft_atof(str[8]) == 0 && ft_atof(str[9]) == 0))
+		return (putlineerr("null vector line (cam)", n_line));
 	return (1);
 }
 
 int			is_valid_lum(char **str, int n_line)
 {
-	(void)n_line;
 	int i = 0;
 
+	if (!str[0])
+		return(0);
 	if (ft_strncmp(str[0], "lum", ft_strstr(str[0], "lum") - *str))
 		return (0);
 	while (str[i])
@@ -43,11 +46,26 @@ int			is_valid_lum(char **str, int n_line)
 	return (1);
 }
 
+int			is_norm_wchar(double x, double y, double z)
+{
+	t_v		v_test;
+
+	v_test.x = x;
+	v_test.y = y;
+	v_test.z = z;
+	if (vect_norm(v_test) == 1.0)
+		return (1);
+	else
+		return (0);
+}
+
 int			is_valid_obj(char **str, int n_line)
 {
 	int		i;
 
 	i = 0;
+	if (!str[0])
+		return(0);
 	if ((ft_strncmp(str[0], "tube", ft_strstr(str[0], "tube") - *str)
 		 && ft_strncmp(str[0], "plane", ft_strstr(str[0], "plane") - *str)
 		 && ft_strncmp(str[0], "cone", ft_strstr(str[0], "cone") - *str)
@@ -57,9 +75,11 @@ int			is_valid_obj(char **str, int n_line)
 		i++;
 	if (i != 12)
 		return (putlineerr("invalid obj line ", n_line));
-	if (!ft_strstr(str[0], "sphere") && ft_atoi(str[4]) == 0
-		&& ft_atoi(str[5]) == 0 && ft_atoi(str[6]) == 0)
-		return (putlineerr("null vector line ", n_line));
+	if (!ft_strstr(str[0], "sphere") && !is_norm_wchar(ft_atof(str[4]), ft_atof(str[5]), ft_atof(str[6])))//&& ft_atof(str[4]) == 0
+//		&& ft_atof(str[5]) == 0 && ft_atof(str[6]) == 0)
+		return (putlineerr("invalid vector line (obj) ", n_line));
+//	if (is_norm_wchar(ft_atof(str[4]), ft_atof(str[5]), ft_atof(str[6])))
+//		return (putlineerr("invalid vector line (obj) ", n_line));
 	i = 0;
 	while (str[11][i])
 		i++;

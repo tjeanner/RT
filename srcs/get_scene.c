@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/29 05:46:20 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/30 02:40:09 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ t_color	get_color(char *hexa)
 void	get_obj(char **arr, t_obj *objet)
 {
 	objet->type = arr[0][0];
-	objet->o.x = ft_atof(arr[1]);
-	objet->o.y = ft_atof(arr[2]);
-	objet->o.z = ft_atof(arr[3]);
+	objet->o.x = ft_atof(arr[1]) + ft_atof(arr[7]);
+	objet->o.y = ft_atof(arr[2]) + ft_atof(arr[8]);
+	objet->o.z = ft_atof(arr[3]) + ft_atof(arr[9]);
 	objet->norm.x = ft_atof(arr[4]);
 	objet->norm.y = ft_atof(arr[5]);
 	objet->norm.z = ft_atof(arr[6]);

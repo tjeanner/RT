@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/29 08:28:28 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/01/30 03:32:22 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	init_scene(t_env *env)
 		exit(0);
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		if (ft_strlen(line) != 0)
+		if (ft_strlen(line) > 0 && ft_strchr(line, ':'))
 			set_list(env, line, &par, i);
 		i++;
 		free(line);
