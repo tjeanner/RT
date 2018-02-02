@@ -6,11 +6,23 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/30 02:40:09 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/02 03:59:50 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+t_v         norm_vect(double x, double y, double z)
+{
+    t_v     vect;
+    t_v     res;
+
+    vect.x = x;
+    vect.y = y;
+    vect.z = z;
+    res = vect_mult(vect, 1.0 / vect_norm(vect));
+    return (res);
+}
 
 t_color	get_color(char *hexa)
 {
@@ -40,8 +52,10 @@ void	get_obj(char **arr, t_obj *objet)
 	objet->norm.x = ft_atof(arr[4]);
 	objet->norm.y = ft_atof(arr[5]);
 	objet->norm.z = ft_atof(arr[6]);
+	objet->norm = rotation(objet->norm, norm_vect(ft_atof(arr[11]),
+			ft_atof(arr[12]), ft_atof(arr[13])), ft_atof(arr[14]));
 	objet->radius = ft_atof(arr[10]);
-	objet->col = get_color(arr[11]);
+	objet->col = get_color(arr[15]);
 }
 
 void	get_lum(char **arr, t_lum *lum)
