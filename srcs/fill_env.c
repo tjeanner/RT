@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 05:36:57 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/02 15:31:09 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/02 18:16:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ t_v			rotation(t_v n, t_v r, float t)
 	c = cos(t / 360 * 2 * M_PI);
 	s = sin(t / 360 * 2 * M_PI);
 	v.x = (r.x * r.x * (1 - c) + c) * n.x
-		+ (r.x * r.y * (1 - c) - r.x * s) * n.y
-		+ (n.x * n.z * (1 - c) + n.y * s) * n.z;
+		+ (r.x * r.y * (1 - c) - r.z * s) * n.y
+		+ (r.x * r.z * (1 - c) + r.y * s) * n.z;
 	v.y = (r.x * r.y * (1 - c) + r.z * s) * n.x
 		+ (r.y * r.y * (1 - c) + c) * n.y
 		+ (r.y * r.z * (1 - c) - r.x * s) * n.z;
