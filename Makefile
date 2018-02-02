@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/01/29 01:34:19 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/02/02 15:07:49 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,11 +23,12 @@ SRC =		main.c \
 			get_scene.c \
 
 CC =		gcc
-CFLAGS =		-Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS =	-Wall -Wextra -Werror -Ofast -march=native -flto -g3 #-fsanitize=address
 
 SRCDIR =	srcs
 INCDIR =	incs
 OBJDIR =	objs
+SDLDIR =	~/Library/Frameworks
 
 INCFILE = $(addprefix $(INCDIR)/,$(NAME).h)
 
@@ -51,6 +52,9 @@ all: obj
 
 obj:
 	@mkdir -p $(OBJDIR)
+	@rm -rf $(SDLDIR)
+	@mkdir -p $(SDLDIR)
+	@cp -R sdl/SDL2.framework ~/Library/Frameworks
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCFILE)
 	$(CC) $(CFLAGS) $(FT_INC) -I $(INCDIR) $(SDL_INC) -o $@ -c $<
