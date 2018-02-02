@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/31 06:13:21 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/02 03:58:56 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 # include <string.h>
 # include <stdbool.h>
 
-//# define WIN_X 1920
-//# define WIN_Y 1080
-# define WIN_X 640
-# define WIN_Y 480
+# define WIN_X 1920
+# define WIN_Y 1080
+//# define WIN_X 640
+//# define WIN_Y 480
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
 # define FCTS "sptc"
@@ -165,8 +165,9 @@ int						get_scenelen(t_env *env);
 int						is_valid_obj(char **str, int n_line);
 int						is_valid_lum(char **str, int n_line);
 int						is_valid_cam(char **str, int n_line);
-void						set_list(t_env *env, char *line, t_par *par, int i);
+void					set_list(t_env *env, char *line, t_par *par, int i);
 void					set_struct(t_env *env, t_par *par);
+t_v						rotation(t_v n, t_v r, float t);
 
 /*
 **distances_functions.c
