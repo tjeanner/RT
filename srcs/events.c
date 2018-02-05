@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/30 03:07:27 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/05 12:57:25 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int				events(t_env *env)
 {
 	SDL_Event	event;
 
-	if (SDL_PollEvent(&event) != 0)
+	while (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
 			env->lums[0].pos_lum.z += 100;
@@ -121,6 +121,20 @@ int				events(t_env *env)
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_PLUS)
 			env->flou /= (env->flou == 0.125) ? 1 : 2;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_p)
+			env->curr_obj = (env->curr_obj < env->nb_obj - 1) ? env->curr_obj + 1 : 0;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_i)
+			env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){1, 0, 0}, 1);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_k)
+			env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){1, 0, 0}, -1);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_j)
+			env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 1, 0}, 1);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_l)
+			env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 1, 0}, -1);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_u)
+			env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 0, 1}, 1);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_o)
+			env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 0, 1}, -1);
 		else if (!move_events(env, event))
 			return (0);
 		rays(env);

@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 05:36:57 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/02 18:16:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/02 19:58:56 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int			is_norm_wchar(double x, double y, double z)
 	v_test.y = y;
 	v_test.z = z;
 	if (v_test.x || v_test.y || v_test.z)
-//	if (vect_norm(v_test) == 1.0)
 		return (1);
 	else
 		return (0);
@@ -53,7 +52,7 @@ int			is_valid_cam(char **str, int n_line)
 	i = 0;
 	if (!str[0])
 		return (0);
-	if (ft_strncmp(str[0], "cam", ft_strstr(str[0], "cam") - *str))
+	if (ft_strcmp(ft_strtrim(str[0]), "cam"))
 		return (0);
 	while (str[i])
 		i++;
@@ -72,7 +71,7 @@ int			is_valid_lum(char **str, int n_line)
 	i = 0;
 	if (!str[0])
 		return (0);
-	if (ft_strncmp(str[0], "lum", ft_strstr(str[0], "lum") - *str))
+	if (ft_strcmp(ft_strtrim(str[0]), "lum"))
 		return (0);
 	while (str[i])
 		i++;
@@ -88,10 +87,10 @@ int			is_valid_obj(char **str, int n_line)
 	i = 0;
 	if (!str[0])
 		return (0);
-	if ((ft_strncmp(str[0], "tube", ft_strstr(str[0], "tube") - *str)
-		&& ft_strncmp(str[0], "plane", ft_strstr(str[0], "plane") - *str)
-		&& ft_strncmp(str[0], "cone", ft_strstr(str[0], "cone") - *str)
-		&& ft_strncmp(str[0], "sphere", ft_strstr(str[0], "sphere") - *str)))
+	if ((ft_strcmp(ft_strtrim(str[0]), "tube"))
+		&& (ft_strcmp(ft_strtrim(str[0]), "sphere"))
+		&& (ft_strcmp(ft_strtrim(str[0]), "plane"))
+		&& (ft_strcmp(ft_strtrim(str[0]), "cone")))
 		return (0);
 	while (str[i])
 		i++;
