@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/30 03:07:27 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/03 10:39:04 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int		rotate_events(t_env *env, SDL_Event event)
 	return (1);
 }
 
-static int		move_events(t_env *env, SDL_Event event)
+static int		movect_events(t_env *env, SDL_Event event)
 {
 	if ((event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
 			|| event.type == SDL_QUIT)
@@ -39,17 +39,41 @@ static int		move_events(t_env *env, SDL_Event event)
 		return (0);
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_w)
-		env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->cams[env->curr_cam].v2cam, 50));
+	{
+		if (env->curr_obj == -1)
+			env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->cams[env->curr_cam].v2cam, 50));
+		else
+			env->objs[env->curr_obj].o = vect_add(env->objs[env->curr_obj].o, vect_mult(env->cams[env->curr_cam].v2cam, 50));
+	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
-		env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->cams[env->curr_cam].v2cam, -50));
+	{
+		if (env->curr_obj == -1)
+			env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->cams[env->curr_cam].v2cam, -50));
+		else
+			env->objs[env->curr_obj].o = vect_add(env->objs[env->curr_obj].o, vect_mult(env->cams[env->curr_cam].v2cam, -50));
+	}
 	else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != 0)
 	{
-		env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam,
+		if (env->curr_obj == -1)
+			env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam,
 				vect_mult(env->cams[env->curr_cam].vcam, -10 * event.wheel.y));
+		else
+			env->objs[env->curr_obj].o = vect_add(env->objs[env->curr_obj].o, vect_mult(env->cams[env->curr_cam].vcam, -10 * event.wheel.y));
 		event.wheel.y = 0;
 	}
-	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_UP)
-		env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->cams[env->curr_cam].vcam, 100));
+	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+	{
+		env->mousex = event.button.x;
+		event.button.x = 0;
+		env->mousey = event.button.y;
+		event.button.y = 0;
+		env->mouse_select = 1;
+	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_NUMLOCKCLEAR)
+	{
+		env->curr_obj = -1;
+		env->mouse_select = 0;
+	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN)
 		env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->cams[env->curr_cam].vcam, -100));
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_a)
@@ -121,7 +145,7 @@ int				events(t_env *env)
 			env->flou = (env->flou * 16 > WIN_Y) ? env->flou : env->flou * 2;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_PLUS)
 			env->flou /= (env->flou == 0.125) ? 1 : 2;
-		else if (!move_events(env, event))
+		else if (!movect_events(env, event))
 			return (0);
 		rays(env);
 	}
