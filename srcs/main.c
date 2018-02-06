@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/06 04:46:04 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/06 09:12:28 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,9 @@ t_color		get_col(t_env *env)
 		{
 				s = env->objs[ob].norm;
 				s = vect_mult(s, 1.0 / vect_norm(s));
-				res = ((double)((s.x * (env->init_rays.r.x - env->objs[ob].norm.x) +
-								s.y * (env->init_rays.r.y - env->objs[ob].norm.y) +
-								s.z * (env->init_rays.r.z - env->objs[ob].norm.z)) /
+				res = ((double)((s.x * (env->init_rays.r.x - env->objs[ob].o.x) +
+								s.y * (env->init_rays.r.y - env->objs[ob].o.y) +
+								s.z * (env->init_rays.r.z - env->objs[ob].o.z)) /
 							vect_scal_prod(s, s)));
 				norm = vect_add(env->objs[ob].o, vect_mult(s, res));//CC
 				norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));//CCPC
