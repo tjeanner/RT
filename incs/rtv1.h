@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/02 03:58:56 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/06 04:26:00 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@
 # include "SDL.h"
 # include <string.h>
 # include <stdbool.h>
+# include <pthread.h>
 
-# define WIN_X 1920
-# define WIN_Y 1080
-//# define WIN_X 640
-//# define WIN_Y 480
+//# define WIN_X 1920
+//# define WIN_Y 1080
+# define WIN_X 640
+# define WIN_Y 480
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
 # define FCTS "sptc"
@@ -44,6 +45,13 @@ typedef union			u_color
 		unsigned char	a;
 	}					c;
 }						t_color;
+
+typedef struct			s_thread
+{
+	int					start;
+	int					stop;
+	pthread_t			ident;
+}						t_thread;
 
 typedef struct			s_v
 {
@@ -97,7 +105,12 @@ typedef struct			s_env
 	SDL_Window			*win;
 	SDL_Surface			*surf;
 	int					state;
+	int					multi_thread;
+	t_thread			*threads;
+	int					mousex;
+	int					mousey;
 	int					nb_obj;
+	int					curr_obj;
 	int					nb_cam;
 	int					curr_cam;
 	int					nb_lum;
@@ -113,7 +126,9 @@ typedef struct			s_env
 /*
 **main.c
 */
-int						rays(t_env *env);
+void					rays(t_env *env);
+int						init_ray(t_env *env, float x, float y);
+int						which_obj_col(t_env *env);
 
 /*
 **vector_math.c

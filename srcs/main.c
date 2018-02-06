@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/02 12:40:38 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/06 04:46:04 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@ int			init_ray(t_env *env, float x, float y)
 	t_v		cam_2_pixel;
 	t_v		cam_2_pixel_norm;
 
-	env->cams[env->curr_cam].v3cam = vect_mult(vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam), -1.0);
+	env->cams[env->curr_cam].v3cam = vect_mult(vect_prod(
+		env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam), -1.0);
 	cam_2_center_screen = vect_mult(env->cams[env->curr_cam].vcam, DIST);
-	center_screen_2_pix = vect_add(vect_mult(env->cams[env->curr_cam].v3cam, (x - WIN_X / 2.0) / vect_norm(env->cams[env->curr_cam].v3cam)),
-			vect_mult(env->cams[env->curr_cam].v2cam, -1.0 * (y - WIN_Y / 2.0) / vect_norm(env->cams[env->curr_cam].v2cam)));
+	center_screen_2_pix = vect_add(vect_mult(env->cams[env->curr_cam].v3cam,
+	(x - WIN_X / 2.0) / vect_norm(env->cams[env->curr_cam].v3cam)),
+	vect_mult(env->cams[env->curr_cam].v2cam, -1.0 * (y - WIN_Y / 2.0) /
+		vect_norm(env->cams[env->curr_cam].v2cam)));
 	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
 	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1.0 / vect_norm(cam_2_pixel));
 	env->init_rays.r = env->cams[env->curr_cam].pos_cam;
@@ -62,7 +65,7 @@ int			which_obj_col(t_env *env)
 						(res == -1 || res > env->objs[i].dist))) && (ob = i) == i)
 			res = env->objs[i].dist;
 	}
-	return (ob);
+	return (ob = (res < 0) ? -1 : ob);
 }
 
 t_color		get_col(t_env *env)
@@ -83,7 +86,7 @@ t_color		get_col(t_env *env)
 	col[0].c.a = 0;
 	col[1].c.a = 0;
 	col[2].c.a = 0;
-	if (env->objs[ob].dist <= 0.0)//there has been no collision with any object
+	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
 		set_black(&col[0]);
 	else
 	{
@@ -102,9 +105,9 @@ t_color		get_col(t_env *env)
 			env->init_rays.v1 = -1;
 			env->init_rays.v2 = -1;
 			if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
-	&env->init_rays, env->objs[i]) == 1 && ((env->init_rays.v1 > 5 &&
+	&env->init_rays, env->objs[i]) == 1 && ((env->init_rays.v1 > 0 &&
 	env->init_rays.v1 < vect_norm(collision_2_lum)) || ((env->init_rays.v2 >
-		5 && env->init_rays.v2 < vect_norm(collision_2_lum)))))
+		0 && env->init_rays.v2 < vect_norm(collision_2_lum)))))
 			{
 				set_black(&col[0]);
 	//			col[0] = mult_color(env->objs[ob].col, 0.2);
@@ -123,40 +126,53 @@ t_color		get_col(t_env *env)
 			res = vect_scal_prod(norm, collision_2_lum_norm);
 			res = (vect_scal_prod(norm, tmp) >= 0.0) ? 0.0 : res;
 		}
+		else if (env->objs[ob].type == 't')
+		{
+				s = env->objs[ob].norm;
+				s = vect_mult(s, 1.0 / vect_norm(s));
+				res = ((double)((s.x * (env->init_rays.r.x - env->objs[ob].norm.x) +
+								s.y * (env->init_rays.r.y - env->objs[ob].norm.y) +
+								s.z * (env->init_rays.r.z - env->objs[ob].norm.z)) /
+							vect_scal_prod(s, s)));
+				norm = vect_add(env->objs[ob].o, vect_mult(s, res));//CC
+				norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));//CCPC
+				norm = vect_mult(norm, 1.0 / vect_norm(norm));//CCPC norme
+				res = vect_scal_prod(norm, collision_2_lum_norm);
+		}
 		else
 		{
 			s = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
 			s = vect_mult(s, 1.0 / vect_norm(s));
 			res = ((double)((s.x * (env->init_rays.r.x - env->objs[ob].norm.x) +
-						s.y * (env->init_rays.r.y - env->objs[ob].norm.y) +
-						s.z * (env->init_rays.r.z - env->objs[ob].norm.z)) /
-					vect_scal_prod(s, s)));
+							s.y * (env->init_rays.r.y - env->objs[ob].norm.y) +
+							s.z * (env->init_rays.r.z - env->objs[ob].norm.z)) /
+						vect_scal_prod(s, s)));
 			norm = vect_add(env->objs[ob].norm, vect_mult(s, res));
 			norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));
 			norm = vect_mult(norm, 1.0 / vect_norm(norm));
 			res = vect_scal_prod(norm, collision_2_lum_norm);
-//			res = (vect_scal_prod(collision_2_lum_norm, tmp) > 0.0) ? 0.0 : res * 1.0;
-//			col[0] = mult_color(env->objs[ob].col, 1.0);
-//			return (col[0]);
+			//			res = (vect_scal_prod(collision_2_lum_norm, tmp) > 0.0) ? 0.0 : res * 1.0;
+			//			col[0] = mult_color(env->objs[ob].col, 1.0);
+			//			return (col[0]);
 		}
 		res = (res < 0.0) ? 0.0 : res;
 		(void)r;
-	//	r = vect_add(vect_mult(collision_2_lum_norm, -1.0), vect_mult(norm, 2.0 * vect_scal_prod(norm, collision_2_lum_norm)));
-	//	if (vect_scal_prod(vect_mult(r, 1.0 / vect_norm(r)), vect_mult(tmp, -1.0 / vect_norm(tmp))) < 0)
-	//		set_white(&col[0]);
-			//col[0] = mult_color(env->objs[ob].col, res);
-	//	else
-	//	{
-	//		set_black(&col[0]);
-	//		set_black(&col[1]);
-	//		set_black(&col[2]);
-	//		col[0] = mult_color( , 0.1 * );
+		//	r = vect_add(vect_mult(collision_2_lum_norm, -1.0), vect_mult(norm, 2.0 * vect_scal_prod(norm, collision_2_lum_norm)));
+		//	if (vect_scal_prod(vect_mult(r, 1.0 / vect_norm(r)), vect_mult(tmp, -1.0 / vect_norm(tmp))) < 0)
+		//		set_white(&col[0]);
+		//col[0] = mult_color(env->objs[ob].col, res);
+		//	else
+		//	{
+		//		set_black(&col[0]);
+		//		set_black(&col[1]);
+		//		set_black(&col[2]);
+		//		col[0] = mult_color( , 0.1 * );
 		col[0] = mult_color(env->objs[ob].col, res);
-	//	}
-	//	col[0].c.a = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.a));
-	//	col[0].c.b = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.b));
-	//	col[0].c.g = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.g));
-//		col[0] = mult_color(env->objs[ob].col, 1.0 - env->objs[ob].plast_coef);
+		//	}
+		//	col[0].c.a = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.a));
+		//	col[0].c.b = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.b));
+		//	col[0].c.g = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.g));
+		//		col[0] = mult_color(env->objs[ob].col, 1.0 - env->objs[ob].plast_coef);
 	}
 	return (col[0]);
 }
@@ -164,8 +180,45 @@ t_color		get_col(t_env *env)
 /*
  **rays: a function that call get_col for each pixel and update window surface
  */
+/*
+   void		multi_thread(t_env *env)
+   {
+   int		i;
 
-int			rays(t_env *env)
+   i = -1;
+   while (++i < env->multi_thread)
+   {
+   if (pthread_create(&env->threads[i].ident, NULL, &rays, env) != 0)
+   {
+   ft_putstr("error multi thread\n");
+   return ;
+   }
+   }
+   }
+
+void	mthread(t_env *env)
+{
+	pthread_t		th[env->multi_thread];
+	int            i;
+	int            size;
+
+	i = 0;
+	size = WIN_Y / env->multi_thread;
+	while (i < env->multi_thread)
+	{
+		base->fr[i] = init_fracthr(base);
+		base->fr[i].y = i * size;
+		base->fr[i].twiny = (i + 1) * size;
+		if (pthread_create(&th[i], NULL, start_draw, (void *)&base->fr[i]))
+			error(4);
+		i++;
+	}
+	i = 0;
+	while (i < env->multi_thread)
+		pthread_join(th[i++], NULL);
+}*/
+
+void		rays(t_env *env)
 {
 	float	a;//go through each row
 	float	b;//go through each pixel in eah row
@@ -173,6 +226,7 @@ int			rays(t_env *env)
 	int		c;
 	t_color	col[64];
 
+	env = (t_env *)env;
 	ft_putstr("calculating image with ");
 	if (env->flou >= 1)
 	{
@@ -222,7 +276,6 @@ int			rays(t_env *env)
 	}
 	SDL_UpdateWindowSurface(env->win);
 	ft_putendl("done!");
-	return (1);
 }
 
 /*
@@ -238,11 +291,11 @@ t_env		*init(void)
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
 		if (!(env->win = SDL_CreateWindow("Rtv1", SDL_WINDOWPOS_CENTERED,
-										  SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
-		{
-			ft_putendl("error");
-			return (NULL);
-		}
+						SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
+						{
+							ft_putendl("error");
+							return (NULL);
+						}
 		else
 		{
 			if (!(env->surf = SDL_GetWindowSurface(env->win)))
@@ -256,6 +309,10 @@ t_env		*init(void)
 		env->col_fcts[2] = get_dist_tube;
 		env->col_fcts[3] = get_dist_cone;
 		env->flou = 4;
+		env->multi_thread = 1;
+		env->curr_obj = -1;
+		if (!(env->threads = (t_thread *)malloc(sizeof(t_thread) * env->multi_thread)))
+			return (0);
 		env->state = 0;
 		env->curr_cam = 0;
 		return (env);
@@ -276,12 +333,12 @@ int			main(int ac, char **av)
 	env->file = ft_strdup(av[1]);
 	init_scene(env);
 	i = -1;
-//	while (++i < env->nb_obj)
-//	{
-//		env->objs[i].spec_coef = 0.1;//ks
-//		env->objs[i].surf_coef = 0.8;//ka
-//		env->objs[i].plast_coef = 0.4;
-//	}
+	//	while (++i < env->nb_obj)
+	//	{
+	//		env->objs[i].spec_coef = 0.1;//ks
+	//		env->objs[i].surf_coef = 0.8;//ka
+	//		env->objs[i].plast_coef = 0.4;
+	//	}
 	env->lums[0].coef = 1.0;
 	rays(env);
 	while (!env->state)
