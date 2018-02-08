@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/06 09:12:28 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/08 01:16:53 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,14 @@ int			which_obj_col(t_env *env)
 		else
 			env->objs[i].dist = -1;
 	i = -1;
+	res = -1;
 	while (++i < env->nb_obj)//we select the shortest distance in all the one we havect
 	{
 		if ((i == 0 || (env->objs[i].dist > 0.0 &&
-						(res == -1 || res > env->objs[i].dist))) && (ob = i) == i)
+			(res == -1 || res > env->objs[i].dist))) && (ob = i) == i)
 			res = env->objs[i].dist;
 	}
-	return (ob = (res < 0) ? -1 : ob);
+	return (ob = (res <= 0) ? -1 : ob);
 }
 
 t_color		get_col(t_env *env)
@@ -77,7 +78,6 @@ t_color		get_col(t_env *env)
 	t_v		norm;
 	t_v		tmp;
 	t_v		s;
-	t_v		r;
 	t_v		pos_collision;
 	t_v		collision_2_lum;
 	t_v		collision_2_lum_norm;
@@ -122,7 +122,7 @@ t_color		get_col(t_env *env)
 		}
 		else if (env->objs[ob].type == 'p')
 		{
-			norm = env->objs[ob].norm;
+			norm = (vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm) < 0) ? vect_mult(env->objs[ob].norm, -1.0) : env->objs[ob].norm;
 			res = vect_scal_prod(norm, collision_2_lum_norm);
 			res = (vect_scal_prod(norm, tmp) >= 0.0) ? 0.0 : res;
 		}
@@ -151,28 +151,9 @@ t_color		get_col(t_env *env)
 			norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));
 			norm = vect_mult(norm, 1.0 / vect_norm(norm));
 			res = vect_scal_prod(norm, collision_2_lum_norm);
-			//			res = (vect_scal_prod(collision_2_lum_norm, tmp) > 0.0) ? 0.0 : res * 1.0;
-			//			col[0] = mult_color(env->objs[ob].col, 1.0);
-			//			return (col[0]);
 		}
 		res = (res < 0.0) ? 0.0 : res;
-		(void)r;
-		//	r = vect_add(vect_mult(collision_2_lum_norm, -1.0), vect_mult(norm, 2.0 * vect_scal_prod(norm, collision_2_lum_norm)));
-		//	if (vect_scal_prod(vect_mult(r, 1.0 / vect_norm(r)), vect_mult(tmp, -1.0 / vect_norm(tmp))) < 0)
-		//		set_white(&col[0]);
-		//col[0] = mult_color(env->objs[ob].col, res);
-		//	else
-		//	{
-		//		set_black(&col[0]);
-		//		set_black(&col[1]);
-		//		set_black(&col[2]);
-		//		col[0] = mult_color( , 0.1 * );
 		col[0] = mult_color(env->objs[ob].col, res);
-		//	}
-		//	col[0].c.a = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.a));
-		//	col[0].c.b = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.b));
-		//	col[0].c.g = (env->lums[0].coef * env->objs[ob].spec_coef * pow(vect_scal_prod(r, vect_mult(tmp, -1.0 / vect_norm(tmp))), env->objs[ob].surf_coef) * (1.0 - env->objs[ob].plast_coef) * (env->objs[ob].col.c.g));
-		//		col[0] = mult_color(env->objs[ob].col, 1.0 - env->objs[ob].plast_coef);
 	}
 	return (col[0]);
 }
@@ -180,43 +161,6 @@ t_color		get_col(t_env *env)
 /*
  **rays: a function that call get_col for each pixel and update window surface
  */
-/*
-   void		multi_thread(t_env *env)
-   {
-   int		i;
-
-   i = -1;
-   while (++i < env->multi_thread)
-   {
-   if (pthread_create(&env->threads[i].ident, NULL, &rays, env) != 0)
-   {
-   ft_putstr("error multi thread\n");
-   return ;
-   }
-   }
-   }
-
-void	mthread(t_env *env)
-{
-	pthread_t		th[env->multi_thread];
-	int            i;
-	int            size;
-
-	i = 0;
-	size = WIN_Y / env->multi_thread;
-	while (i < env->multi_thread)
-	{
-		base->fr[i] = init_fracthr(base);
-		base->fr[i].y = i * size;
-		base->fr[i].twiny = (i + 1) * size;
-		if (pthread_create(&th[i], NULL, start_draw, (void *)&base->fr[i]))
-			error(4);
-		i++;
-	}
-	i = 0;
-	while (i < env->multi_thread)
-		pthread_join(th[i++], NULL);
-}*/
 
 void		rays(t_env *env)
 {
