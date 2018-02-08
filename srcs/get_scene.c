@@ -6,23 +6,11 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/05 14:06:15 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/08 00:30:50 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-t_v         norm_vect(double x, double y, double z)
-{
-    t_v     vect;
-    t_v     res;
-
-    vect.x = x;
-    vect.y = y;
-    vect.z = z;
-    res = vect_mult(vect, 1.0 / vect_norm(vect));
-    return (res);
-}
 
 t_color	get_color(char *hexa)
 {

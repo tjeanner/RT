@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/06 04:26:00 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/08 00:33:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ typedef struct			s_env
 	int					state;
 	int					multi_thread;
 	t_thread			*threads;
-	int					mousex;
-	int					mousey;
+//	int					mousex;
+//	int					mousey;
 	int					nb_obj;
 	int					curr_obj;
 	int					nb_cam;
@@ -159,11 +159,19 @@ t_color					get_black(void);
 */
 int						events(t_env *env);
 
+
 /*
 **parser.c
 */
 void					init_scene(t_env *env);
 int						putlineerr(char *str, int i);
+
+/*
+**norm_manip.c
+*/
+t_v						norm_vect(double x, double y, double z);
+int						is_norm_wchar(double x, double y, double z);
+t_v						rotation(t_v n, t_v r, float t);
 
 /*
 **get_scene.c
@@ -182,7 +190,6 @@ int						is_valid_lum(char **str, int n_line);
 int						is_valid_cam(char **str, int n_line);
 void					set_list(t_env *env, char *line, t_par *par, int i);
 void					set_struct(t_env *env, t_par *par);
-t_v						rotation(t_v n, t_v r, float t);
 
 /*
 **distances_functions.c

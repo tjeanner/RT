@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/02/02 15:46:00 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/02/08 00:28:00 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC =		main.c \
 			parser.c \
 			fill_env.c \
 			get_scene.c \
+			norm_manip.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror -Ofast -march=native -flto -g3 -fsanitize=address
