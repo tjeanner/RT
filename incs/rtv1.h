@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/08 00:33:19 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/08 12:50:10 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,6 @@ typedef union			u_color
 	}					c;
 }						t_color;
 
-typedef struct			s_thread
-{
-	int					start;
-	int					stop;
-	pthread_t			ident;
-}						t_thread;
-
 typedef struct			s_v
 {
 	double				x;
@@ -63,11 +56,13 @@ typedef struct			s_v
 typedef struct			s_obj
 {
 	char				type;
-	double				radius;
+	float				radius;
 	t_v					o;
 	t_v					norm;
 	t_color				col;
 	double				dist;
+	t_v					r;
+	float				p;
 }						t_obj;
 
 typedef struct			s_cam
@@ -105,10 +100,6 @@ typedef struct			s_env
 	SDL_Window			*win;
 	SDL_Surface			*surf;
 	int					state;
-	int					multi_thread;
-	t_thread			*threads;
-//	int					mousex;
-//	int					mousey;
 	int					nb_obj;
 	int					curr_obj;
 	int					nb_cam;
@@ -142,8 +133,10 @@ t_v						vect_prod(t_v a, t_v b);
 /*
 **color_math.c
 */
-void					set_white(t_color *c);
-void					set_black(t_color *c);
+t_color					get_white(void);
+t_color					get_black(void);
+int						set_white(t_color *c);
+int						set_black(t_color *c);
 t_color					add_color(t_color a, t_color b);
 t_color					mult_color(t_color a, float n);
 int						average_color(t_color *col, float flou);
@@ -158,7 +151,6 @@ t_color					get_black(void);
 **events.c
 */
 int						events(t_env *env);
-
 
 /*
 **parser.c

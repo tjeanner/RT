@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/06 07:50:40 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/08 03:28:20 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ static int		move_events(t_env *env, SDL_Event event)
 		else
 			env->objs[env->curr_obj].o = vect_add(env->objs[env->curr_obj].o, vect_mult((t_v){1, 0, 0}, 50.0));
 	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_MINUS && env->curr_obj != -1)
+		env->objs[env->curr_obj].radius -= 10;
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_EQUALS && env->curr_obj != -1)
+		env->objs[env->curr_obj].radius += 10;
 	else
 		return (0);
 	return (1);
