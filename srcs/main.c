@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/08 02:42:03 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/08 03:23:34 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ t_color		get_col(t_env *env)
 	t_color	col[3];
 	t_v		norm;
 	t_v		tmp;
-	t_v		s;
 	t_v		pos_collision;
 	t_v		collision_2_lum;
 	t_v		collision_2_lum_norm;
@@ -117,41 +116,35 @@ t_color		get_col(t_env *env)
 		if (env->objs[ob].type == 's')
 		{
 			norm = vect_add(pos_collision, vect_mult(env->objs[ob].o, -1.0));
-			norm = vect_mult(norm, 1.0 / vect_norm(norm));//v norm a toucher
-			res = vect_scal_prod(norm, collision_2_lum_norm);
 		}
 		else if (env->objs[ob].type == 'p')
 		{
-			norm = (vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm) < 0) ? vect_mult(env->objs[ob].norm, -1.0) : env->objs[ob].norm;
-			res = vect_scal_prod(norm, collision_2_lum_norm);
-			res = (vect_scal_prod(norm, tmp) >= 0.0) ? 0.0 : res;
+			norm = (vect_scal_prod(env->objs[ob].norm, collision_2_lum_norm) < 0.0) ? vect_mult(env->objs[ob].norm, -1.0) : env->objs[ob].norm;
 		}
 		else if (env->objs[ob].type == 't')
 		{
-				s = env->objs[ob].norm;
-				s = vect_mult(s, 1.0 / vect_norm(s));
-				res = ((double)((s.x * (env->init_rays.r.x - env->objs[ob].o.x) +
-								s.y * (env->init_rays.r.y - env->objs[ob].o.y) +
-								s.z * (env->init_rays.r.z - env->objs[ob].o.z)) /
-							vect_scal_prod(s, s)));
-				norm = vect_add(env->objs[ob].o, vect_mult(s, res));//CC
+				tmp = env->objs[ob].norm;
+				tmp = vect_mult(tmp, 1.0 / vect_norm(tmp));
+				res = ((double)((tmp.x * (env->init_rays.r.x - env->objs[ob].o.x) +
+								tmp.y * (env->init_rays.r.y - env->objs[ob].o.y) +
+								tmp.z * (env->init_rays.r.z - env->objs[ob].o.z)) /
+							vect_scal_prod(tmp, tmp)));
+				norm = vect_add(env->objs[ob].o, vect_mult(tmp, res));//CC
 				norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));//CCPC
-				norm = vect_mult(norm, 1.0 / vect_norm(norm));//CCPC norme
-				res = vect_scal_prod(norm, collision_2_lum_norm);
 		}
 		else
 		{
-			s = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
-			s = vect_mult(s, 1.0 / vect_norm(s));
-			res = ((double)((s.x * (env->init_rays.r.x - env->objs[ob].norm.x) +
-							s.y * (env->init_rays.r.y - env->objs[ob].norm.y) +
-							s.z * (env->init_rays.r.z - env->objs[ob].norm.z)) /
-						vect_scal_prod(s, s)));
-			norm = vect_add(env->objs[ob].norm, vect_mult(s, res));
+			tmp = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
+			tmp = vect_mult(tmp, 1.0 / vect_norm(tmp));
+			res = ((double)((tmp.x * (env->init_rays.r.x - env->objs[ob].norm.x) +
+							tmp.y * (env->init_rays.r.y - env->objs[ob].norm.y) +
+							tmp.z * (env->init_rays.r.z - env->objs[ob].norm.z)) /
+						vect_scal_prod(tmp, tmp)));
+			norm = vect_add(env->objs[ob].norm, vect_mult(tmp, res));
 			norm = vect_add(env->init_rays.r, vect_mult(norm, -1.0));
-			norm = vect_mult(norm, 1.0 / vect_norm(norm));
-			res = vect_scal_prod(norm, collision_2_lum_norm);
 		}
+		norm = vect_mult(norm, 1.0 / vect_norm(norm));
+		res = (env->objs[ob].type == 'p' && vect_scal_prod(norm, tmp) >= 0.0) ? 0.0 : vect_scal_prod(norm, collision_2_lum_norm);
 		res = (res < 0.0) ? 0.0 : res;
 		col[0] = mult_color(env->objs[ob].col, res);
 	}
