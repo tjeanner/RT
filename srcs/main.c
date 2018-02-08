@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/08 01:16:53 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/08 02:42:03 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,8 @@ t_color		get_col(t_env *env)
 }
 
 /*
- **rays: a function that call get_col for each pixel and update window surface
- */
+**rays: a function that call get_col for each pixel and update window surface
+*/
 
 void		rays(t_env *env)
 {
@@ -193,16 +193,17 @@ void		rays(t_env *env)
 	a = 0.0;
 	while ((b = 0.0) == 0.0 && a < WIN_Y)//for each row in the img
 	{
-		while (b < WIN_X && init_ray(env, b, a))//for each pixel in the row
+		while (b < WIN_X)//for each pixel in the row
 		{
+			init_ray(env, b + env->flou / 2, a + env->flou / 2);
 			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 /
 					env->flou * (b - (int)b));//col is set with desired color for current pixel
 			col[c] = get_col(env);//col is set with desired color for current pixel
 			if (env->flou < 1 && c + 1.0 == 1.0 / flou_square &&
 					average_color(col, env->flou))
-				((int *)env->surf->pixels)[((int)((int)b + env->flou - 1.0) +
-					((int)(a + env->flou - 1.0) * env->surf->w))] = col[0].color;
-			c = -1.0;
+				((int *)env->surf->pixels)[((int)((int)b) +
+					((int)(a) * env->surf->w))] = col[0].color;
+			c = -1;
 			while (env->flou >= 1 && ++c < flou_square)
 				((int *)env->surf->pixels)[(int)b + ((int)c % (int)env->flou)
 					+ ((int)a + (int)c / (int)env->flou) * env->surf->w] = col[0].color;//we draw the color in the pixel
@@ -223,8 +224,8 @@ void		rays(t_env *env)
 }
 
 /*
- **init: initialise sdl, malloc and fill the data struct (here: env)
- */
+**init: initialise sdl, malloc and fill the data struct (here: env)
+*/
 
 t_env		*init(void)
 {
