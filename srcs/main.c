@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/08 13:24:26 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/09 21:34:36 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ t_color		get_col(t_env *env)
 		0.0 && env->init_rays.v2 < vect_norm(col_2_lum)))))
 			{
 				col = mult_color(env->objs[ob].col, 0.2);
+			//	col = mult_color(env->objs[ob].col, 0.0);
 				return (col);
 			}
 		}
@@ -139,17 +140,25 @@ t_color		get_col(t_env *env)
 		pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
 		res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) >= 0.0) ? 0.0 : vect_scal_prod(pos_col, col_2_lum_norm);
 		res = (res < 0.0) ? 0.0 : res;
-		res *= 85.00 / 100.00;
-		pos_col = vect_add(env->lums[0].pos_lum, vect_mult(env->objs[ob].o, -1.0));
-		pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
-		col.c.r = env->objs[ob].col.c.r * 0.15 + env->objs[ob].col.c.r * res + fmax(0.0, pow(vect_scal_prod(col_2_lum_norm, pos_col), env->objs[ob].p));
-		col.c.g = env->objs[ob].col.c.g * 0.15 + env->objs[ob].col.c.g * res + fmax(0.0, pow(vect_scal_prod(col_2_lum_norm, pos_col), env->objs[ob].p));
-		col.c.b = env->objs[ob].col.c.b * 0.15 + env->objs[ob].col.c.b * res + fmax(0.0, pow(vect_scal_prod(col_2_lum_norm, pos_col), env->objs[ob].p));
-		col = add_color(mult_color(env->objs[ob].col, 0.15), mult_color(env->objs[ob].col, res));
+		tmp = vect_add(col_2_lum_norm, vect_mult(tmp, -1.0));
+		tmp = vect_mult(tmp, 1.0 / vect_norm(tmp));
+//		pos_col = vect_add(env->lums[0].pos_lum, vect_mult(env->objs[ob].o, -1.0));
+//		pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
+//		col.c.r = fmin(255, env->objs[ob].col.c.r * 0.0 + env->objs[ob].col.c.r * res + fmax(0.0, pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)));
+//		col.c.g = fmin(255, env->objs[ob].col.c.g * 0.0 + env->objs[ob].col.c.g * res + fmax(0.0, pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)));
+//		col.c.b = fmin(255, env->objs[ob].col.c.b * 0.0 + env->objs[ob].col.c.b * res + fmax(0.0, pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)));
+		if (env->objs[ob].type == 's')
+		{
+			col.c.r = fmin(255.0, fmax(0.0, env->lums[0].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.r) * res);
+			col.c.g = fmin(255.0, fmax(0.0, env->lums[0].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.g) * res);
+			col.c.b = fmin(255.0, fmax(0.0, env->lums[0].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.b) * res);
+		}
+		else
+			col = add_color(mult_color(env->objs[ob].col, 0.0), mult_color(env->objs[ob].col, res));
 	}
 	return (col);
 }
-
+//env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
 /*
 **rays: a function that call get_col for each pixel and update window surface
 */
@@ -163,7 +172,7 @@ void		rays(t_env *env)
 	t_color	col[64];
 
 	env = (t_env *)env;
-	ft_putstr("calculating image with ");
+	ft_putstr("          calculating image with ");
 	if (env->flou >= 1)
 	{
 		ft_putnbr(1);
@@ -246,8 +255,10 @@ t_env		*init(void)
 		env->col_fcts[3] = get_dist_cone;
 		env->flou = 4;
 		env->curr_obj = -1;
-		env->state = 0;
 		env->curr_cam = 0;
+		env->state = 0;
+		env->constante2test = 1.0;
+		env->portion = 0.50;
 		return (env);
 	}
 	ft_putendl("error in init");
@@ -266,10 +277,10 @@ int			main(int ac, char **av)
 	env->file = ft_strdup(av[1]);
 	init_scene(env);
 	i = -1;
-		while (++i < env->nb_obj)
-		{
-			env->objs[i].p = (env->objs[i].type == 's') ? 4.0 : 0.0;//ks
-		}
+	while (++i < env->nb_obj && env->objs[i].type == 's')
+	{
+		env->objs[i].p = 16.0;//ks
+	}
 	env->lums[0].coef = 1.0;
 	rays(env);
 	while (!env->state)

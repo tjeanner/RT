@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/08 12:50:10 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/09 16:32:55 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ typedef struct			s_env
 	t_lum				*lums;
 	t_ray				init_rays;
 	float				flou;
+	float				constante2test;
+	float				portion;
 	char				*file;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 }						t_env;

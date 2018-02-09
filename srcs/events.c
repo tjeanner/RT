@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/08 03:28:20 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/09 21:48:18 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,42 @@ static int		move_events(t_env *env, SDL_Event event)
 			env->cams[env->curr_cam].pos_cam = vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->cams[env->curr_cam].v2cam, 50.0));
 		else
 			env->objs[env->curr_obj].o = vect_add(env->objs[env->curr_obj].o, vect_mult((t_v){0, 1, 0}, 50.0));
+	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_z)
+	{
+		env->portion *= (env->portion > 0.00001) ? 10.00 / 13.00 : 1.0;
+		ft_putstr(", portion:");
+		ft_putnbr(100 * env->portion);
+	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_x)
+	{
+		env->portion *= 13.00 / 10.00;
+		ft_putstr(", portion:");
+		ft_putnbr(100 * env->portion);
+	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_y)
+	{
+		env->constante2test -= 0.05;
+		ft_putstr(", ksy:");
+		ft_putnbr(100 * env->constante2test);
+	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_h)
+	{
+		env->constante2test += 0.05;
+		ft_putstr(", ksy:");
+		ft_putnbr(100 * env->constante2test);
+	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_n)
+	{
+		env->objs[env->curr_obj].p *= 11.00 / 10.00;
+		ft_putstr(", rugos:");
+		ft_putnbr(100 * env->objs[env->curr_obj].p);
+	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_b)
+	{
+		env->objs[env->curr_obj].p *= (env->objs[env->curr_obj].p > 0.1) ? 10.00 / 11.00 : 1.0;
+		ft_putstr(", rugos:");
+		ft_putnbr(100 * env->objs[env->curr_obj].p);
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_s)
 	{
@@ -86,7 +122,9 @@ static int		move_events(t_env *env, SDL_Event event)
 			env->objs[env->curr_obj].o = vect_add(env->objs[env->curr_obj].o, vect_mult((t_v){1, 0, 0}, 50.0));
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_MINUS && env->curr_obj != -1)
-		env->objs[env->curr_obj].radius -= 10;
+	{
+		env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0) ? 10 : 0;
+	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_EQUALS && env->curr_obj != -1)
 		env->objs[env->curr_obj].radius += 10;
 	else
@@ -101,17 +139,17 @@ int				events(t_env *env)
 	if (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
-			env->lums[0].pos_lum.z += 100;
+			env->lums[0].pos_lum.z += 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f)
-			env->lums[0].pos_lum.z -= 100;
+			env->lums[0].pos_lum.z -= 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c)
-			env->lums[0].pos_lum.x -= 100;
+			env->lums[0].pos_lum.x -= 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v)
-			env->lums[0].pos_lum.x += 100;
+			env->lums[0].pos_lum.x += 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
-			env->lums[0].pos_lum.y += 100;
+			env->lums[0].pos_lum.y += 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
-			env->lums[0].pos_lum.y -= 100;
+			env->lums[0].pos_lum.y -= 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m)
 		{
 			ft_memdel((void **)&env->objs);
