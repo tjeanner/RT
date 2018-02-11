@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/09 21:34:36 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/11 05:26:15 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ t_color		get_col(t_env *env)
 {
 	int		i;//index that run through all objects
 	int		ob;//to store the value of the index i when we find the object
+	int		test;//to store the value of the index i when we find the object
 	double	res;//to store the value of the distance when we find the object
 	t_color	col;
 	t_v		tmp;
@@ -119,27 +120,40 @@ t_color		get_col(t_env *env)
 					env->objs[ob].dist));//pos toucher
 		col_2_lum = vect_add(env->lums[0].pos_lum, vect_mult(pos_col, -1.0));
 		col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
+		tmp = vect_mult(get_norm(env, ob, pos_col, col_2_lum_norm), 0.0000);
+		tmp = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, env->init_rays.r2) >= 0.0) ? vect_mult(tmp, -1.000): tmp;
+		pos_col = vect_add(pos_col, tmp);
+		col_2_lum = vect_add(env->lums[0].pos_lum, vect_mult(pos_col, -1.0));
+		col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
 		env->init_rays.r = pos_col;
 		tmp = env->init_rays.r2;
 		env->init_rays.r2 = col_2_lum_norm;
 		while ((i = (i == ob - 1) ? i + 2 : i + 1) < env->nb_obj)//we search an object between the collision and the light source
 		{
-			env->init_rays.v1 = -1.0;
-			env->init_rays.v2 = -1.0;
-			if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
-	&env->init_rays, env->objs[i]) == 1 && ((env->init_rays.v1 > 0.0 &&
+			env->init_rays.v1 = -100000.0;
+			env->init_rays.v2 = -100000.0;
+			if ((test = env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
+	&env->init_rays, env->objs[i])) == 1 && (((env->init_rays.v1 > 0.0000001 &&
 	env->init_rays.v1 < vect_norm(col_2_lum)) || ((env->init_rays.v2 >
-		0.0 && env->init_rays.v2 < vect_norm(col_2_lum)))))
+		0.0000001 && env->init_rays.v2 < vect_norm(col_2_lum)))) || (env->objs[ob].type == 'p' && env->objs[i].type == 'p' && ((env->init_rays.v1 < -0.0000001 &&
+	env->init_rays.v1 > -2.0000) || (env->init_rays.v2 <
+		-0.0000001 && env->init_rays.v2 > -2.0000)))))
 			{
-				col = mult_color(env->objs[ob].col, 0.2);
+			//	col = mult_color(env->objs[ob].col, 0.2);
 			//	col = mult_color(env->objs[ob].col, 0.0);
-				return (col);
+			res = 0.00;
+			col = add_color(mult_color(env->objs[ob].col, 0.15), mult_color(env->objs[ob].col, res));
+			return (col);
 			}
+		}
+		if (test == 0)
+		{
+			return (get_white());
 		}
 		pos_col = get_norm(env, ob, pos_col, col_2_lum_norm);
 		pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
 		res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) >= 0.0) ? 0.0 : vect_scal_prod(pos_col, col_2_lum_norm);
-		res = (res < 0.0) ? 0.0 : res;
+		res = (res < 0.0) ? 0.0 : res * 85.000 / 100.000;
 		tmp = vect_add(col_2_lum_norm, vect_mult(tmp, -1.0));
 		tmp = vect_mult(tmp, 1.0 / vect_norm(tmp));
 //		pos_col = vect_add(env->lums[0].pos_lum, vect_mult(env->objs[ob].o, -1.0));
@@ -147,14 +161,14 @@ t_color		get_col(t_env *env)
 //		col.c.r = fmin(255, env->objs[ob].col.c.r * 0.0 + env->objs[ob].col.c.r * res + fmax(0.0, pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)));
 //		col.c.g = fmin(255, env->objs[ob].col.c.g * 0.0 + env->objs[ob].col.c.g * res + fmax(0.0, pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)));
 //		col.c.b = fmin(255, env->objs[ob].col.c.b * 0.0 + env->objs[ob].col.c.b * res + fmax(0.0, pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)));
-		if (env->objs[ob].type == 's')
-		{
-			col.c.r = fmin(255.0, fmax(0.0, env->lums[0].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.r) * res);
-			col.c.g = fmin(255.0, fmax(0.0, env->lums[0].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.g) * res);
-			col.c.b = fmin(255.0, fmax(0.0, env->lums[0].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.b) * res);
-		}
-		else
-			col = add_color(mult_color(env->objs[ob].col, 0.0), mult_color(env->objs[ob].col, res));
+	//	if (env->objs[ob].type == 's')
+	//	{
+	//		col.c.r = fmin(255.0, fmax(0.0, env->lums[0].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.r) * res);
+	//		col.c.g = fmin(255.0, fmax(0.0, env->lums[0].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.g) * res);
+	//		col.c.b = fmin(255.0, fmax(0.0, env->lums[0].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.b) * res);
+	//	}
+	//	else
+			col = add_color(mult_color(env->objs[ob].col, 0.15), mult_color(env->objs[ob].col, res));
 	}
 	return (col);
 }
@@ -258,7 +272,7 @@ t_env		*init(void)
 		env->curr_cam = 0;
 		env->state = 0;
 		env->constante2test = 1.0;
-		env->portion = 0.50;
+		env->portion = 0.20;
 		return (env);
 	}
 	ft_putendl("error in init");
@@ -277,9 +291,9 @@ int			main(int ac, char **av)
 	env->file = ft_strdup(av[1]);
 	init_scene(env);
 	i = -1;
-	while (++i < env->nb_obj && env->objs[i].type == 's')
+	while (++i < env->nb_obj)
 	{
-		env->objs[i].p = 16.0;//ks
+		env->objs[i].p = 40.0;//ks
 	}
 	env->lums[0].coef = 1.0;
 	rays(env);
