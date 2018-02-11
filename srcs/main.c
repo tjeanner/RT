@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/09 21:34:36 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/11 00:07:27 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void		rays(t_env *env)
 **init: initialise sdl, malloc and fill the data struct (here: env)
 */
 
-t_env		*init(void)
+t_env		*init(char *file)
 {
 	t_env	*env;
 
@@ -235,6 +235,8 @@ t_env		*init(void)
 	{
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
+		env->file = ft_strdup(file);
+		init_scene(env);
 		if (!(env->win = SDL_CreateWindow("Rtv1", SDL_WINDOWPOS_CENTERED,
 						SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 						{
@@ -270,12 +272,10 @@ int			main(int ac, char **av)
 	int			i;
 	t_env		*env;
 
-	if (!(env = init()))
+	if (!(env = init(av[1])))
 		ft_put_err("error in init");
 	if (ac != 2)
 		ft_put_err("usage : ./rtv1 <scene>");
-	env->file = ft_strdup(av[1]);
-	init_scene(env);
 	i = -1;
 	while (++i < env->nb_obj && env->objs[i].type == 's')
 	{
