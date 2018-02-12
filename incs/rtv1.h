@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/11 03:41:16 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:05:43 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ int						average_color(t_color *col, float flou);
 */
 double					which_pow(double num, double pow);
 t_color					get_black(void);
+void					ft_putfloat_fd(double nbr, int fd);
 
 /*
 **events.c
@@ -186,12 +187,16 @@ int						is_valid_cam(char **str, int n_line);
 void					set_list(t_env *env, char *line, t_par *par, int i);
 void					set_struct(t_env *env, t_par *par);
 
-
 /*
 **update_and_copy.c
 */
 void					update_and_copy_r(t_env *env, int obj);
 void					update_and_copy_a(t_env *env, SDL_Keycode type);
+
+/*
+**generator.c
+*/
+void					scene_generator(t_env *env);
 
 /*
 **distances_functions.c

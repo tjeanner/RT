@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbrbase.c                                    :+:      :+:    :+:   */
+/*   ft_putnbrbase_fd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/22 23:49:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/12 03:22:23 by hbouchet         ###   ########.fr       */
+/*   Created: 2018/02/12 04:28:29 by hbouchet          #+#    #+#             */
+/*   Updated: 2018/02/12 09:20:47 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,28 @@ static char	*ft_base_array(char *tab, int base)
 	return (tab);
 }
 
-void		ft_putnbrbase(int n, int base)
+void		ft_putnbrbase_fd(int n, int base, int fd)
 {
 	char	*tab;
 
 	tab = (char *)malloc(sizeof(char) * base + 1);
-	if (n == -2147483648 && base == 10)
+	if (n == -2147483648)
 	{
-		ft_putnbrbase(n / base, base);
-		return (ft_putnbrbase(n % base * -1, base));
+		ft_putnbrbase_fd(n / base, base, fd);
+		return (ft_putnbrbase_fd(n % base * -1, base, fd));
 	}
 	tab = ft_base_array(tab, base);
 	if (n < 0)
 	{
-		ft_putchar('-');
+		ft_putchar_fd('-', fd);
 		n = -n;
 	}
 	if (n < base)
-		ft_putchar(tab[n]);
+		ft_putchar_fd(tab[n], fd);
 	else
 	{
-		ft_putnbrbase(n / base, base);
-		ft_putnbrbase(n % base, base);
+		ft_putnbrbase_fd(n / base, base, fd);
+		ft_putnbrbase_fd(n % base, base, fd);
 	}
 	free(tab);
 }

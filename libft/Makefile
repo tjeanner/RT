@@ -6,7 +6,7 @@
 #    By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2018/02/11 02:54:39 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/02/12 04:29:39 by hbouchet         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -74,6 +74,7 @@ SRC =			ft_memset.c					\
 				ft_lstiter.c				\
 				ft_lstmap.c					\
 				ft_putnbrbase.c				\
+				ft_putnbrbase_fd.c			\
 				ft_itoabase.c				\
 				ft_sqrt.c					\
 				ft_bubble_sort.c			\

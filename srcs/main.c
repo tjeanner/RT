@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/11 00:07:27 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 02:55:10 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,8 @@ t_color		get_col(t_env *env)
 			col.c.r = fmin(255.0, fmax(0.0, env->lums[0].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.r) * res);
 			col.c.g = fmin(255.0, fmax(0.0, env->lums[0].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.g) * res);
 			col.c.b = fmin(255.0, fmax(0.0, env->lums[0].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.b) * res);
-		}
-		else
+				}
+			else
 			col = add_color(mult_color(env->objs[ob].col, 0.0), mult_color(env->objs[ob].col, res));
 	}
 	return (col);
@@ -260,7 +260,7 @@ t_env		*init(char *file)
 		env->curr_cam = 0;
 		env->state = 0;
 		env->constante2test = 1.0;
-		env->portion = 0.50;
+		env->portion = 0.2;
 		return (env);
 	}
 	ft_putendl("error in init");
@@ -277,9 +277,9 @@ int			main(int ac, char **av)
 	if (ac != 2)
 		ft_put_err("usage : ./rtv1 <scene>");
 	i = -1;
-	while (++i < env->nb_obj && env->objs[i].type == 's')
+	while (++i < env->nb_obj)// && env->objs[i].type == 's')
 	{
-		env->objs[i].p = 16.0;//ks
+		env->objs[i].p = 40.0;//ks
 	}
 	env->lums[0].coef = 1.0;
 	rays(env);

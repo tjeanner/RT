@@ -6,7 +6,7 @@
 #    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/02/11 04:16:35 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/02/11 04:24:13 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC =		main.c \
 			get_scene.c \
 			norm_manip.c \
 			update_and_copy.c \
+			generator.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror -g3 -fsanitize=address -Ofast -march=native -flto

@@ -6,11 +6,25 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/27 05:22:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:08:06 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+void	ft_putfloat_fd(double nbr, int fd)
+{
+	int		tmp;
+	float	nb;
+
+	nb = nbr;
+	tmp = nb;
+	ft_putnbr_fd(tmp,fd);
+	nb = (nb - tmp) * 1000000;
+	ft_putchar_fd('.', fd);
+	tmp = nb;
+	ft_putnbr_fd(tmp, fd);
+}
 
 double	which_pow(double num, double pow)
 {

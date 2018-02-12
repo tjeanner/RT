@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/10 19:57:39 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 03:19:08 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	get_obj(char **arr, t_obj *objet)
 	if (objet->type != 's')
 		objet->norm = rotation(objet->norm, norm_vect(ft_atof(arr[11]),
 						ft_atof(arr[12]), ft_atof(arr[13])), ft_atof(arr[14]));
+	else
+		objet->norm = (t_v){0, 0, 0};
 	objet->radius = ft_atof(arr[10]);
 	objet->col = get_color(arr[15]);
 }
