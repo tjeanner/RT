@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/11 05:40:57 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/12 02:20:02 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,12 +161,12 @@ t_color		get_col(t_env *env)
 //		col.c.b = fmin(255, env->objs[ob].col.c.b * 0.0 + env->objs[ob].col.c.b * res + fmax(0.0, pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)));
 	//	if (env->objs[ob].type == 's')
 	//	{
-	//		col.c.r = fmin(255.0, fmax(0.0, env->lums[0].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.r) * res);
-	//		col.c.g = fmin(255.0, fmax(0.0, env->lums[0].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.g) * res);
-	//		col.c.b = fmin(255.0, fmax(0.0, env->lums[0].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.b) * res);
+			col.c.r = fmin(255.0, fmax(0.0, env->lums[0].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.r) * res);
+			col.c.g = fmin(255.0, fmax(0.0, env->lums[0].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.g) * res);
+			col.c.b = fmin(255.0, fmax(0.0, env->lums[0].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p)) + env->objs[ob].col.c.b) * res);
 	//	}
 	//	else
-			col = add_color(mult_color(env->objs[ob].col, 0.15), mult_color(env->objs[ob].col, res));
+//		col = add_color(mult_color(env->objs[ob].col, 0.15), mult_color(env->objs[ob].col, res));
 	}
 	return (col);
 }
