@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 05:36:57 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/08 00:30:26 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/10 21:31:22 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,14 @@ int			is_valid_cam(char **str, int n_line)
 		return (putlineerr("invalid cam line ", n_line));
 	if (!is_norm_wchar(ft_atof(str[4]), ft_atof(str[5]), ft_atof(str[6]))
 		|| !is_norm_wchar(ft_atof(str[7]), ft_atof(str[8]), ft_atof(str[9])))
-		return (putlineerr("invalid vector line (cam) ", n_line));
+		return (putlineerr("invalid vector (cam) line ", n_line));
 	return (1);
 }
 
 int			is_valid_lum(char **str, int n_line)
 {
-	int i;
+	int		i;
+	char	*trim;
 
 	i = 0;
 	if (!str[0])
@@ -42,36 +43,48 @@ int			is_valid_lum(char **str, int n_line)
 		return (0);
 	while (str[i])
 		i++;
-	if (i != 4)
+	if (i != 5)
 		return (putlineerr("invalid lum line ", n_line));
+	i = 0;
+	trim = ft_strtrim(str[4]);
+	while (trim[i])
+	{
+		if (!((trim[i] >= '0' && trim[i] <= '9') ||
+		(ft_toupper(trim[i]) >= 'A' && ft_toupper(trim[i]) <= 'F')))
+			return (putlineerr("invalid color line ", n_line));
+		i++;
+	}
+	if (i < 6)
+		return (putlineerr("invalid color line ", n_line));
 	return (1);
 }
 
 int			is_valid_obj(char **str, int n_line)
 {
 	int		i;
+	char	*trim;
 
 	i = 0;
-	if (!str[0])
-		return (0);
-	if ((ft_strcmp(ft_strtrim(str[0]), "tube"))
+	if (!str[0] || ((ft_strcmp(ft_strtrim(str[0]), "tube"))
 		&& (ft_strcmp(ft_strtrim(str[0]), "sphere"))
 		&& (ft_strcmp(ft_strtrim(str[0]), "plane"))
-		&& (ft_strcmp(ft_strtrim(str[0]), "cone")))
+		&& (ft_strcmp(ft_strtrim(str[0]), "cone"))))
 		return (0);
 	while (str[i])
 		i++;
 	if (i != 16)
 		return (putlineerr("invalid obj line ", n_line));
-	if (ft_strstr(str[0], "plane") && !is_norm_wchar(ft_atof(str[4]),
+	if (!ft_strstr(str[0], "sphere") && !is_norm_wchar(ft_atof(str[4]),
 		ft_atof(str[5]), ft_atof(str[6])))
-		return (putlineerr("invalid vector line (obj) ", n_line));
+		return (putlineerr("invalid vector (obj) line ", n_line));
+	if (!ft_strstr(str[0], "plane") && ft_atof(str[10]) < 0)
+		return (putlineerr("invalid radius line ", n_line));
 	i = 0;
-	while (str[15][i])
+	trim = ft_strtrim(str[15]);
+	while (trim[i] && ((trim[i] >= '0' && trim[i] <= '9') ||
+		(ft_toupper(trim[i]) >= 'A' && ft_toupper(trim[i]) <= 'F')))
 		i++;
-	if (i < 6)
-		return (putlineerr("invalid color line ", n_line));
-	return (1);
+	return (i == 6) ? (1) : (putlineerr("invalid color line ", n_line));
 }
 
 void		set_list(t_env *env, char *line, t_par *par, int i)

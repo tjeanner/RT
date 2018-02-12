@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/01 22:23:23 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/11 03:57:05 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void		init_scene(t_env *env)
 	env->nb_cam = 0;
 	env->nb_lum = 0;
 	if ((fd = open(env->file, O_RDONLY)) == -1)
-		ft_put_err("bonjour");
+		ft_put_err("Can't open file");
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
 		if (ft_strlen(line) > 0 && ft_strchr(line, ':'))
@@ -53,7 +53,7 @@ void		init_scene(t_env *env)
 	}
 	if (ret == -1)
 		ft_put_err("Can't read scene");
-	if (env->nb_obj == 0 || env->nb_lum == 0 || env->nb_cam == 0)
+	if (env->nb_lum == 0 || env->nb_cam == 0)
 		ft_put_err("invalid scene");
 	malloc_env(env);
 	set_struct(env, &par);

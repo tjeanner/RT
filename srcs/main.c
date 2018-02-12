@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/11 05:26:15 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/11 05:40:57 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,7 @@ t_color		get_col(t_env *env)
 			if ((test = env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
 	&env->init_rays, env->objs[i])) == 1 && (((env->init_rays.v1 > 0.0000001 &&
 	env->init_rays.v1 < vect_norm(col_2_lum)) || ((env->init_rays.v2 >
-		0.0000001 && env->init_rays.v2 < vect_norm(col_2_lum)))) || (env->objs[ob].type == 'p' && env->objs[i].type == 'p' && ((env->init_rays.v1 < -0.0000001 &&
-	env->init_rays.v1 > -2.0000) || (env->init_rays.v2 <
-		-0.0000001 && env->init_rays.v2 > -2.0000)))))
+		0.0000001 && env->init_rays.v2 < vect_norm(col_2_lum))))))
 			{
 			//	col = mult_color(env->objs[ob].col, 0.2);
 			//	col = mult_color(env->objs[ob].col, 0.0);
@@ -146,10 +144,10 @@ t_color		get_col(t_env *env)
 			return (col);
 			}
 		}
-		if (test == 0)
-		{
-			return (get_white());
-		}
+//		if (test == 0)
+//		{
+//			return (get_white());
+//		}
 		pos_col = get_norm(env, ob, pos_col, col_2_lum_norm);
 		pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
 		res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) >= 0.0) ? 0.0 : vect_scal_prod(pos_col, col_2_lum_norm);

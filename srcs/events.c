@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/09 21:48:18 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/11 03:40:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,13 @@ int				events(t_env *env)
 			else
 				env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 0, 1}, -1);
 		}
+		else if (event.type == SDL_KEYDOWN && (event.key.keysym.sym == SDLK_1 || event.key.keysym.sym == SDLK_2
+			|| event.key.keysym.sym == SDLK_3 || event.key.keysym.sym == SDLK_4))
+			update_and_copy_a(env, event.key.keysym.sym);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE)
+			update_and_copy_r(env, env->curr_obj);
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSLASH)
+			env->objs[env->curr_obj].col = get_rand();
 		else if (!move_events(env, event))
 			return (0);
 		rays(env);

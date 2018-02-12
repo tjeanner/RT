@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/08 00:30:50 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/10 19:57:39 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_color	get_color(char *hexa)
 
 void	get_obj(char **arr, t_obj *objet)
 {
-	objet->type = arr[0][0];
+	objet->type = ft_strtrim(arr[0])[0];
 	objet->o.x = ft_atof(arr[1]) + ft_atof(arr[7]);
 	objet->o.y = ft_atof(arr[2]) + ft_atof(arr[8]);
 	objet->o.z = ft_atof(arr[3]) + ft_atof(arr[9]);
@@ -51,7 +51,8 @@ void	get_lum(char **arr, t_lum *lum)
 	lum->pos_lum.y = ft_atof(arr[2]);
 	lum->pos_lum.z = ft_atof(arr[3]);
 	lum->coef = 1.0;
-	set_white(&lum->col);
+//	set_white(&lum->col);
+	lum->col = get_color(arr[4]);
 }
 
 void	get_cam(char **arr, t_cam *cam)

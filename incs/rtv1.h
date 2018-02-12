@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/09 16:32:55 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/11 03:41:16 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ t_v						vect_prod(t_v a, t_v b);
 /*
 **color_math.c
 */
+t_color					get_rand(void);
 t_color					get_white(void);
 t_color					get_black(void);
 int						set_white(t_color *c);
@@ -184,6 +185,13 @@ int						is_valid_lum(char **str, int n_line);
 int						is_valid_cam(char **str, int n_line);
 void					set_list(t_env *env, char *line, t_par *par, int i);
 void					set_struct(t_env *env, t_par *par);
+
+
+/*
+**update_and_copy.c
+*/
+void					update_and_copy_r(t_env *env, int obj);
+void					update_and_copy_a(t_env *env, SDL_Keycode type);
 
 /*
 **distances_functions.c
