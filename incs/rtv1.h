@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 09:05:43 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 16:47:07 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct			s_env
 	int					nb_cam;
 	int					curr_cam;
 	int					nb_lum;
+	int					curr_lum;
 	t_obj				*objs;
 	t_cam				*cams;
 	t_lum				*lums;
