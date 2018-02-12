@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 02:06:53 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 03:04:20 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,12 @@ int				events(t_env *env)
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE && env->curr_obj >= 0)
 			update_and_copy_r(env, env->curr_obj);
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSLASH)
-			env->objs[env->curr_obj].col = get_rand();
+		{
+			if (env->curr_obj >= 0) 
+				env->objs[env->curr_obj].col = get_rand();
+			else if (env->curr_obj == -2)
+				env->lums[0].col = get_rand();
+		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_END)
 			scene_generator(env);
 		else if (!move_events(env, event))
