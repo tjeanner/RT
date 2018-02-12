@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 02:46:25 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/01/28 07:45:53 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/12 04:29:22 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 void				ft_putnbrbase(int n, int base);
+void				ft_putnbrbase_fd(int n, int base, int fd);
 char				*ft_itoabase(int n, int base);
 void				ft_bubble_sort(int ac, char **av);
 int					ft_sqrt(int nb);

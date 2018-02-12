@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 04:51:14 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/11 03:37:41 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 11:02:29 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@ t_color	get_rand(void)
 	c.c.r = rand() % 255;
 	c.c.g = rand() % 255;
 	c.c.b = rand() % 255;
+	c.c.a = 0;
+	return (c);
+}
+
+t_color	get_black(void)
+{
+	t_color	c;
+	c.c.r = 0;
+	c.c.g = 0;
+	c.c.b = 0;
 	c.c.a = 0;
 	return (c);
 }

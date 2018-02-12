@@ -6,22 +6,123 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/11 04:16:15 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/12 09:16:17 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-void	scene_generator(t_env *env)
+static void	print_cam(t_env *env, int i, int fd)
 {
-	int	i_cam;
+	ft_putstr_fd("cam:", fd);
+	ft_putnbr_fd(env->cams[i].pos_cam.x, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].pos_cam.y, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].pos_cam.z, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].vcam.x, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].vcam.y, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].vcam.z, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].v2cam.x, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].v2cam.y, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->cams[i].v2cam.z, fd);
+	ft_putchar_fd('\n', fd);
+}
 
-	i_cam = 0;
-	while (i_cam < env->nb_cam)
+static void	print_lum(t_env *env, int i, int fd)
+{
+	ft_putstr_fd("lum:", fd);
+	ft_putfloat_fd(env->lums[i].pos_lum.x, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->lums[i].pos_lum.y, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->lums[i].pos_lum.z, fd);
+	ft_putchar_fd(':', fd);
+	if (env->lums[i].col.c.r < 16)
+		ft_putchar_fd('0', fd);
+	ft_putnbrbase_fd(env->lums[i].col.c.r, 16, fd);
+	if (env->lums[i].col.c.g < 16)
+		ft_putchar_fd('0', fd);
+	ft_putnbrbase_fd(env->lums[i].col.c.g, 16, fd);
+	if (env->lums[i].col.c.b < 16)
+		ft_putchar_fd('0', fd);
+	ft_putnbrbase_fd(env->lums[i].col.c.b, 16, fd);
+	ft_putchar_fd('\n', fd);
+}
+
+static void	print_d_obj(t_env *env, int i, int fd)
+{
+	if (env->objs[i].type == 's')
+		ft_putstr_fd("sphere:", fd);
+	else if (env->objs[i].type == 'p')
+		ft_putstr_fd("plane:", fd);
+	else if (env->objs[i].type == 'c')
+		ft_putstr_fd("cone:", fd);
+	else if (env->objs[i].type == 't')
+		ft_putstr_fd("tube:", fd);
+	ft_putfloat_fd(env->objs[i].o.x, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->objs[i].o.y, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->objs[i].o.z, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->objs[i].norm.x, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->objs[i].norm.y, fd);
+	ft_putchar_fd(':', fd);
+	ft_putfloat_fd(env->objs[i].norm.z, fd);
+	ft_putchar_fd(':', fd);
+}
+
+static void	print_obj(t_env *env, int i, int fd)
+{
+	int j;
+
+	j = 3;
+	print_d_obj(env, i, fd);
+	while (j-- > 0)
+		ft_putstr_fd("0:", fd);
+	ft_putfloat_fd(env->objs[i].radius, fd);
+	ft_putchar_fd(':', fd);
+	j = 3;
+	ft_putstr_fd("1:", fd);
+	while (j-- > 0)
+		ft_putstr_fd("0:", fd);
+	if (env->objs[i].col.c.r < 16)
+		ft_putchar_fd('0', fd);
+	ft_putnbrbase_fd(env->objs[i].col.c.r, 16, fd);
+	if (env->objs[i].col.c.g < 16)
+		ft_putchar_fd('0', fd);
+	ft_putnbrbase_fd(env->objs[i].col.c.g, 16, fd);
+	if (env->objs[i].col.c.b < 16)
+		ft_putchar_fd('0', fd);
+	ft_putnbrbase_fd(env->objs[i].col.c.b, 16, fd);
+	ft_putchar_fd('\n', fd);
+}
+
+void		scene_generator(t_env *env)
+{
+	int	i;
+	int fd;
+
+	if (!(fd = open("testscene", O_CREAT | O_WRONLY | O_APPEND, 0666)))
+		ft_put_err("lol");//
+	i = env->nb_cam;
+	while (--i >= 0)
+		print_cam(env, i, fd);
+	i = env->nb_lum;
+	while (--i >= 0)
+		print_lum(env, i, fd);
+	i = 0;
+	while (i < env->nb_obj)
 	{
-		ft_putstr("cam:");
-		ft_putnbr(env->cams[i_cam].pos_cam.x);
-		ft_putchar('\n');
-		i_cam++;
+		print_obj(env, i, fd);
+		i++;
 	}
 }

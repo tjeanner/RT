@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 03:08:56 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/12 11:34:18 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,17 +139,17 @@ int				events(t_env *env)
 	if (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
-			env->lums[0].pos_lum.z += 50;
+			env->lums[env->curr_lum].pos_lum.z += 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f)
-			env->lums[0].pos_lum.z -= 50;
+			env->lums[env->curr_lum].pos_lum.z -= 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c)
-			env->lums[0].pos_lum.x -= 50;
+			env->lums[env->curr_lum].pos_lum.x -= 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v)
-			env->lums[0].pos_lum.x += 50;
+			env->lums[env->curr_lum].pos_lum.x += 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_t)
-			env->lums[0].pos_lum.y += 50;
+			env->lums[env->curr_lum].pos_lum.y += 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_g)
-			env->lums[0].pos_lum.y -= 50;
+			env->lums[env->curr_lum].pos_lum.y -= 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m)
 		{
 			ft_memdel((void **)&env->objs);
@@ -188,6 +188,8 @@ int				events(t_env *env)
 			env->flou /= (env->flou == 0.125) ? 1 : 2;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_p)
 			env->curr_obj = (env->curr_obj < env->nb_obj - 1) ? env->curr_obj + 1 : 0;
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SEMICOLON)
+			env->curr_lum = (env->curr_lum < env->nb_lum - 1) ? env->curr_lum + 1 : 0;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_i)
 		{
 			if (env->curr_obj == -1)
@@ -224,7 +226,7 @@ int				events(t_env *env)
 		{
 			if (env->curr_obj == -1)
 			{
-				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam, 10);
+				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam, 1);
 				env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].v2cam, env->cams[env->curr_cam].vcam);
 			}
 			else
@@ -256,9 +258,14 @@ int				events(t_env *env)
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE && env->curr_obj >= 0)
 			update_and_copy_r(env, env->curr_obj);
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSLASH)
-			env->objs[env->curr_obj].col = get_rand();
-	//	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_END)
-	//		scene_generator(env);
+		{
+			if (env->curr_obj >= 0) 
+				env->objs[env->curr_obj].col = get_rand();
+			else if (env->curr_obj == -2)
+				env->lums[env->curr_lum].col = get_rand();
+		}
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_END)
+			scene_generator(env);
 		else if (!move_events(env, event))
 			return (0);
 		rays(env);
