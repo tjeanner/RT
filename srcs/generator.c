@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/12 09:16:17 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/13 12:06:24 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	print_cam(t_env *env, int i, int fd)
 {
 	ft_putstr_fd("cam:", fd);
-	ft_putnbr_fd(env->cams[i].pos_cam.x, fd);
+	ft_putfloat_fd(env->cams[i].pos_cam.x, fd);
 	ft_putchar_fd(':', fd);
 	ft_putfloat_fd(env->cams[i].pos_cam.y, fd);
 	ft_putchar_fd(':', fd);
@@ -115,13 +115,19 @@ void		scene_generator(t_env *env)
 		ft_put_err("lol");//
 	i = env->nb_cam;
 	while (--i >= 0)
+	{
+		env->cams[i].vcam = vect_mult(env->cams[i].vcam, 1.0 / vect_norm(env->cams[i].vcam));
+		env->cams[i].v2cam = vect_mult(env->cams[i].v2cam, 1.0 / vect_norm(env->cams[i].v2cam));
+		env->cams[i].v3cam = vect_mult(env->cams[i].v3cam, 1.0 / vect_norm(env->cams[i].v3cam));
 		print_cam(env, i, fd);
+	}
 	i = env->nb_lum;
 	while (--i >= 0)
 		print_lum(env, i, fd);
 	i = 0;
 	while (i < env->nb_obj)
 	{
+		env->objs[i].norm = vect_mult(env->objs[i].norm, 1.0 / vect_norm(env->objs[i].norm));
 		print_obj(env, i, fd);
 		i++;
 	}
