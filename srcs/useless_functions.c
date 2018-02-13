@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 09:08:06 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/13 11:57:24 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ void	ft_putfloat_fd(double nbr, int fd)
 	nb = nbr;
 	tmp = nb;
 	ft_putnbr_fd(tmp,fd);
+	if (nb < 0.0)
+	{
+		nb *= -1.0;
+		tmp *= -1.0;
+	}
 	nb = (nb - tmp) * 1000000;
 	ft_putchar_fd('.', fd);
 	tmp = nb;
