@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/12 09:16:17 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/13 12:10:55 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	print_cam(t_env *env, int i, int fd)
 {
 	ft_putstr_fd("cam:", fd);
-	ft_putnbr_fd(env->cams[i].pos_cam.x, fd);
+	ft_putfloat_fd(env->cams[i].pos_cam.x, fd);
 	ft_putchar_fd(':', fd);
 	ft_putfloat_fd(env->cams[i].pos_cam.y, fd);
 	ft_putchar_fd(':', fd);
