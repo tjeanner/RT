@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 11:34:18 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/13 12:46:48 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,9 @@ int				events(t_env *env)
 
 	if (SDL_PollEvent(&event) != 0)
 	{
+		env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].vcam, 1.0 / vect_norm(env->cams[env->curr_cam].vcam));
+		env->cams[env->curr_cam].v2cam = vect_mult(env->cams[env->curr_cam].v2cam, 1.0 / vect_norm(env->cams[env->curr_cam].v2cam));
+		env->cams[env->curr_cam].v3cam = vect_mult(env->cams[env->curr_cam].v3cam, 1.0 / vect_norm(env->cams[env->curr_cam].v3cam));
 		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
 			env->lums[env->curr_lum].pos_lum.z += 50;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f)
@@ -189,14 +192,21 @@ int				events(t_env *env)
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_p)
 			env->curr_obj = (env->curr_obj < env->nb_obj - 1) ? env->curr_obj + 1 : 0;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SEMICOLON)
+		{
 			env->curr_lum = (env->curr_lum < env->nb_lum - 1) ? env->curr_lum + 1 : 0;
+			ft_putnbr(env->curr_lum);
+			ft_putnbr(env->nb_lum);
+		}
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_i)
 		{
 			if (env->curr_obj == -1)
 			{
 				env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam);
-				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam, 1);
+				env->cams[env->curr_cam].v3cam = vect_mult(env->cams[env->curr_cam].v3cam, vect_norm(env->cams[env->curr_cam].v3cam));
+				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam, 1.0);
+				env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].vcam, vect_norm(env->cams[env->curr_cam].vcam));
 				env->cams[env->curr_cam].v2cam = vect_prod(env->cams[env->curr_cam].v3cam, env->cams[env->curr_cam].vcam);
+				env->cams[env->curr_cam].v2cam = vect_mult(env->cams[env->curr_cam].v2cam, vect_norm(env->cams[env->curr_cam].v2cam));
 			}
 			else
 				env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){1, 0, 0}, 1);
@@ -206,8 +216,11 @@ int				events(t_env *env)
 			if (env->curr_obj == -1)
 			{
 				env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam);
-				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam, -1);
+				env->cams[env->curr_cam].v3cam = vect_mult(env->cams[env->curr_cam].v3cam, vect_norm(env->cams[env->curr_cam].v3cam));
+				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam, -1.0);
+				env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].vcam, vect_norm(env->cams[env->curr_cam].vcam));
 				env->cams[env->curr_cam].v2cam = vect_prod(env->cams[env->curr_cam].v3cam, env->cams[env->curr_cam].vcam);
+				env->cams[env->curr_cam].v2cam = vect_mult(env->cams[env->curr_cam].v2cam, vect_norm(env->cams[env->curr_cam].v2cam));
 			}
 			else
 				env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){1, 0, 0}, -1);
@@ -217,7 +230,9 @@ int				events(t_env *env)
 			if (env->curr_obj == -1)
 			{
 				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam, -1);
+				env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].vcam, vect_norm(env->cams[env->curr_cam].vcam));
 				env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].v2cam, env->cams[env->curr_cam].vcam);
+				env->cams[env->curr_cam].v3cam = vect_mult(env->cams[env->curr_cam].v3cam, vect_norm(env->cams[env->curr_cam].v3cam));
 			}
 			else
 				env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 1, 0}, 1);
@@ -227,7 +242,9 @@ int				events(t_env *env)
 			if (env->curr_obj == -1)
 			{
 				env->cams[env->curr_cam].vcam = rotation(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam, 1);
+				env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].vcam, vect_norm(env->cams[env->curr_cam].vcam));
 				env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].v2cam, env->cams[env->curr_cam].vcam);
+				env->cams[env->curr_cam].v3cam = vect_mult(env->cams[env->curr_cam].v3cam, vect_norm(env->cams[env->curr_cam].v3cam));
 			}
 			else
 				env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 1, 0}, -1);
@@ -237,7 +254,9 @@ int				events(t_env *env)
 			if (env->curr_obj == -1)
 			{
 				env->cams[env->curr_cam].v2cam = rotation(env->cams[env->curr_cam].v2cam, env->cams[env->curr_cam].vcam, 1);
+				env->cams[env->curr_cam].v2cam = vect_mult(env->cams[env->curr_cam].v2cam, vect_norm(env->cams[env->curr_cam].v2cam));
 				env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].v2cam, env->cams[env->curr_cam].vcam);
+				env->cams[env->curr_cam].v3cam = vect_mult(env->cams[env->curr_cam].v3cam, vect_norm(env->cams[env->curr_cam].v3cam));
 			}
 			else
 				env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 0, 1}, 1);
@@ -247,7 +266,9 @@ int				events(t_env *env)
 			if (env->curr_obj == -1)
 			{
 				env->cams[env->curr_cam].v2cam = rotation(env->cams[env->curr_cam].v2cam, env->cams[env->curr_cam].vcam, -1);
+				env->cams[env->curr_cam].v2cam = vect_mult(env->cams[env->curr_cam].v2cam, vect_norm(env->cams[env->curr_cam].v2cam));
 				env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].v2cam, env->cams[env->curr_cam].vcam);
+				env->cams[env->curr_cam].v3cam = vect_mult(env->cams[env->curr_cam].v3cam, vect_norm(env->cams[env->curr_cam].v3cam));
 			}
 			else
 				env->objs[env->curr_obj].norm = rotation(env->objs[env->curr_obj].norm, (t_v){0, 0, 1}, -1);
@@ -264,6 +285,8 @@ int				events(t_env *env)
 			else if (env->curr_obj == -2)
 				env->lums[env->curr_lum].col = get_rand();
 		}
+		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_KP_CLEAR)
+			env->curr_obj = -1;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_END)
 			scene_generator(env);
 		else if (!move_events(env, event))
