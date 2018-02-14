@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/13 11:57:24 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/13 19:46:12 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,19 @@ void	ft_putfloat_fd(double nbr, int fd)
 
 	nb = nbr;
 	tmp = nb;
-	ft_putnbr_fd(tmp,fd);
-	if (nb < 0.0)
+	if (nbr < 0.0000000000000)
 	{
 		nb *= -1.0;
 		tmp *= -1.0;
+		ft_putchar_fd('-', fd);
 	}
-	nb = (nb - tmp) * 1000000;
+	ft_putnbr_fd(tmp,fd);
 	ft_putchar_fd('.', fd);
-	tmp = nb;
-	ft_putnbr_fd(tmp, fd);
+	while ((nb = (nb - tmp) * 1000000.0) > 0)
+	{
+		tmp = nb;
+		ft_putnbr_fd(tmp, fd);
+	}
 }
 
 double	which_pow(double num, double pow)
