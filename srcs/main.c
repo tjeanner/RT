@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/15 20:26:03 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/15 21:12:47 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ t_v			get_norm(t_env *env, int ob, t_v pos_col, t_v col_2_lum_norm)
 		vect = vect_add(env->objs[ob].norm, vect_mult(vect, res));
 		vect = vect_add(env->init_rays.r, vect_mult(vect, -1.0));
 	}
+	vect = vect_mult(vect, 1.00 / vect_norm(vect));
 	return (vect);
 }
 
@@ -117,7 +118,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 				env->objs[ob].dist));//pos toucher
 	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
 	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
-	tmp = vect_mult(get_norm(env, ob, pos_col, col_2_lum_norm), 0.00001);
+	tmp = vect_mult(get_norm(env, ob, pos_col, col_2_lum_norm), 0.000100);
 	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.r2) > 0.0) ? vect_mult(tmp, -1.000): tmp;
 	pos_col = vect_add(pos_col, tmp);
 //	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
@@ -131,9 +132,9 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 		env->init_rays.v1 = -100000.0;
 		env->init_rays.v2 = -100000.0;
 		if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
-			&env->init_rays, env->objs[i]) == 1 && (((env->init_rays.v1 > 0.0000001 &&
+			&env->init_rays, env->objs[i]) == 1 && (((env->init_rays.v1 > -0.0000000000001 &&
 			env->init_rays.v1 < vect_norm(col_2_lum)) || ((env->init_rays.v2 >
-			0.0000001 && env->init_rays.v2 < vect_norm(col_2_lum))))))
+			-0.0000000000001 && env->init_rays.v2 < vect_norm(col_2_lum))))))
 		{
 			//	col = mult_color(env->objs[ob].col, 0.2);
 			//	col = mult_color(env->objs[ob].col, 0.0);
