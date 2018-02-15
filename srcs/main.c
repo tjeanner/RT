@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 21:06:26 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/15 08:58:11 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,22 +116,22 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 				env->objs[ob].dist));//pos toucher
 	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
 	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
-	tmp = vect_mult(get_norm(env, ob, pos_col, col_2_lum_norm), 0.0000);
-	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, env->init_rays.r2) >= 0.0) ? vect_mult(tmp, -1.000): tmp;
+	tmp = vect_mult(get_norm(env, ob, pos_col, col_2_lum_norm), 0.00001);
+	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.r2) >= 0.0) ? vect_mult(tmp, -1.000): tmp;
 	pos_col = vect_add(pos_col, tmp);
-	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
-	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
+//	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
+//	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
 	env->init_rays.r = pos_col;
 	tmp = env->init_rays.r2;
 	env->init_rays.r2 = col_2_lum_norm;
-	while ((i = (i == ob - 1) ? i + 2 : i + 1) < env->nb_obj)//we search an object between the collision and the light source
+	while (++i < env->nb_obj)//we search an object between the collision and the light source
 	{
 		env->init_rays.v1 = -100000.0;
 		env->init_rays.v2 = -100000.0;
 		if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
-					&env->init_rays, env->objs[i]) == 1 && (((env->init_rays.v1 > 0.0000001 &&
-								env->init_rays.v1 < vect_norm(col_2_lum)) || ((env->init_rays.v2 >
-									0.0000001 && env->init_rays.v2 < vect_norm(col_2_lum))))))
+			&env->init_rays, env->objs[i]) == 1 && (((env->init_rays.v1 > 0.0000001 &&
+			env->init_rays.v1 < vect_norm(col_2_lum)) || ((env->init_rays.v2 >
+			0.0000001 && env->init_rays.v2 < vect_norm(col_2_lum))))))
 		{
 			//	col = mult_color(env->objs[ob].col, 0.2);
 			//	col = mult_color(env->objs[ob].col, 0.0);
@@ -151,17 +151,16 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 //	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) + env->objs[ob].col.c.b * res);
 	//	}
 	//	else
-	*col = add_color(mult_color(env->objs[ob].col, 0.0), mult_color(env->objs[ob].col, res));
+	*col = mult_color(env->objs[ob].col, res);
 	return (col);
 	}
 //env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
 
 t_color		get_col(t_env *env)
 {
-	t_color	colo[env->nb_lum];
+	t_color	colo;
 	int		i;
 	int		ob;
-	int		nb;
 	t_color	*tmp;
 
 	ob = which_obj_col(env);
@@ -170,35 +169,19 @@ t_color		get_col(t_env *env)
 	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
 		return(get_black());
 	i = 0;
-	nb = 0;
-	colo[0] = get_black();
+	colo = get_black();
 	while (i < env->nb_lum)
 	{
 		if ((tmp = get_lums(env, i, ob)) != NULL)
 		{
-			//ft_memcpy((void *)(colo[0] + nb), (void *)tmp, sizeof(t_color));
-			colo[0] = add_color(colo[0], *tmp);
-			nb++;
+			colo.c.r += tmp->c.r / 2.0;
+			colo.c.g += tmp->c.g / 2.0;
+			colo.c.b += tmp->c.b / 2.0;
 		}
-	//	else
-	//	{
-			//ft_memcpy((void *)(colo[0] + nb), (void *)tmp, sizeof(t_color));
-		//	colo[nb] = get_black();
-		//	nb++;
-	//	}
 		i++;
 	}
-	i = 0;
-//	while (i < nb)
-//	{
-//		*(colo + i) = mult_color(*(colo + i), 1.0 / env->nb_lum);
-//		i++;
-//	}
-//	i = 0;
-//	while (++i < nb)
-//		colo[0] = add_color(colo[0], colo[i]);
-	colo[0] = add_color(colo[0], mult_color(env->objs[ob].col, 0.15));
-	return (colo[0]);
+	colo = add_color(colo, mult_color(env->objs[ob].col, 0.15));
+	return (colo);
 }
 
 /*
@@ -229,14 +212,22 @@ void		rays(t_env *env)
 		ft_putnbr(1 / (env->flou * env->flou));
 		ft_putstr(" rays for ");
 		ft_putnbr(1);
-		ft_putstr("pixel.....");
+		ft_putstr("pixel.....\n");
 	}
+	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.x));
+	ft_putstr(", ");
+	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.y));
+	ft_putstr(", ");
+	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.z));
+	ft_putstr(", ");
 	flou_square = env->flou * env->flou;
 	a = 0.0;
 	while ((b = 0.0) == 0.0 && a < WIN_Y)//for each row in the img
 	{
 		while (b < WIN_X && init_ray(env, b + env->flou / 2, a + env->flou / 2))//for each pixel in the row
 		{
+			if (b == 320 && a == 260)
+				ft_putendl("hello");
 			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 /
 					env->flou * (b - (int)b));//col is set with desired color for current pixel
 			col[c] = get_col(env);//col is set with desired color for current pixel
@@ -321,7 +312,7 @@ int			main(int ac, char **av)
 	i = -1;
 	while (++i < env->nb_lum)
 	{
-		env->lums[i].coef = 0.2;
+		env->lums[i].coef = 1.0;
 	}
 	rays(env);
 	while (!env->state)
