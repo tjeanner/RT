@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/02/11 04:24:13 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/02/15 07:31:32 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,9 @@ SRC =		main.c \
 			vector_math.c \
 			useless_functions.c \
 			events.c \
+			events_sel.c \
+			events_rotation.c \
+			events_move.c \
 			color_math.c \
 			distances_functions.c \
 			parser.c \

@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/15 08:58:11 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/15 17:42:31 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	double	res;//to store the value of the distance when we find the object
 	t_color	*col;
 	t_v		tmp;
+	t_v		tmp2;
 	t_v		pos_col;
 	t_v		col_2_lum;
 	t_v		col_2_lum_norm;
@@ -121,6 +122,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	pos_col = vect_add(pos_col, tmp);
 //	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
 //	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
+	tmp2 = env->init_rays.r;
 	env->init_rays.r = pos_col;
 	tmp = env->init_rays.r2;
 	env->init_rays.r2 = col_2_lum_norm;
@@ -140,6 +142,8 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 			return (NULL);
 		}
 	}
+	env->init_rays.r = tmp2;
+	env->init_rays.r2 = tmp;
 	pos_col = get_norm(env, ob, pos_col, col_2_lum_norm);
 	pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
 	res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) >= 0.0) ? 0.0 : vect_scal_prod(pos_col, col_2_lum_norm);
@@ -156,7 +160,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	}
 //env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
 
-t_color		get_col(t_env *env)
+t_color		get_col(t_env *env, t_v vect)
 {
 	t_color	colo;
 	int		i;
@@ -172,11 +176,14 @@ t_color		get_col(t_env *env)
 	colo = get_black();
 	while (i < env->nb_lum)
 	{
+	//	ft_bzero(tmp, sizeof(t_color));
 		if ((tmp = get_lums(env, i, ob)) != NULL)
 		{
-			colo.c.r += tmp->c.r / 2.0;
-			colo.c.g += tmp->c.g / 2.0;
-			colo.c.b += tmp->c.b / 2.0;
+			colo.c.r += tmp->c.r / 3.0;
+			colo.c.g += tmp->c.g / 3.0;
+			colo.c.b += tmp->c.b / 3.0;
+			if (vect_scal_prod(vect, vect_mult(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0)), 1.0 / vect_norm(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0))))) < -0.9999)
+				return(get_white());
 		}
 		i++;
 	}
@@ -221,6 +228,17 @@ void		rays(t_env *env)
 	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.z));
 	ft_putstr(", ");
 	flou_square = env->flou * env->flou;
+	c = -1;
+	while (++c < 2)
+	{
+	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.x));
+	ft_putstr(", ");
+	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.y));
+	ft_putstr(", ");
+	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.z));
+	ft_putstr(", ");
+	rotation(env->cams[env->curr_cam].vcam, (t_v){1, 0, 0}, 0);
+	}
 	a = 0.0;
 	while ((b = 0.0) == 0.0 && a < WIN_Y)//for each row in the img
 	{
@@ -230,7 +248,7 @@ void		rays(t_env *env)
 				ft_putendl("hello");
 			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 /
 					env->flou * (b - (int)b));//col is set with desired color for current pixel
-			col[c] = get_col(env);//col is set with desired color for current pixel
+			col[c] = get_col(env, env->init_rays.r2);//col is set with desired color for current pixel
 			if (env->flou < 1 && c + 1.0 == 1.0 / flou_square &&
 					average_color(col, env->flou))
 				((int *)env->surf->pixels)[((int)((int)b) +
