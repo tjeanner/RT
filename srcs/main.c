@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/15 17:42:31 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/15 20:26:03 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ t_v			get_norm(t_env *env, int ob, t_v pos_col, t_v col_2_lum_norm)
 	double	res;
 	t_v		vect;
 
+	(void)col_2_lum_norm;
 	if (env->objs[ob].type == 's')
 		vect = vect_add(pos_col, vect_mult(env->objs[ob].o, -1.0));
 	else if (env->objs[ob].type == 'p')
-		vect = (vect_scal_prod(env->objs[ob].norm, col_2_lum_norm) < 0.0)
-			? vect_mult(env->objs[ob].norm, -1.0) : env->objs[ob].norm;
+		vect = env->objs[ob].norm;
 	else if (env->objs[ob].type == 't')
 	{
 		vect = vect_mult(env->objs[ob].norm, 1.0 / vect_norm(env->objs[ob].norm));
@@ -118,7 +118,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
 	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
 	tmp = vect_mult(get_norm(env, ob, pos_col, col_2_lum_norm), 0.00001);
-	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.r2) >= 0.0) ? vect_mult(tmp, -1.000): tmp;
+	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.r2) > 0.0) ? vect_mult(tmp, -1.000): tmp;
 	pos_col = vect_add(pos_col, tmp);
 //	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
 //	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
@@ -146,7 +146,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	env->init_rays.r2 = tmp;
 	pos_col = get_norm(env, ob, pos_col, col_2_lum_norm);
 	pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
-	res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) >= 0.0) ? 0.0 : vect_scal_prod(pos_col, col_2_lum_norm);
+	res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) > 0.0) ? vect_scal_prod(vect_mult(pos_col, -1.00), col_2_lum_norm) : vect_scal_prod(pos_col, col_2_lum_norm);
 	res = (res < 0.0) ? 0.0 : res * env->lums[lumcur].coef;
 	tmp = vect_add(col_2_lum_norm, vect_mult(tmp, -1.0));
 	tmp = vect_mult(tmp, 1.0 / vect_norm(tmp));
@@ -155,6 +155,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 //	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) + env->objs[ob].col.c.b * res);
 	//	}
 	//	else
+	
 	*col = mult_color(env->objs[ob].col, res);
 	return (col);
 	}
@@ -179,9 +180,9 @@ t_color		get_col(t_env *env, t_v vect)
 	//	ft_bzero(tmp, sizeof(t_color));
 		if ((tmp = get_lums(env, i, ob)) != NULL)
 		{
-			colo.c.r += tmp->c.r / 3.0;
-			colo.c.g += tmp->c.g / 3.0;
-			colo.c.b += tmp->c.b / 3.0;
+			colo.c.r += 0.750 * tmp->c.r / env->nb_lum;
+			colo.c.g += 0.750 * tmp->c.g / env->nb_lum;
+			colo.c.b += 0.750 * tmp->c.b / env->nb_lum;
 			if (vect_scal_prod(vect, vect_mult(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0)), 1.0 / vect_norm(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0))))) < -0.9999)
 				return(get_white());
 		}
