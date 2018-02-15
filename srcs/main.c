@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 21:06:26 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/14 02:41:51 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 //	col->c.g = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) + env->objs[ob].col.c.g * res);
 //	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) + env->objs[ob].col.c.b * res);
 	//	}
-	//	else
+//	else
 	*col = add_color(mult_color(env->objs[ob].col, 0.0), mult_color(env->objs[ob].col, res));
 	return (col);
 	}
@@ -321,7 +321,7 @@ int			main(int ac, char **av)
 	i = -1;
 	while (++i < env->nb_lum)
 	{
-		env->lums[i].coef = 0.2;
+		env->lums[i].coef = 0.8;
 	}
 	rays(env);
 	while (!env->state)

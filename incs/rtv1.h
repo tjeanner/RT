@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 16:47:07 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/15 08:59:11 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,23 @@ void					ft_putfloat_fd(double nbr, int fd);
 **events.c
 */
 int						events(t_env *env);
+
+/*
+**events_sel.c
+*/
+int						event_cam_switch(t_env *env, unsigned int sym);
+int						events_sel(t_env *env, SDL_Event event, unsigned int sym);
+
+/*
+**events_rotation.c
+*/
+int						events_rotation(t_env *env, unsigned int sym, t_v *norm);
+
+/*
+**events_move.c
+*/
+int						events_move(t_env *env, unsigned int sym, t_cam *cam, t_obj *obj);
+void					mouse_move(t_env *env, SDL_Event event, t_cam *cam, t_obj *obj);
 
 /*
 **parser.c

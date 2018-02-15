@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/13 13:04:18 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/14 02:34:54 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	get_lum(char **arr, t_lum *lum)
 	lum->pos_lum.x = ft_atof(arr[1]);
 	lum->pos_lum.y = ft_atof(arr[2]);
 	lum->pos_lum.z = ft_atof(arr[3]);
-	lum->coef = 1.0;
+	lum->coef = 0.8;
 //	set_white(&lum->col);
 	lum->col = get_color(arr[4]);
 }
