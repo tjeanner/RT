@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/15 21:12:47 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/18 11:59:00 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	t_v		col_2_lum_norm;
 
 	if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))
-		return (0);
+		return (NULL);
 	i = -1;
 	pos_col = vect_add(env->init_rays.r, vect_mult(env->init_rays.r2,
 				env->objs[ob].dist));//pos toucher
@@ -168,8 +168,12 @@ t_color		get_col(t_env *env, t_v vect)
 	int		i;
 	int		ob;
 	t_color	*tmp;
+	t_env	*tutu;
 
 	ob = which_obj_col(env);
+	if (!(tutu = (t_env *)malloc(sizeof(t_env) * 1)))
+		return (get_black());
+	ft_memcpy(tutu, env, sizeof(t_env));
 //	if (!(colo = (t_color *[env->nb_lum])malloc(sizeof(t_color[env->nb_lum]) * (1))))
 //		return (get_black());
 	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
@@ -178,18 +182,38 @@ t_color		get_col(t_env *env, t_v vect)
 	colo = get_black();
 	while (i < env->nb_lum)
 	{
-	//	ft_bzero(tmp, sizeof(t_color));
-		if ((tmp = get_lums(env, i, ob)) != NULL)
+		if ((tmp = get_lums(tutu, i, ob)) != NULL)
 		{
-			colo.c.r += 0.750 * tmp->c.r / env->nb_lum;
-			colo.c.g += 0.750 * tmp->c.g / env->nb_lum;
-			colo.c.b += 0.750 * tmp->c.b / env->nb_lum;
+			colo = add_color(colo, mult_color(*tmp, 0.3000));
+			ft_bzero(tmp, sizeof(t_color));
+			ft_memdel((void **)&tmp);
+		}
 			if (vect_scal_prod(vect, vect_mult(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0)), 1.0 / vect_norm(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0))))) < -0.9999)
 				return(get_white());
-		}
+		ft_memcpy(tutu, env, sizeof(t_env));
 		i++;
 	}
-	colo = add_color(colo, mult_color(env->objs[ob].col, 0.15));
+	colo = mult_color(colo, 2.000 / env->nb_lum);
+	colo = add_color(colo, mult_color(env->objs[ob].col, 0.1500));
+	ft_memdel((void **)&tutu);
+//	if (tt == env->nb_lum)
+//		return (get_white());
+//	if (tt == env->nb_lum - 2)
+//	{
+//		colo.c.r = 0;
+//		colo.c.g = 255;
+//		colo.c.b = 0;
+//		colo.c.a = 0;
+//		return (colo);
+//	}
+//	if (tt == env->nb_lum - 1)
+//	{
+//		colo.c.r = 255;
+//		colo.c.g = 0;
+//		colo.c.b = 0;
+//		colo.c.a = 0;
+//		return (colo);
+//	}
 	return (colo);
 }
 
@@ -208,7 +232,7 @@ void		rays(t_env *env)
 	ft_putstr("          calculating image with ");
 	if (env->flou >= 1)
 	{
-		ft_putnbr(1);
+		ft_putnbr(env->nb_lum);
 		ft_putstr(" ray for ");
 		ft_putnbr(env->flou * env->flou);
 		if (env->flou == 1)
@@ -246,8 +270,9 @@ void		rays(t_env *env)
 	{
 		while (b < WIN_X && init_ray(env, b + env->flou / 2, a + env->flou / 2))//for each pixel in the row
 		{
-			if (b == 320 && a == 260)
-				ft_putendl("hello");
+			if (b == 320 && a == 240)
+				((int *)env->surf->pixels)[((int)((int)b) +
+					((int)(a) * env->surf->w))] = 1118208;
 			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 /
 					env->flou * (b - (int)b));//col is set with desired color for current pixel
 			col[c] = get_col(env, env->init_rays.r2);//col is set with desired color for current pixel
@@ -339,8 +364,22 @@ int			main(int ac, char **av)
 	{
 		events(env);
 	}
+/*	if (ac == 2)
+	{
+		ft_putstr("atoi:");
+		ft_putnbr(atoi(av[1]));
+		ft_putstr("\natof:");
+		ft_putnbr(ft_atof(av[1]));
+		ft_putstr("\n1000*atof:");
+		ft_putnbr(100000000 * ft_atof(av[1]));
+		ft_putstr("\natof+putfloat:");
+		ft_putfloat_fd(ft_atof(av[1]), 1);
+		ft_putstr("\n");
+	}*/
 	SDL_DestroyWindow(env->win);
 	free(env);
+//	(void)i;
+//	(void)env;
 	SDL_Quit();
 	return (1);
 }
