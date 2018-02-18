@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/02 17:22:44 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/18 08:33:01 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ int			get_dist_plan(t_ray *init_rays, t_obj obj)
 	init_rays->v1 = -1;
 	init_rays->v2 = vect_scal_prod(obj.norm, vect_add(obj.o,
 	vect_mult(init_rays->r, -1.0))) / vect_scal_prod(obj.norm, init_rays->r2);
+	if (obj.radius < 0 && vect_norm(vect_add(obj.o, vect_mult(vect_add(init_rays->r, vect_mult(init_rays->r2, init_rays->v2)), -1.0))) > -1.0 * obj.radius)
+		init_rays->v2 = -1;
 	return (1);
 }
 
