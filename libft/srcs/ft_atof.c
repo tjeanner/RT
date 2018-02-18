@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 01:24:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/15 10:48:28 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/02/18 05:39:15 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ double		ft_atof(char *s)
 			neg = -1;
 		while (s[++i] && ft_isdigit(s[i]))
 		{
-			res += (res >= 0) ? ((double)(s[i] - '0') * ft_pow(10, 0 - j)) :
-				-1.0 * ((double)(s[i] - '0') * ft_pow(10, 0 - j));
+			res += (neg == 1) ? ((double)(s[i] - '0') * ft_pow(10, 0 - j)) :
+				((double)-1.00 * (s[i] - '0') * ft_pow(10, 0 - j));
 			j++;
 		}
 	}
-	return (res * (double)neg);
+	return (res);
 }
