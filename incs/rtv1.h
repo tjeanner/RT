@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/15 08:59:11 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/07 03:15:25 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <string.h>
 # include <stdbool.h>
 # include <pthread.h>
+# include "parser.h"
 
 //# define WIN_X 1920
 //# define WIN_Y 1080
@@ -223,6 +224,9 @@ int						get_dist_cone(t_ray *init_rays, t_obj obj);
 int						get_dist_tube(t_ray *init_rays, t_obj obj);
 int						get_dist_plan(t_ray *init_rays, t_obj obj);
 int						get_dist_sphere(t_ray *init_rays, t_obj obj);
+
+
+
 
 
 #endif
