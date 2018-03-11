@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/07 07:29:38 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/11 14:53:29 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,18 @@ typedef struct              s_json_arr
 void					j_init(t_env *env);
 t_json                 *parse_json(char **str);
 t_val                   parse_obj(char **str);
+
+/*
+**fill_json.c
+*/
+void                    j_fill_env(t_json *json);
+void       j_fill_obj(t_val *val);
+
+/*
+**parse_function.c
+*/
+char        *parse_str(char **str);
+float       parse_float(char **str);
+void        skip_whitespaces(char **str);
 
 #endif
