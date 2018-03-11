@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/11 15:24:08 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/11 20:59:40 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 t_json_arr		*parse_arr(char **str)
 {
 	t_json_arr	*arr;
+	static int cpt = 0;
 
-	arr = malloc(sizeof(t_json_arr) * 1);
-	arr->next = NULL;
+	arr = NULL;
 	skip_whitespaces(str);
 	if (**str != ']')
 	{
+		*str += 1;
+		printf(": %d", cpt++);
+		arr = malloc(sizeof(t_json_arr) * 1);
 		arr->val = parse_obj(str);
 		arr->next = parse_arr(str);
 	}
@@ -65,7 +68,6 @@ t_val			parse_obj(char **str)
 		val.data.obj = parse_json(str);
 	else if (**str == '[')
 	{
-		*str += 1;
 		val.data.tab = parse_arr(str);
 	}
 	skip_whitespaces(str);

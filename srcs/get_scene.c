@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_scene.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/14 02:34:54 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/18 01:45:26 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	get_lum(char **arr, t_lum *lum)
 	lum->pos_lum.y = ft_atof(arr[2]);
 	lum->pos_lum.z = ft_atof(arr[3]);
 	lum->coef = 0.8;
-//	set_white(&lum->col);
 	lum->col = get_color(arr[4]);
 }
 
@@ -65,12 +64,6 @@ void	get_cam(char **arr, t_cam *cam)
 	cam->pos_cam.z = ft_atof(arr[3]);
 	cam->vcam = norm_vect(ft_atof(arr[4]), ft_atof(arr[5]), ft_atof(arr[6]));
 	cam->v2cam = norm_vect(ft_atof(arr[7]), ft_atof(arr[8]), ft_atof(arr[9]));
-/*	cam->vcam.x = ft_atof(arr[4]);
-	cam->vcam.y = ft_atof(arr[5]);
-	cam->vcam.z = ft_atof(arr[6]);
-	cam->v2cam.x = ft_atof(arr[7]);
-	cam->v2cam.y = ft_atof(arr[8]);
-	cam->v2cam.z = ft_atof(arr[9]);*/
 }
 
 int		get_scenelen(t_env *env)

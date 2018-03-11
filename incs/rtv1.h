@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/07 03:15:25 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/08 01:51:50 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct			s_env
 	float				portion;
 	char				*file;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
+	t_json				*json;
 }						t_env;
 
 /*
