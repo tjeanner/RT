@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/11 20:59:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/12 15:44:40 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,12 @@
 t_json_arr		*parse_arr(char **str)
 {
 	t_json_arr	*arr;
-	static int cpt = 0;
 
 	arr = NULL;
 	skip_whitespaces(str);
 	if (**str != ']')
 	{
 		*str += 1;
-		printf(": %d", cpt++);
 		arr = malloc(sizeof(t_json_arr) * 1);
 		arr->val = parse_obj(str);
 		arr->next = parse_arr(str);
@@ -109,6 +107,7 @@ void			j_init(t_env *env)
 	int		fd;
 	char	*line;
 	char	*tmp;
+	t_par	par;
 
 	env->nb_obj = 0;
 	env->nb_cam = 0;
@@ -118,5 +117,9 @@ void			j_init(t_env *env)
 	while ((ret = get_next_line(fd, &line)) > 0)
 		tmp = ft_strjoinfree(tmp, line, 'B');
 	env->json = parse_json(&tmp);
-	j_fill_env(env->json);
+	j_fill_env(env->json, &par, env);
+	if (env->nb_lum == 0 || env->nb_cam == 0)
+		ft_put_err("invalid scene");
+	malloc_env(env);
+	set_struct(env, &par);
 }

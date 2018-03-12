@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/08 01:51:50 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/12 14:50:40 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ void					mouse_move(t_env *env, SDL_Event event, t_cam *cam, t_obj *obj);
 **parser.c
 */
 void					init_scene(t_env *env);
+void					malloc_env(t_env *env);
 int						putlineerr(char *str, int i);
 
 /*

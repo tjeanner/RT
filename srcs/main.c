@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/07 01:03:09 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/12 14:51:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,7 +354,7 @@ int			main(int ac, char **av)
 		ft_put_err("usage : ./rtv1 <scene>");
 	env->file = ft_strdup(av[1]);
 	j_init(env);
-	init_scene(env);
+//	init_scene(env);
 	i = -1;
 	while (++i < env->nb_lum)
 	{
