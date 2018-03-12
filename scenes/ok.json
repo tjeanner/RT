@@ -2,7 +2,7 @@
     "name":"test",
     "scene":
     {
-        "objects" : [
+        "objects":[
             {
                 "type":"plane",
                 "color":"FF8022",
@@ -60,6 +60,20 @@
                 }
             },
             {
+                "type":"plane",
+                "color":"F4428C",
+                "pos":{
+                    "x":0,
+                    "y":-1000,
+                    "z":0
+                },
+                "norm":{
+                    "x":0,
+                    "y":1,
+                    "z":0
+                }
+            },
+            {
                 "type":"sphere",
                 "color":"04dd45", 
                 "pos":{
@@ -100,7 +114,7 @@
                 "radius":100
             }
         ],
-        "lights" : [
+        "lights":[
             {
                 "color":"FFFFFF",
                 "pos":{
@@ -110,7 +124,7 @@
                 }
             }
         ],
-        "cameras" : [
+        "cameras":[
             {
                 "pos":{
                     "x":0,
