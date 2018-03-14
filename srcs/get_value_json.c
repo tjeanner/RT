@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/12 16:23:08 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/14 11:16:17 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,15 @@ void		j_get_type(t_json *json, t_obj *obj)
 		|| !ft_strcmp(json->val.data.str, "tube")
 		|| !ft_strcmp(json->val.data.str, "cone"))
 		obj->type = json->val.data.str[0];
+	else if (!ft_strcmp(json->val.data.str, "cylindre"))
+		obj->type = 't';
 	json = json->next;
 }
 
 t_color		j_get_color(t_json *json)
 {
 	t_color col;
+	
 	col = get_color(json->val.data.str);
 	json = json->next;
 	return (col);

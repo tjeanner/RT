@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/12 15:44:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/14 10:28:29 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ t_val			parse_obj(char **str)
 t_json			*parse_json(char **str)
 {
 	t_json		*json;
+	int			cpt = 0;
 
 	json = NULL;
 	json = malloc(sizeof(t_json) * 1);
@@ -85,16 +86,25 @@ t_json			*parse_json(char **str)
 		*str += 1;
 		skip_whitespaces(str);
 		if (**str == '"')
+		{
 			json->key = parse_str(str);
-		skip_whitespaces(str);
+			skip_whitespaces(str);
+			cpt++;
+		}
 		if (**str == ':')
 		{
 			*str += 1;
 			skip_whitespaces(str);
 			json->val = parse_obj(str);
+			cpt++;
 		}
 		if (**str == ',')
+		{
 			json->next = parse_json(str);
+			cpt++;
+		}
+		if (!cpt)
+			ft_put_err("lol");
 	}
 	if (!json->key)
 		return (NULL);
@@ -116,6 +126,8 @@ void			j_init(t_env *env)
 	tmp = ft_strnew(0);
 	while ((ret = get_next_line(fd, &line)) > 0)
 		tmp = ft_strjoinfree(tmp, line, 'B');
+	if (!brackets(tmp, ft_strlen(tmp)))
+		ft_put_err("invalid json");
 	env->json = parse_json(&tmp);
 	j_fill_env(env->json, &par, env);
 	if (env->nb_lum == 0 || env->nb_cam == 0)

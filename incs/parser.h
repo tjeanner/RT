@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/12 16:10:30 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/14 11:05:14 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,12 @@ void	            	j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 void	            	j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env);
 void	            	j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env);
 
+/*
+**valid_json.c
+*/
+int		                j_is_valid_obj(t_obj *obj);
+int		                j_is_valid_cam(t_cam *cam);
+int		                j_is_valid_lum(t_lum *lum);
+int			            brackets(char *str, int len);
 
 #endif

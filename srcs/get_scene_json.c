@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/12 16:04:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/14 12:42:06 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 {
 	while (tab)
 	{
+		ft_bzero(obj, sizeof(t_obj));
 		while (tab->val.data.obj)
 		{
 			if (!ft_strcmp(tab->val.data.obj->key, "type")
@@ -33,10 +34,15 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 			else if (!ft_strcmp(tab->val.data.obj->key, "pos")
 				&& tab->val.data.obj->val.type == TYPE_OBJ)
 				obj->o = j_get_vec(tab->val.data.obj);
+			else
+				ft_put_err("tamere");
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
-		ft_lstadd(&par->lst_obj, ft_lstnew(obj, sizeof(t_obj)));
-		env->nb_obj++;
+		if (j_is_valid_obj(obj))
+		{
+			ft_lstadd(&par->lst_obj, ft_lstnew(obj, sizeof(t_obj)));
+			env->nb_obj++;
+		}
 		tab = tab->next;
 	}
 }
@@ -45,18 +51,25 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 {
 	while (tab)
 	{
+		ft_bzero(lum, sizeof(t_lum));
 		while (tab->val.data.obj)
 		{
+
 			if (!ft_strcmp(tab->val.data.obj->key, "color")
 				&& tab->val.data.obj->val.type == TYPE_STRING)
 				lum->col = j_get_color(tab->val.data.obj);
 			else if (!ft_strcmp(tab->val.data.obj->key, "pos")
 				&& tab->val.data.obj->val.type == TYPE_OBJ)
 				lum->pos_lum = j_get_vec(tab->val.data.obj);
+			else
+				ft_put_err("invalid light");
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
-		ft_lstadd(&par->lst_lum, ft_lstnew(lum, sizeof(t_lum)));
-		env->nb_lum++;
+		if (j_is_valid_lum(lum))
+		{
+			ft_lstadd(&par->lst_lum, ft_lstnew(lum, sizeof(t_lum)));
+			env->nb_lum++;
+		}
 		tab = tab->next;
 	}
 }
@@ -76,10 +89,15 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 			else if (!ft_strcmp(tab->val.data.obj->key, "v2")
 				&& tab->val.data.obj->val.type == TYPE_OBJ)
 				cam->v2cam = j_get_vec(tab->val.data.obj);
+			else
+				ft_put_err("invalid camera");
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
-		ft_lstadd(&par->lst_cam, ft_lstnew(cam, sizeof(t_cam)));
-		env->nb_cam++;
+		if (j_is_valid_cam(cam))
+		{
+			ft_lstadd(&par->lst_cam, ft_lstnew(cam, sizeof(t_cam)));
+			env->nb_cam++;
+		}
 		tab = tab->next;
 	}
 }

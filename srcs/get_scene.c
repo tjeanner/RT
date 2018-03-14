@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/18 01:45:26 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/14 11:15:59 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,19 @@ t_color	get_color(char *hexa)
 	t_color	col;
 	char	*s;
 	int		tmp;
+	int		i;
 
+	i = 0;
+	while (hexa[i] && ((hexa[i] >= '0' && hexa[i] <= '9') ||
+		(ft_toupper(hexa[i]) >= 'A' && ft_toupper(hexa[i]) <= 'F')))
+		i++;
+	if (i != 6)
+	{
+		col.color = 16777216;
+		return (col);
+	}
+	else
+		col.color = 0;
 	s = ft_strdup("0123456789ABCDEF");
 	tmp = (int)(ft_strchr(s, ft_toupper(hexa[0])) - s) * 16
 		+ (int)(ft_strchr(s, ft_toupper(hexa[1])) - s);
@@ -48,7 +60,7 @@ void	get_obj(char **arr, t_obj *objet)
 	objet->p = 40.0;
 }
 
-void	get_lum(char **arr, t_lum *lum)
+void	get_lum(char **arr, t_lum *lum) 
 {
 	lum->pos_lum.x = ft_atof(arr[1]);
 	lum->pos_lum.y = ft_atof(arr[2]);
