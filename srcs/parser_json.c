@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/14 10:28:29 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/15 13:51:51 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ t_val			parse_obj(char **str)
 	{
 		val.data.tab = parse_arr(str);
 	}
+	else
+		ft_put_err("invalid json");
 	skip_whitespaces(str);
 	return (val);
 }
@@ -75,40 +77,30 @@ t_val			parse_obj(char **str)
 t_json			*parse_json(char **str)
 {
 	t_json		*json;
-	int			cpt = 0;
+	int			cpt;
 
 	json = NULL;
-	json = malloc(sizeof(t_json) * 1);
-	json->next = NULL;
-	json->key = NULL;
+	cpt = init_json(&json);
 	if (**str == '{' || **str == ',')
 	{
 		*str += 1;
 		skip_whitespaces(str);
-		if (**str == '"')
-		{
+		if (**str == '"' && ++cpt)
 			json->key = parse_str(str);
-			skip_whitespaces(str);
-			cpt++;
-		}
-		if (**str == ':')
+		if (**str == ':' && ++cpt)
 		{
 			*str += 1;
 			skip_whitespaces(str);
+			if (**str == ',' || **str == '}')
+				ft_put_err("invalid json");
 			json->val = parse_obj(str);
-			cpt++;
 		}
-		if (**str == ',')
-		{
+		if (**str == ',' && ++cpt)
 			json->next = parse_json(str);
-			cpt++;
-		}
 		if (!cpt)
-			ft_put_err("lol");
+			ft_put_err("invalid json");
 	}
-	if (!json->key)
-		return (NULL);
-	return (json);
+	return ((!json->key) ? NULL : json);
 }
 
 void			j_init(t_env *env)

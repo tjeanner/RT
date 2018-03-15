@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 14:29:16 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/11 15:25:29 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/15 14:19:18 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char		*parse_str(char **str)
 	*str += 1;
 	tmp = ft_strsub(*str, 0, (ft_strchr(*str, '"') - *str));
 	*str += (ft_strchr(*str, '"') - *str) + 1;
+	skip_whitespaces(str);
 	return (tmp);
 }
 
@@ -43,4 +44,13 @@ void		skip_whitespaces(char **str)
 {
 	while (**str == ' ' || **str == '\t' || **str == '\n')
 		*str += 1;
+}
+
+int			init_json(t_json **json)
+{
+	if (!(*json = malloc(sizeof(t_json) * 1)))
+		ft_put_err("Malloc error");
+	(*json)->next = NULL;
+	(*json)->key = NULL;
+	return (0);
 }

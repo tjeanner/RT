@@ -6,11 +6,27 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/14 12:42:06 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/15 14:45:46 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
+{
+	if (!ft_strcmp(key, "type") && type == TYPE_STRING)
+		j_get_type(j_obj, obj);
+	else if (!ft_strcmp(key, "radius") && type == TYPE_DOUBLE)
+		j_get_radius(j_obj, obj);
+	else if (!ft_strcmp(key, "color") && type == TYPE_STRING)
+		obj->col = j_get_color(j_obj);
+	else if (!ft_strcmp(key, "norm") && type == TYPE_OBJ)
+		obj->norm = j_get_vec(j_obj);
+	else if (!ft_strcmp(key, "pos") && type == TYPE_OBJ)
+		obj->o = j_get_vec(j_obj);
+	else
+		ft_put_err("invalid json");
+}
 
 void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 {
@@ -19,23 +35,8 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 		ft_bzero(obj, sizeof(t_obj));
 		while (tab->val.data.obj)
 		{
-			if (!ft_strcmp(tab->val.data.obj->key, "type")
-				&& tab->val.data.obj->val.type == TYPE_STRING)
-				j_get_type(tab->val.data.obj, obj);
-			else if (!ft_strcmp(tab->val.data.obj->key, "radius")
-				&& tab->val.data.obj->val.type == TYPE_DOUBLE)
-				j_get_radius(tab->val.data.obj, obj);
-			else if (!ft_strcmp(tab->val.data.obj->key, "color")
-				&& tab->val.data.obj->val.type == TYPE_STRING)
-				obj->col = j_get_color(tab->val.data.obj);
-			else if (!ft_strcmp(tab->val.data.obj->key, "norm")
-				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				obj->norm = j_get_vec(tab->val.data.obj);
-			else if (!ft_strcmp(tab->val.data.obj->key, "pos")
-				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				obj->o = j_get_vec(tab->val.data.obj);
-			else
-				ft_put_err("tamere");
+			j_set_obj(tab->val.data.obj->key, tab->val.data.obj->val.type,
+					tab->val.data.obj, obj);
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
 		if (j_is_valid_obj(obj))
@@ -54,7 +55,6 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 		ft_bzero(lum, sizeof(t_lum));
 		while (tab->val.data.obj)
 		{
-
 			if (!ft_strcmp(tab->val.data.obj->key, "color")
 				&& tab->val.data.obj->val.type == TYPE_STRING)
 				lum->col = j_get_color(tab->val.data.obj);
@@ -78,6 +78,7 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 {
 	while (tab)
 	{
+		ft_bzero(cam, sizeof(t_cam));
 		while (tab->val.data.obj)
 		{
 			if (!ft_strcmp(tab->val.data.obj->key, "pos")

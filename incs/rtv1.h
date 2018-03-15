@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/12 14:50:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/15 14:22:50 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
 # define FCTS "sptc"
+# define S "0123456789ABCDEF"
 
 typedef union			u_color
 {

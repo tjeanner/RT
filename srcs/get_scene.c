@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 01:32:15 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/14 11:15:59 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/15 14:23:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 t_color	get_color(char *hexa)
 {
 	t_color	col;
-	char	*s;
 	int		tmp;
 	int		i;
 
@@ -30,15 +29,14 @@ t_color	get_color(char *hexa)
 	}
 	else
 		col.color = 0;
-	s = ft_strdup("0123456789ABCDEF");
-	tmp = (int)(ft_strchr(s, ft_toupper(hexa[0])) - s) * 16
-		+ (int)(ft_strchr(s, ft_toupper(hexa[1])) - s);
+	tmp = (int)(ft_strchr(S, ft_toupper(hexa[0])) - S) * 16
+		+ (int)(ft_strchr(S, ft_toupper(hexa[1])) - S);
 	col.c.r = tmp;
-	tmp = (int)(ft_strchr(s, ft_toupper(hexa[2])) - s) * 16
-		+ (int)(ft_strchr(s, ft_toupper(hexa[3])) - s);
+	tmp = (int)(ft_strchr(S, ft_toupper(hexa[2])) - S) * 16
+		+ (int)(ft_strchr(S, ft_toupper(hexa[3])) - S);
 	col.c.g = tmp;
-	tmp = (int)(ft_strchr(s, ft_toupper(hexa[4])) - s) * 16
-		+ (int)(ft_strchr(s, ft_toupper(hexa[5])) - s);
+	tmp = (int)(ft_strchr(S, ft_toupper(hexa[4])) - S) * 16
+		+ (int)(ft_strchr(S, ft_toupper(hexa[5])) - S);
 	col.c.b = tmp;
 	return (col);
 }
@@ -60,7 +58,7 @@ void	get_obj(char **arr, t_obj *objet)
 	objet->p = 40.0;
 }
 
-void	get_lum(char **arr, t_lum *lum) 
+void	get_lum(char **arr, t_lum *lum)
 {
 	lum->pos_lum.x = ft_atof(arr[1]);
 	lum->pos_lum.y = ft_atof(arr[2]);
