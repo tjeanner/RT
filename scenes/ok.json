@@ -1,5 +1,6 @@
 {
-    "name":"test",
+    "name":"Basic",
+    "filter":3,
     "scene":
     {
         "objects":[
