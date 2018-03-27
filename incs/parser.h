@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/15 13:49:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/27 16:02:55 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 typedef struct s_env        t_env;
 typedef struct s_cam        t_cam;
 typedef struct s_lum        t_lum;
-typedef union u_color      t_color;
+typedef union u_color       t_color;
 typedef struct s_v          t_v;
 typedef struct s_par        t_par;
 typedef struct s_obj        t_obj;

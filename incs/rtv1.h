@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/15 14:22:50 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/27 16:25:22 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct			s_env
 	int					curr_cam;
 	int					nb_lum;
 	int					curr_lum;
+	int					filter;
 	t_obj				*objs;
 	t_cam				*cams;
 	t_lum				*lums;
@@ -116,6 +117,7 @@ typedef struct			s_env
 	float				constante2test;
 	float				portion;
 	char				*file;
+	char				*name;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 	t_json				*json;
 }						t_env;
@@ -228,8 +230,10 @@ int						get_dist_tube(t_ray *init_rays, t_obj obj);
 int						get_dist_plan(t_ray *init_rays, t_obj obj);
 int						get_dist_sphere(t_ray *init_rays, t_obj obj);
 
-
-
+/*
+**filter.c
+*/
+void 					set_filter(t_env *env);
 
 
 #endif

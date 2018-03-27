@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/03/15 11:43:26 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/03/27 16:25:37 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC =		main.c \
 			get_scene_json.c \
 			get_value_json.c \
 			valid_json.c \
+			filter.c	\
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror -Ofast -march=native -flto -g3 -fsanitize=address 
