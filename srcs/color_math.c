@@ -6,11 +6,19 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 04:51:14 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/12 11:02:29 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/03/07 17:35:29 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+t_color	satur_col(t_color a, double n)
+{
+	t_color		b;
+
+	b = add_color(a, add_color(mult_color(get_white(), n), mult_color(a, 1.000 - n)));
+	return (b);
+}
 
 t_color	get_rand(void)
 {

@@ -6,7 +6,7 @@
 /*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 00:27:48 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/08 00:41:03 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/02 00:13:37 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ t_v			norm_vect(double x, double y, double z)
 	vect.x = x;
 	vect.y = y;
 	vect.z = z;
-	res = vect_mult(vect, 1.0 / vect_norm(vect));
+	res = vect_norm(vect);
 	return (res);
 }
