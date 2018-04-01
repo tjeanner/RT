@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/13 11:49:02 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/02 00:10:10 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ int			init_ray(t_env *env, float x, float y)
 	t_v		cam_2_pixel;
 	t_v		cam_2_pixel_norm;
 
-	env->cams[env->curr_cam].v3cam = vect_mult(vect_prod(
-				env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam), -1.0);
+	env->cams[env->curr_cam].v3cam = vect_inv(vect_prod(
+				env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam));
 	cam_2_center_screen = vect_mult(env->cams[env->curr_cam].vcam, DIST);
 	center_screen_2_pix = vect_add(vect_mult(env->cams[env->curr_cam].v3cam,
-				(x - WIN_X / 2.0) / vect_norm(env->cams[env->curr_cam].v3cam)),
-			vect_mult(env->cams[env->curr_cam].v2cam, -1.0 * (y - WIN_Y / 2.0) /
-				vect_norm(env->cams[env->curr_cam].v2cam)));
+				(x - WIN_X / 2.0) / get_vect_norm(env->cams[env->curr_cam].v3cam)),
+			vect_mult(env->cams[env->curr_cam].v2cam, (WIN_Y / 2.0 - y) /
+				get_vect_norm(env->cams[env->curr_cam].v2cam)));
 	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
-	cam_2_pixel_norm = vect_mult(cam_2_pixel, 1.0 / vect_norm(cam_2_pixel));
+	cam_2_pixel_norm = vect_norm(cam_2_pixel);
 	env->init_rays.r = env->cams[env->curr_cam].pos_cam;
 	env->init_rays.r2 = cam_2_pixel_norm;
 	return (1);
@@ -61,43 +61,40 @@ int			which_obj_col(t_env *env)
 		else
 			env->objs[i].dist = -1.0;
 		if ((i == 0 || (env->objs[i].dist > 0.0 &&
-						(res == -1.0 || res > env->objs[i].dist))) && (ob = i) == i)
+			(res == -1.0 || res > env->objs[i].dist))) && (ob = i) == i)
 			res = env->objs[i].dist;
 	}
 	return (ob = (res <= 0.0) ? -1 : ob);
 }
 
-t_v			get_norm(t_env *env, int ob, t_v pos_col, t_v col_2_lum_norm)
+t_v			get_norm(t_env *env, int ob, t_v pos_col)
 {
 	double	res;
 	t_v		vect;
 
-	(void)col_2_lum_norm;
-	if (env->objs[ob].type == 's')
-		vect = vect_add(pos_col, vect_mult(env->objs[ob].o, -1.0));
-	else if (env->objs[ob].type == 'p')
-		vect = env->objs[ob].norm;
+	if (env->objs[ob].type == 's' || env->objs[ob].type == 'p')
+		vect = (env->objs[ob].type == 'p') ? vect = env->objs[ob].norm :
+			vect_soustr(pos_col, env->objs[ob].o);
 	else if (env->objs[ob].type == 't')
 	{
-		vect = vect_mult(env->objs[ob].norm, 1.0 / vect_norm(env->objs[ob].norm));
+		vect = vect_norm(env->objs[ob].norm);
 		res = ((double)((vect.x * (env->init_rays.r.x - env->objs[ob].o.x) +
-						vect.y * (env->init_rays.r.y - env->objs[ob].o.y) + vect.z *
-						(env->init_rays.r.z - env->objs[ob].o.z)) / vect_scal_prod(vect, vect)));
+			vect.y * (env->init_rays.r.y - env->objs[ob].o.y) + vect.z *
+	(env->init_rays.r.z - env->objs[ob].o.z)) / vect_scal_prod(vect, vect)));
 		vect = vect_add(env->objs[ob].o, vect_mult(vect, res));//CC
-		vect = vect_add(env->init_rays.r, vect_mult(vect, -1.0));//CCPC
+		vect = vect_soustr(env->init_rays.r, vect);//CCPC
 	}
 	else
 	{
-		vect = vect_add(env->objs[ob].o, vect_mult(env->objs[ob].norm, -1.0));
-		vect = vect_mult(vect, 1.0 / vect_norm(vect));
+		vect = vect_soustr(env->objs[ob].o, env->objs[ob].norm);
+		vect = vect_norm(vect);
 		res = ((double)((vect.x * (env->init_rays.r.x - env->objs[ob].norm.x) +
-						vect.y * (env->init_rays.r.y - env->objs[ob].norm.y) + vect.z *
-						(env->init_rays.r.z - env->objs[ob].norm.z)) / vect_scal_prod(vect, vect)));
+			vect.y * (env->init_rays.r.y - env->objs[ob].norm.y) + vect.z *
+(env->init_rays.r.z - env->objs[ob].norm.z)) / vect_scal_prod(vect, vect)));
 		vect = vect_add(env->objs[ob].norm, vect_mult(vect, res));
-		vect = vect_add(env->init_rays.r, vect_mult(vect, -1.0));
+		vect = vect_soustr(env->init_rays.r, vect);
 	}
-	vect = vect_mult(vect, 1.00 / vect_norm(vect));
-	return (vect);
+	return ((vect = vect_norm(vect)));
 }
 
 t_color		*get_lums(t_env *env, int lumcur, int ob)
@@ -116,13 +113,13 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	i = -1;
 	pos_col = vect_add(env->init_rays.r, vect_mult(env->init_rays.r2,
 				env->objs[ob].dist));//pos toucher
-	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
-	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
-	tmp = vect_mult(get_norm(env, ob, pos_col, col_2_lum_norm), 0.000100);
-	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.r2) > 0.0) ? vect_mult(tmp, -1.000): tmp;
+	col_2_lum = vect_soustr(env->lums[lumcur].pos_lum, pos_col);
+	col_2_lum_norm = vect_norm(col_2_lum);
+	tmp = vect_mult(get_norm(env, ob, pos_col), 0.000100);
+	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.r2) > 0.0) ? vect_inv(tmp): tmp;
 	pos_col = vect_add(pos_col, tmp);
-//	col_2_lum = vect_add(env->lums[lumcur].pos_lum, vect_mult(pos_col, -1.0));
-//	col_2_lum_norm = vect_mult(col_2_lum, 1.0 / vect_norm(col_2_lum));
+//	col_2_lum = vect_soustr(env->lums[lumcur].pos_lum, pos_col);
+//	col_2_lum_norm = vect_norm(col_2_lum);
 	tmp2 = env->init_rays.r;
 	env->init_rays.r = pos_col;
 	tmp = env->init_rays.r2;
@@ -132,9 +129,9 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 		env->init_rays.v1 = -100000.0;
 		env->init_rays.v2 = -100000.0;
 		if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
-			&env->init_rays, env->objs[i]) == 1 && (((env->init_rays.v1 > -0.0000000000001 &&
-			env->init_rays.v1 < vect_norm(col_2_lum)) || ((env->init_rays.v2 >
-			-0.0000000000001 && env->init_rays.v2 < vect_norm(col_2_lum))))))
+			&env->init_rays, env->objs[i]) == 1 && (((env->init_rays.v1 > -0.0001 &&
+			env->init_rays.v1 < get_vect_norm(col_2_lum) - 0.0001) || ((env->init_rays.v2 >
+			-0.0001 && env->init_rays.v2 < get_vect_norm(col_2_lum) - 0.0001)))))
 		{
 			//	col = mult_color(env->objs[ob].col, 0.2);
 			//	col = mult_color(env->objs[ob].col, 0.0);
@@ -145,19 +142,16 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	}
 	env->init_rays.r = tmp2;
 	env->init_rays.r2 = tmp;
-	pos_col = get_norm(env, ob, pos_col, col_2_lum_norm);
-	pos_col = vect_mult(pos_col, 1.0 / vect_norm(pos_col));
-	res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) > 0.0) ? vect_scal_prod(vect_mult(pos_col, -1.00), col_2_lum_norm) : vect_scal_prod(pos_col, col_2_lum_norm);
+	pos_col = get_norm(env, ob, pos_col);
+	pos_col = vect_norm(pos_col);
+	res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) > 0.0) ? vect_scal_prod(vect_inv(pos_col), col_2_lum_norm) : vect_scal_prod(pos_col, col_2_lum_norm);
 	res = (res < 0.0) ? 0.0 : res * env->lums[lumcur].coef;
-	tmp = vect_add(col_2_lum_norm, vect_mult(tmp, -1.0));
-	tmp = vect_mult(tmp, 1.0 / vect_norm(tmp));
-//	col->c.r = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) + env->objs[ob].col.c.r * res);
-//	col->c.g = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) + env->objs[ob].col.c.g * res);
-//	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) + env->objs[ob].col.c.b * res);
-	//	}
-	//	else
-	
-	*col = mult_color(env->objs[ob].col, res);
+	tmp = vect_soustr(col_2_lum_norm, tmp);
+	tmp = vect_norm(tmp);
+	col->c.r = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.r * res);
+	col->c.g = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.g * res);
+	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.b * res);
+//	*col = mult_color(env->objs[ob].col, res);
 	return (col);
 	}
 //env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
@@ -166,6 +160,7 @@ t_color		get_col(t_env *env, t_v vect)
 {
 	t_color	colo;
 	int		i;
+	double test;
 	int		ob;
 	t_color	*tmp;
 	t_env	*tutu;
@@ -179,42 +174,28 @@ t_color		get_col(t_env *env, t_v vect)
 	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
 		return(get_black());
 	i = 0;
+	test = 1.00;
 	colo = get_black();
 	while (i < env->nb_lum)
 	{
 		if ((tmp = get_lums(tutu, i, ob)) != NULL)
 		{
-			colo = add_color(colo, mult_color(*tmp, 0.3000));
+			colo = add_color(colo, mult_color(*tmp, 0.500 / env->nb_lum));
 			ft_bzero(tmp, sizeof(t_color));
 			ft_memdel((void **)&tmp);
 		}
-			if (vect_scal_prod(vect, vect_mult(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0)), 1.0 / vect_norm(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->lums[i].pos_lum, -1.0))))) < -0.9999)
-				return(get_white());
+		if (vect_scal_prod(vect, vect_norm(vect_soustr(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum))) < -0.99999)
+		//	test = vect_scal_prod(vect, vect_norm(vect_soustr(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum), vect_norm(vect_soustr(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum))));
+			return (get_white());
 		ft_memcpy(tutu, env, sizeof(t_env));
 		i++;
 	}
-	colo = mult_color(colo, 2.000 / env->nb_lum);
+//	colo = mult_color(colo, 0.2000 / env->nb_lum);
 	colo = add_color(colo, mult_color(env->objs[ob].col, 0.1500));
 	ft_memdel((void **)&tutu);
-//	if (tt == env->nb_lum)
-//		return (get_white());
-//	if (tt == env->nb_lum - 2)
-//	{
-//		colo.c.r = 0;
-//		colo.c.g = 255;
-//		colo.c.b = 0;
-//		colo.c.a = 0;
-//		return (colo);
-//	}
-//	if (tt == env->nb_lum - 1)
-//	{
-//		colo.c.r = 255;
-//		colo.c.g = 0;
-//		colo.c.b = 0;
-//		colo.c.a = 0;
-//		return (colo);
-//	}
+//	if (test > -0.7)
 	return (colo);
+//	return (satur_col(colo, -1.00 * test));
 }
 
 /*

@@ -130,15 +130,20 @@ int						which_obj_col(t_env *env);
 /*
 **vector_math.c
 */
-double					vect_norm(t_v a);
+double					get_vect_norm(t_v a);
+t_v						vect_norm(t_v a);
 t_v						vect_mult(t_v a, double n);
+t_v						vect_div(t_v a, double n);
 t_v						vect_add(t_v a, t_v b);
+t_v						vect_soustr(t_v a, t_v b);
 double					vect_scal_prod(t_v a, t_v b);
 t_v						vect_prod(t_v a, t_v b);
+t_v						vect_inv(t_v a);
 
 /*
 **color_math.c
 */
+t_color					satur_col(t_color a, double n);
 t_color					get_rand(void);
 t_color					get_white(void);
 t_color					get_black(void);
@@ -227,9 +232,6 @@ int						get_dist_cone(t_ray *init_rays, t_obj obj);
 int						get_dist_tube(t_ray *init_rays, t_obj obj);
 int						get_dist_plan(t_ray *init_rays, t_obj obj);
 int						get_dist_sphere(t_ray *init_rays, t_obj obj);
-
-
-
 
 
 #endif
