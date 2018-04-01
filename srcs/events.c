@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/18 08:37:12 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/02 00:08:40 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int		move_events(t_env *env, SDL_Event event)
 	return (1);
 }
 
-static int		events_obj_mod(t_env *env, unsigned int sym, t_obj *obj)
+static int		events_obj_mod(t_env *env, unsigned int sym)
 {
 	if ((sym == SDLK_1 || sym == SDLK_2 || sym == SDLK_3 || sym == SDLK_4))
 		update_and_copy_a(env, sym);
@@ -65,16 +65,18 @@ static int		events_obj_mod(t_env *env, unsigned int sym, t_obj *obj)
 	else if (sym == SDLK_BACKSLASH)
 	{
 		if (env->curr_obj >= 0)
-			obj->col = get_rand();
+			env->objs[env->curr_obj].col = get_rand();
 		else if (env->curr_obj == -2)
 			env->lums[env->curr_lum].col = get_rand();
 	}
-	else if (sym == SDLK_MINUS && env->curr_obj != -1)
-	{
-		obj->radius -= (obj->radius >= 0 || env->objs[env->curr_obj].type == 'p') ? 10 : 0;
-	}
-	else if (sym == SDLK_EQUALS && env->curr_obj != -1)
-		obj->radius += 10;
+	else if (sym == SDLK_MINUS && env->curr_obj >= 0)
+		env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0 || env->objs[env->curr_obj].type == 'p') ? 10 : 0;
+	else if (sym == SDLK_MINUS && env->curr_obj == -2)
+		env->lums[env->curr_lum].coef /= (env->lums[env->curr_lum].coef > 0) ? 1.1000000 : 1;
+	else if (sym == SDLK_EQUALS && env->curr_obj >= 0)
+		env->objs[env->curr_obj].radius += 10;
+	else if (sym == SDLK_EQUALS && env->curr_obj == -2)
+		env->lums[env->curr_lum].coef *= 1.1000000;
 	else
 		return (0);
 	return (1);
@@ -113,18 +115,18 @@ int			events_special_move_cam(t_env *env, unsigned int sym, SDL_Event event)
 
 	if (event.type == SDL_KEYDOWN)
 	{
-		if (env->curr_obj < 0 && (sym == SDLK_5 || sym == SDLK_6))
+		if (env->curr_obj == -1 && (sym == SDLK_5 || sym == SDLK_6))
 		{
 			env->cams[env->curr_cam].pos_cam = rotation(env->cams[env->curr_cam].pos_cam, (t_v){0, 1, 0}, angle = (sym == SDLK_5) ? 1.0 : -1.0);
 			env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].pos_cam, -1.0);
-			env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].vcam, 1.0 / vect_norm(env->cams[env->curr_cam].vcam));
+			env->cams[env->curr_cam].vcam = vect_norm(env->cams[env->curr_cam].vcam);
 			env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam);
 		}
 		else if (env->curr_obj >= 0 && (sym == SDLK_5 || sym == SDLK_6))
 		{
 			env->cams[env->curr_cam].pos_cam = vect_add(env->objs[env->curr_obj].o, rotation(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->objs[env->curr_obj].o, -1.0)), (t_v){0, 1, 0}, angle = (sym == SDLK_5) ? 1.0 : -1.0));
 			env->cams[env->curr_cam].vcam = vect_add(env->objs[env->curr_obj].o, vect_mult(env->cams[env->curr_cam].pos_cam, -1.0));
-			env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].vcam, 1.0 / vect_norm(env->cams[env->curr_cam].vcam));
+			env->cams[env->curr_cam].vcam = vect_norm(env->cams[env->curr_cam].vcam);
 			env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam);
 		}
 		else
@@ -146,14 +148,14 @@ int			events(t_env *env)
 	if (SDL_PollEvent(&event) != 0)
 	{
 		sym = event.key.keysym.sym;
-		cam->vcam = vect_mult(cam->vcam, 1.0 / vect_norm(cam->vcam));
-		cam->v2cam = vect_mult(cam->v2cam, 1.0 / vect_norm(cam->v2cam));
-		cam->v3cam = vect_mult(cam->v3cam, 1.0 / vect_norm(cam->v3cam));
+		cam->vcam = vect_norm(cam->vcam);
+		cam->v2cam = vect_norm(cam->v2cam);
+		cam->v3cam = vect_norm(cam->v3cam);
 		if (events_random(env, sym, event) || events_sel(env, event, sym))
 			;
 		else if (events_special_move_cam(env, sym, event))
 			;
-		else if (event.type == SDL_KEYDOWN && (events_obj_mod(env, sym, obj)
+		else if (event.type == SDL_KEYDOWN && (events_obj_mod(env, sym)
 			|| events_rotation(env, sym, &obj->norm)
 			|| events_move(env, sym, cam, obj)))
 			;

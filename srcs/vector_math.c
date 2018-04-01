@@ -6,18 +6,28 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 18:20:50 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/01/19 02:09:42 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/01 23:54:29 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-double		vect_norm(t_v a)
+double		get_vect_norm(t_v a)
 {
 	double	n;
 
 	n = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 	return (n);
+}
+
+t_v			vect_norm(t_v a)
+{
+	double	n;
+	t_v		b;
+
+	n = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+	b = vect_div(a, n);
+	return (b);
 }
 
 t_v			vect_mult(t_v a, double n)
@@ -30,6 +40,26 @@ t_v			vect_mult(t_v a, double n)
 	return (b);
 }
 
+t_v			vect_div(t_v a, double n)
+{
+	t_v		b;
+
+	b.x = a.x / n;
+	b.y = a.y / n;
+	b.z = a.z / n;
+	return (b);
+}
+
+t_v			vect_inv(t_v a)
+{
+	t_v		b;
+
+	b.x = a.x * -1.0000000;
+	b.y = a.y * -1.0000000;
+	b.z = a.z * -1.0000000;
+	return (b);
+}
+
 t_v			vect_add(t_v a, t_v b)
 {
 	t_v		c;
@@ -37,6 +67,16 @@ t_v			vect_add(t_v a, t_v b)
 	c.x = a.x + b.x;
 	c.y = a.y + b.y;
 	c.z = a.z + b.z;
+	return (c);
+}
+
+t_v			vect_soustr(t_v a, t_v b)
+{
+	t_v		c;
+
+	c.x = a.x - b.x;
+	c.y = a.y - b.y;
+	c.z = a.z - b.z;
 	return (c);
 }
 

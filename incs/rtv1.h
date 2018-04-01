@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/02/15 08:59:11 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/01 23:52:01 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,15 +127,20 @@ int						which_obj_col(t_env *env);
 /*
 **vector_math.c
 */
-double					vect_norm(t_v a);
+double					get_vect_norm(t_v a);
+t_v						vect_norm(t_v a);
 t_v						vect_mult(t_v a, double n);
+t_v						vect_div(t_v a, double n);
 t_v						vect_add(t_v a, t_v b);
+t_v						vect_soustr(t_v a, t_v b);
 double					vect_scal_prod(t_v a, t_v b);
 t_v						vect_prod(t_v a, t_v b);
+t_v						vect_inv(t_v a);
 
 /*
 **color_math.c
 */
+t_color					satur_col(t_color a, double n);
 t_color					get_rand(void);
 t_color					get_white(void);
 t_color					get_black(void);
