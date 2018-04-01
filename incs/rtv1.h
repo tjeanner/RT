@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/27 16:25:22 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/01 21:57:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ typedef struct			s_env
 	int					nb_lum;
 	int					curr_lum;
 	int					filter;
+	int					seuil;
 	t_obj				*objs;
 	t_cam				*cams;
 	t_lum				*lums;

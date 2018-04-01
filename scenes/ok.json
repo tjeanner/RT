@@ -1,6 +1,7 @@
 {
     "name":"Basic",
-    "filter":3,
+        "filter":4,
+        "seuil":8,
     "scene":
     {
         "objects":[

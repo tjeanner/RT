@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/27 17:08:49 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/01 23:15:12 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,71 @@ void	bw_filter(t_env *env)
 		data[i + 2] = moy;
 		i += 4;
 	}
+}
+
+void	sobel_filter(t_env *env)
+{
+	int	y;
+	int x;
+	int gx, gy, gn;
+	unsigned int *data;
+	unsigned int *tmp = NULL;
+
+	tmp = malloc(sizeof(unsigned int) * WIN_X * WIN_Y);
+	data = (unsigned int *)env->surf->pixels;
+	ft_bzero(tmp, sizeof(tmp));
+	y = 1;
+	while (y < WIN_Y - 1)
+	{
+		x = 1;
+		while (x < WIN_X - 1)
+		{
+			gx = ((data[(y - 1) * WIN_X + x + 1] - data[(y - 1) * WIN_X + x - 1]) + 3 
+					* (data[(y) * WIN_X + x + 1] - data[(y) * WIN_X + x - 1])
+					+ (data[(y + 1) * WIN_X + x + 1] - data[(y + 1) * WIN_X + x - 1]))
+				* 3;
+			gy = ((data[(y + 1) * WIN_X + x - 1] - data[(y - 1) * WIN_X + x - 1]) + 3 
+					* (data[(y + 1) * WIN_X + x] - data[(y - 1) * WIN_X + x])
+					+ (data[(y + 1) * WIN_X + x + 1] - data[(y - 1) * WIN_X + x + 1]))
+				* 3;
+			gn = (unsigned int)sqrt(gx * gx + gy * gy);
+			tmp[(y * WIN_X) + x] = gn;
+			x++;
+		}
+		y++;
+	}
+	y = 1;
+	while (y < WIN_Y)
+	{
+		x = 1;
+		while (x < WIN_X)
+		{
+			if (tmp[(y * WIN_X) + x] > 1)
+				data[(y * WIN_X) + x] =  get_black().color;
+//			data[(y * WIN_X) + x] = tmp[(y * WIN_X) + x];
+			x++;
+		}
+		y++;
+	}
+}
+
+void	cartoon_filter(t_env *env)
+{
+	size_t			i;
+	unsigned int	max;
+	unsigned char 	*data;
+	int				pas;
+
+	data = (unsigned char *)env->surf->pixels;
+	max = ((WIN_X * WIN_Y) * 4);
+	i = 0;
+	pas = 255 / env->seuil;
+	while (i < max)
+	{
+		data[i] = (int)(data[i] / pas) * pas;
+		i++;
+	}
+//	sobel_filter(env);
 }
 
 void	sepia_filter(t_env *env)
@@ -70,6 +135,7 @@ void	neg_filter(t_env *env)
 	}
 }
 
+
 void	set_filter(t_env *env)
 {
 	if (env->filter == 1)
@@ -78,4 +144,7 @@ void	set_filter(t_env *env)
 		bw_filter(env);
 	else if (env->filter == 3)
 		sepia_filter(env);
+	else if (env->filter == 4)
+//			sobel_filter(env);
+		cartoon_filter(env);
 }
