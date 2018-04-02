@@ -108,7 +108,7 @@ typedef struct			s_env
 	int					curr_cam;
 	int					nb_lum;
 	int					curr_lum;
-	int					filter;
+	char				*filter;
 	int					seuil;
 	t_obj				*objs;
 	t_cam				*cams;

@@ -1,7 +1,6 @@
 {
     "name":"Basic",
-        "filter":4,
-        "seuil":8,
+        "filter":"CARTOON:",
     "scene":
     {
         "objects":[
