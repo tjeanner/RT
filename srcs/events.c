@@ -96,7 +96,8 @@ static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
 		ft_memdel((void **)&env->objs);
 		ft_memdel((void **)&env->cams);
 		ft_memdel((void **)&env->lums);
-		init_scene(env);
+		j_init(env);
+//		init_scene(env);
 	}
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_MINUS)
 		env->flou *= (env->flou >= 16) ? 1.0 : 2.0;

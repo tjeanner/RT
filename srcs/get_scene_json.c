@@ -67,6 +67,7 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 		}
 		if (j_is_valid_lum(lum))
 		{
+			lum->coef = 0.5;
 			ft_lstadd(&par->lst_lum, ft_lstnew(lum, sizeof(t_lum)));
 			env->nb_lum++;
 		}

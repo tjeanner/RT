@@ -337,7 +337,7 @@ int			main(int ac, char **av)
 	i = -1;
 	while (++i < env->nb_lum)
 	{
-		env->lums[i].coef = 1.0;
+		env->lums[i].coef = 0.5;
 	}
 	rays(env);
 	while (!env->state)
