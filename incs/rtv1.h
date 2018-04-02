@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/01 23:52:01 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/01 21:57:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <string.h>
 # include <stdbool.h>
 # include <pthread.h>
+# include "parser.h"
 
 //# define WIN_X 1920
 //# define WIN_Y 1080
@@ -33,6 +34,7 @@
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
 # define FCTS "sptc"
+# define S "0123456789ABCDEF"
 
 typedef union			u_color
 {
@@ -106,6 +108,8 @@ typedef struct			s_env
 	int					curr_cam;
 	int					nb_lum;
 	int					curr_lum;
+	char				*filter;
+	int					seuil;
 	t_obj				*objs;
 	t_cam				*cams;
 	t_lum				*lums;
@@ -114,7 +118,9 @@ typedef struct			s_env
 	float				constante2test;
 	float				portion;
 	char				*file;
+	char				*name;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
+	t_json				*json;
 }						t_env;
 
 /*
@@ -183,6 +189,7 @@ void					mouse_move(t_env *env, SDL_Event event, t_cam *cam, t_obj *obj);
 **parser.c
 */
 void					init_scene(t_env *env);
+void					malloc_env(t_env *env);
 int						putlineerr(char *str, int i);
 
 /*
@@ -229,5 +236,9 @@ int						get_dist_tube(t_ray *init_rays, t_obj obj);
 int						get_dist_plan(t_ray *init_rays, t_obj obj);
 int						get_dist_sphere(t_ray *init_rays, t_obj obj);
 
+/*
+**filter.c
+*/
+void 					set_filter(t_env *env);
 
 #endif

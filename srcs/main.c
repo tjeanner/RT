@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/02 00:10:10 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/03/27 16:34:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,7 @@ void		rays(t_env *env)
 		}
 		a += (env->flou < 1) ? 1.0 : env->flou;
 	}
+	set_filter(env);
 	SDL_UpdateWindowSurface(env->win);
 	ft_putendl("done!");
 }
@@ -285,7 +286,7 @@ void		rays(t_env *env)
 **init: initialise sdl, malloc and fill the data struct (here: env)
 */
 
-t_env		*init(void)
+t_env		*init(char *filename)
 {
 	t_env	*env;
 
@@ -293,19 +294,18 @@ t_env		*init(void)
 	{
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
-		if (!(env->win = SDL_CreateWindow("Rtv1", SDL_WINDOWPOS_CENTERED,
+		env->file = ft_strdup(filename);
+		j_init(env);
+		if (!(env->win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 						SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 						{
 							ft_putendl("error");
 							return (NULL);
 						}
-		else
+		if (!(env->surf = SDL_GetWindowSurface(env->win)))
 		{
-			if (!(env->surf = SDL_GetWindowSurface(env->win)))
-			{
-				ft_putendl("error");
-				return (NULL);
-			}
+			ft_putendl("error");
+			return (NULL);
 		}
 		env->col_fcts[0] = get_dist_sphere;
 		env->col_fcts[1] = get_dist_plan;
@@ -329,12 +329,11 @@ int			main(int ac, char **av)
 	int			i;
 	t_env		*env;
 
-	if (!(env = init()))
+	if (ac != 2 || !ft_strstr(av[1], ".json"))
+		ft_put_err("usage : ./rtv1 <scene.json>");
+	if (!(env = init(av[1])))
 		ft_put_err("error in init");
-	if (ac != 2)
-		ft_put_err("usage : ./rtv1 <scene>");
-	env->file = ft_strdup(av[1]);
-	init_scene(env);
+//	init_scene(env);
 	i = -1;
 	while (++i < env->nb_lum)
 	{

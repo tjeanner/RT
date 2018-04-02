@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 05:36:57 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/10 21:31:22 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/02/18 01:42:59 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,34 +117,27 @@ void		set_list(t_env *env, char *line, t_par *par, int i)
 
 void		set_struct(t_env *env, t_par *par)
 {
-	t_list	*temp;
 	int		i;
 
-	i = 0;
-	temp = par->lst_obj;
-	while (i < env->nb_obj)
+	i = -1;
+	while (++i < env->nb_obj)
 	{
-		ft_memcpy((void *)&env->objs[i], temp->content, sizeof(t_obj));
-		free(temp->content);
-		temp = temp->next;
-		i++;
+		ft_memcpy((void *)&env->objs[i], par->lst_obj->content, sizeof(t_obj));
+		free(par->lst_obj->content);
+		par->lst_obj = par->lst_obj->next;
 	}
-	i = 0;
-	temp = par->lst_cam;
-	while (i < env->nb_cam)
+	i = -1;
+	while (++i < env->nb_cam)
 	{
-		ft_memcpy((void *)&env->cams[i], temp->content, sizeof(t_cam));
-		free(temp->content);
-		temp = temp->next;
-		i++;
+		ft_memcpy((void *)&env->cams[i], par->lst_cam->content, sizeof(t_cam));
+		free(par->lst_cam->content);
+		par->lst_cam = par->lst_cam->next;
 	}
-	i = 0;
-	temp = par->lst_lum;
-	while (i < env->nb_lum)
+	i = -1;
+	while (++i < env->nb_lum)
 	{
-		ft_memcpy((void *)&env->lums[i], temp->content, sizeof(t_lum));
-		free(temp->content);
-		temp = temp->next;
-		i++;
+		ft_memcpy((void *)&env->lums[i], par->lst_lum->content, sizeof(t_lum));
+		free(par->lst_lum->content);
+		par->lst_lum = par->lst_lum->next;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/12 02:24:21 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/03/12 14:51:06 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			putlineerr(char *str, int i)
 	return (0);
 }
 
-static void	malloc_env(t_env *env)
+void	malloc_env(t_env *env)
 {
 	if (!(env->objs = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj)))
 		exit(0);
@@ -44,7 +44,7 @@ void		init_scene(t_env *env)
 	env->nb_lum = 0;
 	if ((fd = open(env->file, O_RDONLY)) == -1)
 		ft_put_err("Can't open file");
-	while ((ret = get_next_line(fd, &line)) > 0)
+	while ((ret = get_next_line(fd, &line)) > 0) 
 	{
 		if (ft_strlen(line) > 0 && ft_strchr(line, ':'))
 			set_list(env, line, &par, i);
