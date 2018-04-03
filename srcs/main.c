@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/27 16:34:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/03 20:35:46 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,10 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	res = (res < 0.0) ? 0.0 : res * env->lums[lumcur].coef;
 	tmp = vect_soustr(col_2_lum_norm, tmp);
 	tmp = vect_norm(tmp);
-	col->c.r = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.r * res);
-	col->c.g = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.g * res);
-	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.b * res);
-//	*col = mult_color(env->objs[ob].col, res);
+//	col->c.r = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.r * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.r * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.r * res);
+//	col->c.g = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.g * res);
+//	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.b * res);
+	*col = mult_color(env->objs[ob].col, res);
 	return (col);
 	}
 //env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
@@ -163,14 +163,8 @@ t_color		get_col(t_env *env, t_v vect)
 	double test;
 	int		ob;
 	t_color	*tmp;
-	t_env	*tutu;
 
 	ob = which_obj_col(env);
-	if (!(tutu = (t_env *)malloc(sizeof(t_env) * 1)))
-		return (get_black());
-	ft_memcpy(tutu, env, sizeof(t_env));
-//	if (!(colo = (t_color *[env->nb_lum])malloc(sizeof(t_color[env->nb_lum]) * (1))))
-//		return (get_black());
 	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
 		return(get_black());
 	i = 0;
@@ -178,7 +172,7 @@ t_color		get_col(t_env *env, t_v vect)
 	colo = get_black();
 	while (i < env->nb_lum)
 	{
-		if ((tmp = get_lums(tutu, i, ob)) != NULL)
+		if ((tmp = get_lums(env, i, ob)) != NULL)
 		{
 			colo = add_color(colo, mult_color(*tmp, 0.500 / env->nb_lum));
 			ft_bzero(tmp, sizeof(t_color));
@@ -187,12 +181,10 @@ t_color		get_col(t_env *env, t_v vect)
 		if (vect_scal_prod(vect, vect_norm(vect_soustr(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum))) < -0.99999)
 		//	test = vect_scal_prod(vect, vect_norm(vect_soustr(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum), vect_norm(vect_soustr(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum))));
 			return (get_white());
-		ft_memcpy(tutu, env, sizeof(t_env));
 		i++;
 	}
 //	colo = mult_color(colo, 0.2000 / env->nb_lum);
 	colo = add_color(colo, mult_color(env->objs[ob].col, 0.1500));
-	ft_memdel((void **)&tutu);
 //	if (test > -0.7)
 	return (colo);
 //	return (satur_col(colo, -1.00 * test));
@@ -210,50 +202,14 @@ void		rays(t_env *env)
 	int		c;
 	t_color	col[64];
 
-	ft_putstr("          calculating image with ");
-	if (env->flou >= 1)
-	{
-		ft_putnbr(env->nb_lum);
-		ft_putstr(" ray for ");
-		ft_putnbr(env->flou * env->flou);
-		if (env->flou == 1)
-			ft_putstr("pixel.....");
-		else
-			ft_putstr("pixels.....");
-	}
-	else
-	{
-		ft_putnbr(1 / (env->flou * env->flou));
-		ft_putstr(" rays for ");
-		ft_putnbr(1);
-		ft_putstr("pixel.....\n");
-	}
-	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.x));
-	ft_putstr(", ");
-	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.y));
-	ft_putstr(", ");
-	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.z));
-	ft_putstr(", ");
+	ft_putfloat_fd(env->flou, 1);
 	flou_square = env->flou * env->flou;
 	c = -1;
-	while (++c < 2)
-	{
-	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.x));
-	ft_putstr(", ");
-	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.y));
-	ft_putstr(", ");
-	ft_putnbr(1000 * (env->cams[env->curr_cam].vcam.z));
-	ft_putstr(", ");
-	rotation(env->cams[env->curr_cam].vcam, (t_v){1, 0, 0}, 0);
-	}
 	a = 0.0;
 	while ((b = 0.0) == 0.0 && a < WIN_Y)//for each row in the img
 	{
 		while (b < WIN_X && init_ray(env, b + env->flou / 2, a + env->flou / 2))//for each pixel in the row
 		{
-			if (b == 320 && a == 240)
-				((int *)env->surf->pixels)[((int)((int)b) +
-					((int)(a) * env->surf->w))] = 1118208;
 			c = ((int)1.0 / flou_square * (a - (int)a)) + ((int)1.0 /
 					env->flou * (b - (int)b));//col is set with desired color for current pixel
 			col[c] = get_col(env, env->init_rays.r2);//col is set with desired color for current pixel
@@ -279,7 +235,7 @@ void		rays(t_env *env)
 	}
 	set_filter(env);
 	SDL_UpdateWindowSurface(env->win);
-	ft_putendl("done!");
+	ft_putendl("done");
 }
 
 /*
@@ -295,8 +251,6 @@ t_env		*init(char *filename)
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
 		env->file = ft_strdup(filename);
-		env->name = ft_strdup("RT");
-		env->filter = ft_strdup("NONE");
 		j_init(env);
 		if (!(env->win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 						SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
@@ -339,7 +293,7 @@ int			main(int ac, char **av)
 	i = -1;
 	while (++i < env->nb_lum)
 	{
-		env->lums[i].coef = 0.5;
+		env->lums[i].coef = 0.4;
 	}
 	rays(env);
 	while (!env->state)
