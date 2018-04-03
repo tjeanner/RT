@@ -27,6 +27,7 @@ SRC =		main.c \
 			norm_manip.c \
 			update_and_copy.c \
 			generator.c \
+			j_generator.c \
 			parser_json.c \
 			fill_json.c \
 			parse_function.c \

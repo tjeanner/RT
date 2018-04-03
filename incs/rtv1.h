@@ -227,6 +227,7 @@ void					update_and_copy_a(t_env *env, SDL_Keycode type);
 **generator.c
 */
 void					scene_generator(t_env *env);
+void					j_scene_generator(t_env *env);
 
 /*
 **distances_functions.c
