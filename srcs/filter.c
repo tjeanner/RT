@@ -138,13 +138,19 @@ void	neg_filter(t_env *env)
 
 void	set_filter(t_env *env)
 {
-	if (env->filter == 1)
+	if (!ft_strcmp(env->filter, "NEGATIVE"))
 		neg_filter(env);
-	else if (env->filter == 2)
+	else if (!ft_strcmp(env->filter, "B&W"))
 		bw_filter(env);
-	else if (env->filter == 3)
+	else if (!ft_strcmp(env->filter, "SEPIA"))
 		sepia_filter(env);
-	else if (env->filter == 4)
+	else if (!ft_strncmp(env->filter, "CARTOON", 7))
+	{
+		if (!ft_strncmp(env->filter, "CARTOON:", 8) && ft_strlen(env->filter) > 8)
+			env->seuil = ft_atoi(env->filter + 8);
+		else
+			env->seuil = 8;
 //			sobel_filter(env);
 		cartoon_filter(env);
+	}
 }

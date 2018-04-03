@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/02 00:10:10 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/03/27 16:34:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,8 @@ t_env		*init(char *filename)
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
 		env->file = ft_strdup(filename);
+		env->name = ft_strdup("RT");
+		env->filter = ft_strdup("NONE");
 		j_init(env);
 		if (!(env->win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 						SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
@@ -337,7 +339,7 @@ int			main(int ac, char **av)
 	i = -1;
 	while (++i < env->nb_lum)
 	{
-		env->lums[i].coef = 1.0;
+		env->lums[i].coef = 0.5;
 	}
 	rays(env);
 	while (!env->state)

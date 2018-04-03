@@ -96,14 +96,16 @@ static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
 		ft_memdel((void **)&env->objs);
 		ft_memdel((void **)&env->cams);
 		ft_memdel((void **)&env->lums);
-		init_scene(env);
+		free(env->filter);
+		j_init(env);
+//		init_scene(env);
 	}
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_MINUS)
 		env->flou *= (env->flou >= 16) ? 1.0 : 2.0;
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_PLUS)
 		env->flou /= (env->flou <= 0.125) ? 1 : 2;
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_END)
-		scene_generator(env);
+		j_scene_generator(env);
 	else
 		return (0);
 	return (1);

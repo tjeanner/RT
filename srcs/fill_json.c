@@ -18,12 +18,8 @@ void		j_fill_scn(t_json *json, t_env *env)
 	{
 		if (!ft_strcmp(json->key, "name") && json->val.type == TYPE_STRING)
 			env->name = ft_strdup(json->val.data.str);
-		else if (!ft_strcmp(json->key, "filter") && json->val.type == TYPE_DOUBLE)
-			env->filter = (json->val.data.nb > 0 && json->val.data.nb < 5) ?
-				json->val.data.nb : 0;
-		else if (!ft_strcmp(json->key, "seuil") && json->val.type == TYPE_DOUBLE)
-			env->seuil = (json->val.data.nb > 3 && json->val.data.nb < 15) ?
-				json->val.data.nb : 0;
+		else if (!ft_strcmp(json->key, "filter") && json->val.type == TYPE_STRING)
+			env->filter = ft_strdup(json->val.data.str);
 		json = json->next;
 	}
 }
