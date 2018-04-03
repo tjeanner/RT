@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 14:29:16 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/15 14:19:18 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/03 21:23:18 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ float		parse_float(char **str)
 	*str += 1;
 	while ((**str == '.' && cpt == 0) || (**str >= '0' && **str <= '9'))
 	{
-		*str += 1;
 		if (**str == '.')
 			cpt++;
+		*str += 1;
 	}
 	return (nb);
 }
