@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/02 00:13:05 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/04 01:24:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,9 @@ void		j_scene_generator(t_env *env)
 	int	i;
 	int fd;
 
-	if (!(fd = open("testscene.json", O_CREAT | O_WRONLY | O_APPEND, 0666)))
-		ft_put_err("lol");//
+	i = 0;
+	while ((fd = open(ft_strjoin("./scenes/scene", ft_strjoin(ft_itoa(i), ".json")), O_CREAT | O_EXCL | O_RDONLY, 0666)) == -1 && i < 20)
+		i++;
 	ft_putstr_fd("{\"name\":\"", fd);
 	ft_putstr_fd(env->name, fd);
 	ft_putstr_fd("\",\"filter\":\"", fd);

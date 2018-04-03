@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/01 23:15:12 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/03 23:38:09 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ void	cartoon_filter(t_env *env)
 	data = (unsigned char *)env->surf->pixels;
 	max = ((WIN_X * WIN_Y) * 4);
 	i = 0;
+	if (env->seuil <= 4 || env->seuil >= 15)
+		env->seuil = 8;
 	pas = 255 / env->seuil;
 	while (i < max)
 	{
@@ -135,7 +137,6 @@ void	neg_filter(t_env *env)
 	}
 }
 
-
 void	set_filter(t_env *env)
 {
 	if (!ft_strcmp(env->filter, "NEGATIVE"))
@@ -150,7 +151,7 @@ void	set_filter(t_env *env)
 			env->seuil = ft_atoi(env->filter + 8);
 		else
 			env->seuil = 8;
-//			sobel_filter(env);
+//		sobel_filter(env);
 		cartoon_filter(env);
 	}
 }
