@@ -96,6 +96,7 @@ static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
 		ft_memdel((void **)&env->objs);
 		ft_memdel((void **)&env->cams);
 		ft_memdel((void **)&env->lums);
+		free(env->filter);
 		j_init(env);
 //		init_scene(env);
 	}
