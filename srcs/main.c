@@ -295,6 +295,8 @@ t_env		*init(char *filename)
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
 		env->file = ft_strdup(filename);
+		env->name = ft_strdup("RT");
+		env->filter = ft_strdup("NONE");
 		j_init(env);
 		if (!(env->win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 						SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
