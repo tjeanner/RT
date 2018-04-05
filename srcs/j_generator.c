@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/04 01:24:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/04 02:59:06 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void		j_scene_generator(t_env *env)
 	ft_putstr_fd(env->filter, fd);
 	ft_putstr_fd("\",\"scene\":{", fd);
 	i = env->nb_cam;
-	ft_putstr_fd("\"cameras\":[", fd);	
+	ft_putstr_fd("\"cameras\":[", fd);
 	while (--i >= 0)
 	{
 		env->cams[i].vcam = vect_norm(env->cams[i].vcam);
@@ -129,7 +129,7 @@ void		j_scene_generator(t_env *env)
 	}
 	ft_putstr_fd("],", fd);
 	i = env->nb_lum;
-	ft_putstr_fd("\"lights\":[", fd);	
+	ft_putstr_fd("\"lights\":[", fd);
 	while (--i >= 0)
 	{
 		j_print_lum(env, i, fd);
