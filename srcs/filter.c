@@ -6,12 +6,21 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/03 23:38:09 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/04 03:46:11 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
+void	stereo_filter(t_env *env)
+{
+	(void)env;
+}
+
+void	motionblur_filter(t_env *env)
+{
+	(void)env;
+}
 void	bw_filter(t_env *env)
 {
 	size_t			i;
@@ -145,13 +154,16 @@ void	set_filter(t_env *env)
 		bw_filter(env);
 	else if (!ft_strcmp(env->filter, "SEPIA"))
 		sepia_filter(env);
+	else if (!ft_strcmp(env->filter, "MOTIONBLUR"))
+		motionblur_filter(env);
+	else if (!ft_strcmp(env->filter, "3D"))
+		stereo_filter(env);
 	else if (!ft_strncmp(env->filter, "CARTOON", 7))
 	{
 		if (!ft_strncmp(env->filter, "CARTOON:", 8) && ft_strlen(env->filter) > 8)
 			env->seuil = ft_atoi(env->filter + 8);
 		else
 			env->seuil = 8;
-//		sobel_filter(env);
 		cartoon_filter(env);
 	}
 }
