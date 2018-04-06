@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/03 19:36:05 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/06 05:35:26 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	t_v		col_2_lum;
 	t_v		col_2_lum_norm;
 
-	if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))
+	if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))//
 		return (NULL);
 	i = -1;
 	pos_col = vect_add(env->init_rays.r, vect_mult(env->init_rays.r2,
@@ -166,7 +166,7 @@ t_color		get_col(t_env *env, t_v vect)
 	t_env	*tutu;
 
 	ob = which_obj_col(env);
-	if (!(tutu = (t_env *)malloc(sizeof(t_env) * 1)))
+	if (!(tutu = (t_env *)malloc(sizeof(t_env) * 1)))//
 		return (get_black());
 	ft_memcpy(tutu, env, sizeof(t_env));
 //	if (!(colo = (t_color *[env->nb_lum])malloc(sizeof(t_color[env->nb_lum]) * (1))))

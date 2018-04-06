@@ -1,14 +1,14 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2018/02/12 04:29:39 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/04/06 02:38:26 by hbouchet         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 NAME =			libft.a
 
@@ -84,7 +84,7 @@ SRC =			ft_memset.c					\
 				ft_puterr.c					\
 
 CC =			gcc
-CFLAGS =		-Wall -Wextra -Werror  -g3 -fsanitize=address -Ofast -march=native -flto
+CFLAGS =		-Wall -Wextra -Werror #-g3 -fsanitize=address -Ofast -march=native -flto
 
 SRCDIR =		srcs
 INCDIR =		incs

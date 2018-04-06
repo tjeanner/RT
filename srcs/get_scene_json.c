@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/15 14:45:46 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/06 05:41:35 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 		{
 			j_set_obj(tab->val.data.obj->key, tab->val.data.obj->val.type,
 					tab->val.data.obj, obj);
+			free(tab->val.data.obj->key);			
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
 		if (j_is_valid_obj(obj))
@@ -63,6 +64,7 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 				lum->pos_lum = j_get_vec(tab->val.data.obj);
 			else
 				ft_put_err("invalid light");
+			free(tab->val.data.obj->key);
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
 		if (j_is_valid_lum(lum))
@@ -93,6 +95,7 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 				cam->v2cam = j_get_vec(tab->val.data.obj);
 			else
 				ft_put_err("invalid camera");
+			free(tab->val.data.obj->key);
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
 		if (j_is_valid_cam(cam))
