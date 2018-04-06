@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/15 13:51:51 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/03 19:36:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ void			j_init(t_env *env)
 	env->nb_obj = 0;
 	env->nb_cam = 0;
 	env->nb_lum = 0;
+	env->name = ft_strdup("RT");
+	env->filter = ft_strdup("NONE");
 	fd = open(env->file, O_RDONLY);
 	tmp = ft_strnew(0);
 	while ((ret = get_next_line(fd, &line)) > 0)

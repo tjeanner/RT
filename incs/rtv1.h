@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/01 21:57:19 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/05 15:04:51 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 
 //# define WIN_X 1920
 //# define WIN_Y 1080
-# define WIN_X 640
-# define WIN_Y 480
+# define WIN_X 1920
+# define WIN_Y 1080
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
 # define FCTS "sptc"
@@ -114,7 +114,7 @@ typedef struct			s_env
 	t_cam				*cams;
 	t_lum				*lums;
 	t_ray				init_rays;
-	float				flou;
+	int					flou;
 	float				constante2test;
 	float				portion;
 	char				*file;
@@ -127,7 +127,7 @@ typedef struct			s_env
 **main.c
 */
 void					rays(t_env *env);
-int						init_ray(t_env *env, float x, float y);
+int						init_ray(t_env *env, double x, double y);
 int						which_obj_col(t_env *env);
 
 /*
@@ -138,7 +138,7 @@ t_v						vect_norm(t_v a);
 t_v						vect_mult(t_v a, double n);
 t_v						vect_div(t_v a, double n);
 t_v						vect_add(t_v a, t_v b);
-t_v						vect_soustr(t_v a, t_v b);
+t_v						vect_sous(t_v a, t_v b);
 double					vect_scal_prod(t_v a, t_v b);
 t_v						vect_prod(t_v a, t_v b);
 t_v						vect_inv(t_v a);
@@ -146,7 +146,7 @@ t_v						vect_inv(t_v a);
 /*
 **color_math.c
 */
-t_color					satur_col(t_color a, double n);
+t_color					satur_col(t_color a, float n);
 t_color					get_rand(void);
 t_color					get_white(void);
 t_color					get_black(void);
@@ -154,6 +154,7 @@ int						set_white(t_color *c);
 int						set_black(t_color *c);
 t_color					add_color(t_color a, t_color b);
 t_color					mult_color(t_color a, float n);
+t_color					div_color(t_color a, float n);
 int						average_color(t_color *col, float flou);
 
 /*

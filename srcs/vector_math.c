@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 18:20:50 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/01 23:54:29 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/05 14:41:52 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_v			vect_add(t_v a, t_v b)
 	return (c);
 }
 
-t_v			vect_soustr(t_v a, t_v b)
+t_v			vect_sous(t_v a, t_v b)
 {
 	t_v		c;
 
