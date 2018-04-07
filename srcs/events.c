@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/02 00:08:40 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/07 16:27:06 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,21 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 			env->lums[env->curr_lum].col = get_rand();
 	}
 	else if (sym == SDLK_MINUS && env->curr_obj >= 0)
-		env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0 || env->objs[env->curr_obj].type == 'p') ? 10 : 0;
+	{
+	//	if (env->objs[env->curr_obj].type == 'c')
+	//		env->objs[env->curr_obj].radius /= 1.1;
+	//	else
+		env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0 || env->objs[env->curr_obj].type == 's') ? 10 : 0;
+	}
 	else if (sym == SDLK_MINUS && env->curr_obj == -2)
-		env->lums[env->curr_lum].coef /= (env->lums[env->curr_lum].coef > 0) ? 1.1000000 : 1;
+		env->lums[env->curr_lum].coef /= (env->lums[env->curr_lum].coef > 0) ? 1.1000000 : 10;
 	else if (sym == SDLK_EQUALS && env->curr_obj >= 0)
+	{
+	//	if (env->objs[env->curr_obj].type == 'c')
+	//		env->objs[env->curr_obj].radius *= 1.1;
+	//	else
 		env->objs[env->curr_obj].radius += 10;
+	}
 	else if (sym == SDLK_EQUALS && env->curr_obj == -2)
 		env->lums[env->curr_lum].coef *= 1.1000000;
 	else
@@ -101,9 +111,9 @@ static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
 //		init_scene(env);
 	}
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_MINUS)
-		env->flou *= (env->flou >= 16) ? 1.0 : 2.0;
+		env->flou *= (env->flou > WIN_X  / 2 || env->flou > WIN_Y  / 2) ? 1.0 : 2.0;
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_PLUS)
-		env->flou /= (env->flou <= 0.125) ? 1 : 2;
+		env->flou /= (env->flou <= 1) ? 1 : 2;
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_END)
 		j_scene_generator(env);
 	else

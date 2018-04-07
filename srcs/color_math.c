@@ -6,17 +6,17 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 04:51:14 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/03/07 17:35:29 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/05 01:26:14 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-t_color	satur_col(t_color a, double n)
+t_color	satur_col(t_color a, float n)
 {
 	t_color		b;
 
-	b = add_color(a, add_color(mult_color(get_white(), n), mult_color(a, 1.000 - n)));
+	b = add_color(mult_color(a, n), mult_color(get_white(), 1.0 - n));
 	return (b);
 }
 
@@ -76,6 +76,17 @@ t_color		add_color(t_color a, t_color b)
 	c.c.g = a.c.g + b.c.g;
 	c.c.b = a.c.b + b.c.b;
 	c.c.a = a.c.a + b.c.a;
+	return (c);
+}
+
+t_color		div_color(t_color a, float n)
+{
+	t_color		c;
+
+	c.c.r = a.c.r / n;
+	c.c.g = a.c.g / n;
+	c.c.b = a.c.b / n;
+	c.c.a = a.c.a / n;
 	return (c);
 }
 
