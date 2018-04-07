@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/05 15:04:51 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/07 17:03:02 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@
 # include <pthread.h>
 # include "parser.h"
 
-//# define WIN_X 1920
-//# define WIN_Y 1080
 # define WIN_X 1920
 # define WIN_Y 1080
+//# define WIN_X 640
+//# define WIN_Y 480
 # define DIST ((int)WIN_X / tan(30 * M_PI / 180))
 # define BPP 32
 # define FCTS "sptc"
@@ -86,8 +86,8 @@ typedef struct			s_ray
 {
 	double				v1;
 	double				v2;
-	t_v					r;
-	t_v					r2;
+	t_v					pos;
+	t_v					dir;
 }						t_ray;
 
 typedef struct			s_par
@@ -129,6 +129,7 @@ typedef struct			s_env
 void					rays(t_env *env);
 int						init_ray(t_env *env, double x, double y);
 int						which_obj_col(t_env *env);
+t_color					get_col(t_env *env, t_v vect);
 
 /*
 **vector_math.c
@@ -163,6 +164,14 @@ int						average_color(t_color *col, float flou);
 double					which_pow(double num, double pow);
 t_color					get_black(void);
 void					ft_putfloat_fd(double nbr, int fd);
+
+/*
+**raytracing.c
+*/
+void					rays(t_env *env);
+int						which_obj_col(t_env *env);
+int						init_ray(t_env *env, double x, double y);
+
 
 /*
 **events.c

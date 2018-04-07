@@ -6,66 +6,16 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/06 06:02:53 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/07 17:03:27 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-
-int			init_ray(t_env *env, double x, double y)
-{
-	t_v		center_screen_2_pix;
-	t_v		cam_2_center_screen;
-	t_v		cam_2_pixel;
-	t_v		cam_2_pixel_norm;
-
-	env->cams[env->curr_cam].v3cam = vect_inv(vect_prod(
-				env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam));
-	cam_2_center_screen = vect_mult(env->cams[env->curr_cam].vcam, DIST);
-	center_screen_2_pix = vect_add(vect_mult(env->cams[env->curr_cam].v3cam,
-				(x - WIN_X / 2.0) / get_vect_norm(env->cams[env->curr_cam].v3cam)),
-			vect_mult(env->cams[env->curr_cam].v2cam, (WIN_Y / 2.0 - y) /
-				get_vect_norm(env->cams[env->curr_cam].v2cam)));
-	cam_2_pixel = vect_add(cam_2_center_screen, center_screen_2_pix);
-	cam_2_pixel_norm = vect_norm(cam_2_pixel);
-	env->init_rays.r = env->cams[env->curr_cam].pos_cam;
-	env->init_rays.r2 = cam_2_pixel_norm;
-	return (1);
-}
-
 /*
 **get_col: a function that will return a col structure containing color
 **corresponding for desired pixel (specified by x & y)
 */
-
-int			which_obj_col(t_env *env)
-{
-	double	res;
-	int		i;
-	int		ob;
-
-	i = -1;
-	res = -1.0;
-	while (++i < env->nb_obj && (env->objs[i].dist = -1.0) == -1.0)
-	{
-		if (env->col_fcts[ft_strchr(FCTS, env->objs[i].type) - FCTS](
-					&env->init_rays, env->objs[i]) == 1 &&
-				(env->init_rays.v1 > 0.0 || env->init_rays.v2 > 0.0))
-			if (env->init_rays.v1 > 0.0 && env->init_rays.v2 > 0.0)
-				env->objs[i].dist = (env->init_rays.v1 < env->init_rays.v2) ?
-					env->init_rays.v1 : env->init_rays.v2;
-			else
-				env->objs[i].dist = (env->init_rays.v1 > 0.0) ?
-					env->init_rays.v1 : env->init_rays.v2;
-		else
-			env->objs[i].dist = -1.0;
-		if ((i == 0 || (env->objs[i].dist > 0.0 &&
-			(res == -1.0 || res > env->objs[i].dist))) && (ob = i) == i)
-			res = env->objs[i].dist;
-	}
-	return (ob = (res <= 0.0) ? -1 : ob);
-}
 
 t_v			get_norm(t_obj obj, t_ray init_rays, t_v pos_col)
 {
@@ -77,12 +27,12 @@ t_v			get_norm(t_obj obj, t_ray init_rays, t_v pos_col)
 	else if (obj.type == 't')
 	{
 		vect = vect_norm(obj.norm);
-	//	res = ((double)((vect.x * (init_rays.r.x - obj.o.x) +
-	//					vect.y * (init_rays.r.y - obj.o.y) +
-	//	vect.z * (init_rays.r.z - obj.o.z)) / vect_scal_prod(vect, vect)));
+	//	res = ((double)((vect.x * (init_rays.pos.x - obj.o.x) +
+	//					vect.y * (init_rays.pos.y - obj.o.y) +
+	//	vect.z * (init_rays.pos.z - obj.o.z)) / vect_scal_prod(vect, vect)));
 	//	vect = vect_add(obj.o, vect_mult(vect, res));//CC
-	//	vect = vect_sous(init_rays.r, vect);//CCPC
-		res = vect_scal_prod(init_rays.r2, vect_mult(vect, obj.dist)) + vect_scal_prod(vect_sous(init_rays.r, obj.o), vect);
+	//	vect = vect_sous(init_rays.pos, vect);//CCPC
+		res = vect_scal_prod(init_rays.dir, vect_mult(vect, obj.dist)) + vect_scal_prod(vect_sous(init_rays.pos, obj.o), vect);
 		vect = vect_norm(vect_sous(vect_sous(vect_mult(vect, res), obj.o), pos_col));
 		vect = vect_inv(vect);
 	}
@@ -90,11 +40,11 @@ t_v			get_norm(t_obj obj, t_ray init_rays, t_v pos_col)
 	{
 		vect = vect_sous(obj.o, obj.norm);
 		vect = vect_norm(vect);
-		res = ((double)((vect.x * (init_rays.r.x - obj.norm.x) +
-			vect.y * (init_rays.r.y - obj.norm.y) + vect.z *
-(init_rays.r.z - obj.norm.z)) / vect_scal_prod(vect, vect)));
+		res = ((double)((vect.x * (init_rays.pos.x - obj.norm.x) +
+			vect.y * (init_rays.pos.y - obj.norm.y) + vect.z *
+(init_rays.pos.z - obj.norm.z)) / vect_scal_prod(vect, vect)));
 		vect = vect_add(obj.norm, vect_mult(vect, res));
-		vect = vect_sous(init_rays.r, vect);
+		vect = vect_sous(init_rays.pos, vect);
 		vect = vect_inv(vect);
 	}
 	return ((vect = vect_norm(vect)));
@@ -114,19 +64,19 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))
 		return (NULL);
 	i = -1;
-	pos_col = vect_add(env->init_rays.r, vect_mult(env->init_rays.r2,
+	pos_col = vect_add(env->init_rays.pos, vect_mult(env->init_rays.dir,
 				env->objs[ob].dist));//pos toucher
 	col_2_lum = vect_sous(env->lums[lumcur].pos_lum, pos_col);
 	col_2_lum_norm = vect_norm(col_2_lum);
 	tmp = vect_mult(get_norm(env->objs[ob], env->init_rays, pos_col), 0.000100);
-	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.r2) > 0.0) ? vect_inv(tmp): tmp;
+	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.dir) > 0.0) ? vect_inv(tmp): tmp;
 	pos_col = vect_add(pos_col, tmp);
 //	col_2_lum = vect_sous(env->lums[lumcur].pos_lum, pos_col);
 //	col_2_lum_norm = vect_norm(col_2_lum);
-	tmp2 = env->init_rays.r;
-	env->init_rays.r = pos_col;
-	tmp = env->init_rays.r2;
-	env->init_rays.r2 = col_2_lum_norm;
+	tmp2 = env->init_rays.pos;
+	env->init_rays.pos = pos_col;
+	tmp = env->init_rays.dir;
+	env->init_rays.dir = col_2_lum_norm;
 	while (++i < env->nb_obj)//we search an object between the collision and the light source
 	{
 		env->init_rays.v1 = -100000.0;
@@ -143,8 +93,8 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 			return (NULL);
 		}
 	}
-	env->init_rays.r = tmp2;
-	env->init_rays.r2 = tmp;
+	env->init_rays.pos = tmp2;
+	env->init_rays.dir = tmp;
 	pos_col = get_norm(env->objs[ob], env->init_rays, pos_col);
 	pos_col = vect_norm(pos_col);
 	res = (env->objs[ob].type == 'p' && vect_scal_prod(pos_col, tmp) > 0.0) ? vect_scal_prod(vect_inv(pos_col), col_2_lum_norm) : vect_scal_prod(pos_col, col_2_lum_norm);
@@ -171,16 +121,31 @@ t_color		get_col(t_env *env, t_v vect)
 
 	i = 0;
 	ob = which_obj_col(env);
-	if (env->objs[ob].type == 'p' && env->objs[ob].radius < 0.0)
+	if (env->objs[ob].radius < 0.0)
+	{
+		if (env->objs[ob].type == 's')
 		{
-			u1 = (vect_scal_prod(env->init_rays.r2, env->objs[ob].norm)) > 0.000 ?
-		env->objs[ob].norm : vect_inv(env->objs[ob].norm);
-		//	u1 = env->init_rays.r;
-			u2 = env->init_rays.r2;
-			env->init_rays.r = vect_add(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(vect, env->objs[ob].dist)), vect_mult(env->init_rays.r, 0.5));
-			env->init_rays.r2 = rotation(vect_inv(u2), env->objs[ob].norm, 180.000);
-			ob = which_obj_col(env);
+			u1 = vect_sous(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->init_rays.dir, env->objs[ob].dist)), env->objs[ob].o);
+//			u1 = (vect_scal_prod(env->init_rays.dir, env->objs[ob].norm)) > 0.000 ?
+//		env->objs[ob].norm : vect_inv(env->objs[ob].norm);
+		//	u1 = env->init_rays.pos;
+			u2 = env->init_rays.dir;
+			env->init_rays.pos = vect_add(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->init_rays.dir, env->objs[ob].dist)), vect_mult(env->init_rays.pos, 0.5));
+			env->init_rays.dir = rotation(vect_inv(u2), u1, 180.000);
 		}
+		else
+		{
+//			u1 = vect_sous(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->init_rays.dir, env->objs[ob].dist)), env->objs[ob].o);
+			u1 = (vect_scal_prod(env->init_rays.dir, env->objs[ob].norm)) > 0.000 ?
+			env->objs[ob].norm : vect_inv(env->objs[ob].norm);
+		//	u1 = env->init_rays.pos;
+			u2 = env->init_rays.dir;
+			env->init_rays.pos = vect_add(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->init_rays.dir, env->objs[ob].dist)), vect_mult(u1, 0.5));
+			env->init_rays.dir = rotation(vect_inv(u1), vect, 180.000);
+		}
+//		ob = which_obj_col(env);
+		return(get_col(env, vect));
+	}
 	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
 	{
 		while (i < env->nb_lum)
@@ -219,35 +184,6 @@ t_color		get_col(t_env *env, t_v vect)
 /*
 **rays: a function that call get_col for each pixel and update window surface
 */
-
-void		rays(t_env *env)
-{
-	int		i;
-	int		y;
-	int		x;
-	int		alias_coef;
-	t_color	col;
-
-	y = 0;
-	alias_coef = env->flou;
-	while ((x = 0) == 0 && y < WIN_Y)
-	{
-		while ((i = 0) == 0 && x < WIN_X &&
-				init_ray(env, x + alias_coef / 2.0, y + alias_coef / 2.0))
-		{
-			col = get_col(env, env->init_rays.r2);
-			((int *)env->surf->pixels)[x + y * env->surf->w] = col.color;
-			while (alias_coef > 1 && ++i < alias_coef * alias_coef)
-				if (x + i % alias_coef < WIN_X && y + i / alias_coef < WIN_Y)
-					((int *)env->surf->pixels)[x + i % alias_coef +
-						(y + i / alias_coef) * env->surf->w] = col.color;
-			x += alias_coef;
-		}
-		y += alias_coef;
-	}
-	set_filter(env);
-	SDL_UpdateWindowSurface(env->win);
-}
 
 /*
 **init: initialise sdl, malloc and fill the data struct (here: env)
