@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/27 16:02:55 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 03:22:07 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,27 @@ int		                j_is_valid_obj(t_obj *obj);
 int		                j_is_valid_cam(t_cam *cam);
 int		                j_is_valid_lum(t_lum *lum);
 int			            brackets(char *str, int len);
+
+/*
+**parser.c
+*/
+void					malloc_env(t_env *env);
+int						putlineerr(char *str, int i);
+
+/*
+**get_scene.c
+*/
+t_color					get_color(char *hexa);
+
+/*
+**fill_env.c
+*/
+void					set_struct(t_env *env, t_par *par);
+
+/*
+**generator.c
+*/
+void					scene_generator(t_env *env);
+void					j_scene_generator(t_env *env);
 
 #endif

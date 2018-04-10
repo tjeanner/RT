@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fill_json.c                                        :+:      :+:    :+:   */
+/*   parser_fill_json.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 01:49:37 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/06 06:18:50 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 03:55:25 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,16 @@
 
 void		j_fill_scn(t_json *json, t_env *env)
 {
-	char *tmp;
-
-	tmp = json->key;
-	while (json->val.type == TYPE_STRING || json->val.type == TYPE_DOUBLE)
+	if (!ft_strcmp(json->key, "name") && json->val.type == TYPE_STRING)
 	{
-		if (!ft_strcmp(json->key, "name") && json->val.type == TYPE_STRING)
-		{
-			free(env->name);
-			env->name = ft_strdup(json->val.data.str);
-//			free(tmp);
-		}
-		else if (!ft_strcmp(json->key, "filter") && json->val.type == TYPE_STRING)
-		{
-			free(env->filter);
-			env->filter = ft_strdup(json->val.data.str);
-			free(tmp);
-		}
+		free(env->name);
+		env->name = ft_strdup(json->val.data.str);
+		json = json->next;
+	}
+	if (!ft_strcmp(json->key, "filter") && json->val.type == TYPE_STRING)
+	{
+		free(env->filter);
+		env->filter = ft_strdup(json->val.data.str);
 		json = json->next;
 	}
 }
@@ -46,10 +39,6 @@ void		j_fill_obj(t_val *val, t_par *par, t_env *env)
 {
 	if (val->type == TYPE_OBJ)
 		j_fill_env(val->data.obj, par, env);
-//	else if (val->type == TYPE_STRING)
-//		printf("s: %s\n", val->data.str);
-//	else if (val->type == TYPE_DOUBLE)
-//		printf("d: %f\n", val->data.nb);
 	else if (val->type == TYPE_ARR)
 		j_fill_arr(val->data.tab, par, env);
 }
@@ -68,12 +57,12 @@ void		j_fill_env(t_json *json, t_par *par, t_env *env)
 			j_get_obj(json->val.data.tab, &obj, par, env);
 			free(json->key);
 		}
-		if (!ft_strcmp(json->key, "lights") && json->val.type == TYPE_ARR)
+		else if (!ft_strcmp(json->key, "lights") && json->val.type == TYPE_ARR)
 		{
 			j_get_lights(json->val.data.tab, &lum, par, env);
 			free(json->key);
 		}
-		if (!ft_strcmp(json->key, "cameras") && json->val.type == TYPE_ARR)
+		else if (!ft_strcmp(json->key, "cameras") && json->val.type == TYPE_ARR)
 		{
 			j_get_cam(json->val.data.tab, &cam, par, env);
 			free(json->key);

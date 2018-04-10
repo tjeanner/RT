@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/07 16:22:28 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/04/10 04:25:55 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,24 +21,23 @@ SRC =		main.c \
 			events_move.c \
 			color_math.c \
 			distances_functions.c \
-			parser.c \
-			fill_env.c \
-			get_scene.c \
 			norm_manip.c \
 			update_and_copy.c \
-			generator.c \
-			j_generator.c \
+			generator_json.c \
 			parser_json.c \
-			fill_json.c \
-			parse_function.c \
-			get_scene_json.c \
-			get_value_json.c \
-			valid_json.c \
+			parser.c \
+			parser_fill_json.c \
+			parser_function.c \
+			parser_get_scene.c \
+			parser_get_value.c \
+			parser_valid_json.c \
 			filter.c \
 			raytracing.c \
 
 CC =		gcc
-CFLAGS =	-Wall -Wextra -Werror -Ofast -march=native -flto #-g3 -fsanitize=address 
+CFLAGS =	-Wall -Wextra -Werror
+CFLAGS +=	-Ofast -march=native -flto
+CFLAGS +=	-g3 -fsanitize=address 
 
 SRCDIR =	srcs
 INCDIR =	incs

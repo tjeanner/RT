@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/07 17:03:02 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/08 19:16:08 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,6 @@ void					rays(t_env *env);
 int						which_obj_col(t_env *env);
 int						init_ray(t_env *env, double x, double y);
 
-
 /*
 **events.c
 */
@@ -196,13 +195,6 @@ int						events_move(t_env *env, unsigned int sym, t_cam *cam, t_obj *obj);
 void					mouse_move(t_env *env, SDL_Event event, t_cam *cam, t_obj *obj);
 
 /*
-**parser.c
-*/
-void					init_scene(t_env *env);
-void					malloc_env(t_env *env);
-int						putlineerr(char *str, int i);
-
-/*
 **norm_manip.c
 */
 t_v						norm_vect(double x, double y, double z);
@@ -210,34 +202,10 @@ int						is_norm_wchar(double x, double y, double z);
 t_v						rotation(t_v n, t_v r, float t);
 
 /*
-**get_scene.c
-*/
-t_color					get_color(char *hexa);
-void					get_obj(char **arr, t_obj *objet);
-void					get_cam(char **arr, t_cam *cam);
-void					get_lum(char **arr, t_lum *lum);
-int						get_scenelen(t_env *env);
-
-/*
-**fill_env.c
-*/
-int						is_valid_obj(char **str, int n_line);
-int						is_valid_lum(char **str, int n_line);
-int						is_valid_cam(char **str, int n_line);
-void					set_list(t_env *env, char *line, t_par *par, int i);
-void					set_struct(t_env *env, t_par *par);
-
-/*
 **update_and_copy.c
 */
 void					update_and_copy_r(t_env *env, int obj);
 void					update_and_copy_a(t_env *env, SDL_Keycode type);
-
-/*
-**generator.c
-*/
-void					scene_generator(t_env *env);
-void					j_scene_generator(t_env *env);
 
 /*
 **distances_functions.c

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/12 14:51:06 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 03:54:46 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			putlineerr(char *str, int i)
 	return (0);
 }
 
-void	malloc_env(t_env *env)
+void		malloc_env(t_env *env)
 {
 	if (!(env->objs = (t_obj *)malloc(sizeof(t_obj) * env->nb_obj)))
 		exit(0);
@@ -30,31 +30,29 @@ void	malloc_env(t_env *env)
 		exit(0);
 }
 
-void		init_scene(t_env *env)
+void		set_struct(t_env *env, t_par *par)
 {
-	int		fd;
-	int		ret;
-	char	*line;
-	t_par	par;
 	int		i;
 
-	i = 0;
-	env->nb_obj = 0;
-	env->nb_cam = 0;
-	env->nb_lum = 0;
-	if ((fd = open(env->file, O_RDONLY)) == -1)
-		ft_put_err("Can't open file");
-	while ((ret = get_next_line(fd, &line)) > 0) 
+	i = -1;
+	while (++i < env->nb_obj)
 	{
-		if (ft_strlen(line) > 0 && ft_strchr(line, ':'))
-			set_list(env, line, &par, i);
-		i++;
-		free(line);
+		ft_memcpy((void *)&env->objs[i], par->lst_obj->content, sizeof(t_obj));
+		free(par->lst_obj->content);
+		par->lst_obj = par->lst_obj->next;
 	}
-	if (ret == -1)
-		ft_put_err("Can't read scene");
-	if (env->nb_lum == 0 || env->nb_cam == 0)
-		ft_put_err("invalid scene");
-	malloc_env(env);
-	set_struct(env, &par);
+	i = -1;
+	while (++i < env->nb_cam)
+	{
+		ft_memcpy((void *)&env->cams[i], par->lst_cam->content, sizeof(t_cam));
+		free(par->lst_cam->content);
+		par->lst_cam = par->lst_cam->next;
+	}
+	i = -1;
+	while (++i < env->nb_lum)
+	{
+		ft_memcpy((void *)&env->lums[i], par->lst_lum->content, sizeof(t_lum));
+		free(par->lst_lum->content);
+		par->lst_lum = par->lst_lum->next;
+	}
 }

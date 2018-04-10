@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/06 05:53:37 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 03:57:00 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,4 @@ void			j_init(t_env *env)
 		ft_put_err("invalid scene");
 	malloc_env(env);
 	set_struct(env, &par);
-	ft_memdel((void **)&par);
 }

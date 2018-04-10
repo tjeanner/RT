@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_value_json.c                                   :+:      :+:    :+:   */
+/*   parser_get_value.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/06 05:44:22 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 03:56:14 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,35 @@ void		j_get_type(t_json *json, t_obj *obj)
 		obj->type = 't';
 	free(json->val.data.str);
 	json = json->next;
+}
+
+t_color		get_color(char *hexa)
+{
+	t_color	col;
+	int		tmp;
+	int		i;
+
+	i = 0;
+	while (hexa[i] && ((hexa[i] >= '0' && hexa[i] <= '9') ||
+		(ft_toupper(hexa[i]) >= 'A' && ft_toupper(hexa[i]) <= 'F')))
+		i++;
+	if (i != 6)
+	{
+		col.color = 16777216;
+		return (col);
+	}
+	else
+		col.color = 0;
+	tmp = (int)(ft_strchr(S, ft_toupper(hexa[0])) - S) * 16
+		+ (int)(ft_strchr(S, ft_toupper(hexa[1])) - S);
+	col.c.r = tmp;
+	tmp = (int)(ft_strchr(S, ft_toupper(hexa[2])) - S) * 16
+		+ (int)(ft_strchr(S, ft_toupper(hexa[3])) - S);
+	col.c.g = tmp;
+	tmp = (int)(ft_strchr(S, ft_toupper(hexa[4])) - S) * 16
+		+ (int)(ft_strchr(S, ft_toupper(hexa[5])) - S);
+	col.c.b = tmp;
+	return (col);
 }
 
 t_color		j_get_color(t_json *json)

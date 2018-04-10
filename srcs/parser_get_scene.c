@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_scene_json.c                                   :+:      :+:    :+:   */
+/*   parser_get_scene.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/06 05:41:35 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 03:57:34 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 		{
 			j_set_obj(tab->val.data.obj->key, tab->val.data.obj->val.type,
 					tab->val.data.obj, obj);
-			free(tab->val.data.obj->key);			
+			free(tab->val.data.obj->key);
 			tab->val.data.obj = tab->val.data.obj->next;
 		}
 		if (j_is_valid_obj(obj))
