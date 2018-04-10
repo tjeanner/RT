@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/23 04:51:21 by hbouchet          #+#    #+#              #
-#    Updated: 2018/04/07 22:11:28 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/04/10 05:02:29 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,7 +84,7 @@ SRC =			ft_memset.c					\
 				ft_puterr.c					\
 
 CC =			gcc
-CFLAGS =		-Wall -Wextra -Werror  -Ofast -march=native -flto -g3 -fsanitize=address
+CFLAGS =		-Wall -Wextra -Werror  -Ofast -march=native -flto #-g3 -fsanitize=address
 
 SRCDIR =		srcs
 INCDIR =		incs

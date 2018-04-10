@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/08 19:16:08 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 04:55:27 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ typedef struct			s_env
 void					rays(t_env *env);
 int						init_ray(t_env *env, double x, double y);
 int						which_obj_col(t_env *env);
-t_color					get_col(t_env *env, t_v vect);
+t_color					get_col(t_env *env, t_v vect, t_color *col);
 
 /*
 **vector_math.c
