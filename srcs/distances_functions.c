@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/12 08:00:43 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/12 08:19:02 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int			get_dist_tube(t_ray *init_rays, t_obj obj)
 {
 	t_v		math;
 	t_v		aa;
-//	t_v		bb;
 
 	aa = vect_sous(init_rays->pos, obj.o);
 	math.x = vect_scal_prod(vect_sous(init_rays->dir, vect_mult(obj.norm, vect_scal_prod(init_rays->dir, obj.norm))), vect_sous(init_rays->dir, vect_mult(obj.norm, vect_scal_prod(init_rays->dir, obj.norm))));
