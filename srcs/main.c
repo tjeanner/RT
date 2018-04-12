@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/11 19:34:43 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/12 08:15:28 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,6 @@
 **get_col: a function that will return a col structure containing color
 **corresponding for desired pixel (specified by x & y)
 */
-
-t_v			get_norm(t_obj obj, t_ray init_rays, t_v pos_col)
-{
-	double	res;
-	t_v		vect;
-
-	if (obj.type == 's' || obj.type == 'p')
-		vect = (obj.type == 'p') ? vect = obj.norm : vect_sous(pos_col, obj.o);
-	else if (obj.type == 't')
-	{
-		vect = vect_norm(obj.norm);
-		res = ((double)((vect.x * (init_rays.pos.x - obj.o.x) +
-			vect.y * (init_rays.pos.y - obj.o.y) +
-		vect.z * (init_rays.pos.z - obj.o.z)) / vect_scal_prod(vect, vect)));
-		vect = vect_add(obj.o, vect_mult(vect, res));//CC
-		vect = vect_sous(init_rays.pos, vect);//CCPC
-	//	res = vect_scal_prod(init_rays.dir, vect_mult(vect, obj.dist)) + vect_scal_prod(vect_sous(init_rays.pos, obj.o), vect);
-	//	vect = vect_norm(vect_sous(vect_sous(vect_mult(vect, res), obj.o), pos_col));
-//		vect = vect_norm(vect_sous(vect_mult(vect, res), vect_sous(obj.o, pos_col)));
-	//	vect = vect_inv(vect);
-	}
-	else
-	{
-		vect = vect_sous(obj.o, obj.norm);
-		vect = vect_norm(vect);
-		res = ((double)((vect.x * (init_rays.pos.x - obj.norm.x) +
-			vect.y * (init_rays.pos.y - obj.norm.y) + vect.z *
-(init_rays.pos.z - obj.norm.z)) / vect_scal_prod(vect, vect)));
-		vect = vect_add(obj.norm, vect_mult(vect, res));
-		vect = vect_sous(init_rays.pos, vect);
-		vect = vect_inv(vect);
-	}
-	return ((vect = vect_norm(vect)));
-}
 
 t_color		*get_lums(t_env *env, int lumcur, int ob)
 {
@@ -121,9 +87,8 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	}
 //env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
 
-t_color		get_col(t_env *env, t_v vect)
+t_color		get_col(t_env *env, t_v vect, t_color *colo)
 {
-	t_color	colo;
 	int		i;
 	double	test;
 	t_v		u1;
@@ -132,9 +97,16 @@ t_color		get_col(t_env *env, t_v vect)
 	t_color	*tmp;
 
 	i = 0;
-//	ob = which_obj_col(env);
-	return (env->objs[which_obj_col(env)].col);
-	if (env->objs[ob].radius < 0.0)
+	if ((ob = which_obj_col(env)) == -1)
+		return (get_black());
+	u1 = vect_add(env->init_rays.pos, vect_mult(env->init_rays.dir, env->objs[ob].dist));//poscol
+	u2 = vect_norm(get_norm(env->objs[ob], env->init_rays, u1));
+//	colo->c.r = 255 * fabs(u2.x);
+//	colo->c.g = 255 * fabs(u2.y);
+//	colo->c.b = 255 * fabs(u2.z);
+//	colo->c.a = 0;
+//	return (*colo);
+/*	if (env->objs[ob].radius < 0.0)
 	{
 		if (env->objs[ob].type == 's')
 		{
@@ -157,8 +129,8 @@ t_color		get_col(t_env *env, t_v vect)
 			env->init_rays.dir = rotation(vect_inv(u1), vect, 180.000);
 		}
 //		ob = which_obj_col(env);
-		return(get_col(env, vect));
-	}
+		return(get_col(env, vect, colo));
+	}*/
 	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
 	{
 		while (i < env->nb_lum)
@@ -172,12 +144,12 @@ t_color		get_col(t_env *env, t_v vect)
 	}
 	i = 0;
 	test = 1.00;
-	colo = get_black();
+	*colo = get_black();
 	while (i < env->nb_lum)
 	{
 		if ((tmp = get_lums(env, i, ob)) != NULL)
 		{
-			colo = add_color(colo, mult_color(*tmp, 0.500 / env->nb_lum));
+			*colo = add_color(*colo, mult_color(*tmp, 2.500 / env->nb_lum));
 			ft_bzero(tmp, sizeof(t_color));
 			ft_memdel((void **)&tmp);
 		}
@@ -186,10 +158,10 @@ t_color		get_col(t_env *env, t_v vect)
 			return (get_white());
 		i++;
 	}
-	colo = mult_color(colo, 3.500 / env->nb_lum);
+//	*colo = mult_color(*colo, 3.500 / env->nb_lum);
 //	colo = add_color(colo, mult_color(env->objs[ob].col, 0.1500));
 //	if (test > -0.7)
-	return (colo);
+	return (*colo);
 //	return (satur_col(colo, 1.000 / (0.0000 - vect_scal_prod(vect, vect_norm(vect_sous(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum))))));
 //	return (satur_col(colo, -1.00 * test));
 }

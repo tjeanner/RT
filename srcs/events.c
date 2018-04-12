@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/07 16:27:06 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/11 20:00:24 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,23 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 	}
 	else if (sym == SDLK_MINUS && env->curr_obj >= 0)
 	{
-	//	if (env->objs[env->curr_obj].type == 'c')
-	//		env->objs[env->curr_obj].radius /= 1.1;
-	//	else
-		env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0 || env->objs[env->curr_obj].type == 's') ? 10 : 0;
+		if (env->objs[env->curr_obj].type == 'c' && env->objs[env->curr_obj].radius > 0.0)
+			env->objs[env->curr_obj].radius -= 0.5;
+		else if (env->objs[env->curr_obj].type != 'c')
+			env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0 || env->objs[env->curr_obj].type == 's') ? 10 : 0;
+		ft_putnbr(env->objs[env->curr_obj].radius);
+		ft_putstr(", ");
 	}
 	else if (sym == SDLK_MINUS && env->curr_obj == -2)
 		env->lums[env->curr_lum].coef /= (env->lums[env->curr_lum].coef > 0) ? 1.1000000 : 10;
 	else if (sym == SDLK_EQUALS && env->curr_obj >= 0)
 	{
-	//	if (env->objs[env->curr_obj].type == 'c')
-	//		env->objs[env->curr_obj].radius *= 1.1;
-	//	else
-		env->objs[env->curr_obj].radius += 10;
+		if (env->objs[env->curr_obj].type == 'c' && env->objs[env->curr_obj].radius < 89.5)
+			env->objs[env->curr_obj].radius += 0.5;
+		else if (env->objs[env->curr_obj].type != 'c')
+			env->objs[env->curr_obj].radius += 10;
+		ft_putnbr(env->objs[env->curr_obj].radius);
+		ft_putstr(", ");
 	}
 	else if (sym == SDLK_EQUALS && env->curr_obj == -2)
 		env->lums[env->curr_lum].coef *= 1.1000000;

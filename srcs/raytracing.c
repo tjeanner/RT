@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/11 19:20:26 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/12 08:03:02 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,33 @@ int			init_ray(t_env *env, double x, double y)
 				get_vect_norm(env->cams[env->curr_cam].v2cam)))));
 	env->init_rays.pos = env->cams[env->curr_cam].pos_cam;
 	return (1);
+}
+
+t_v			get_norm(t_obj obj, t_ray init_rays, t_v pos_col)
+{
+	double	res;
+	t_v		vect;
+
+	if (obj.type == 's' || obj.type == 'p')
+		vect = (obj.type == 'p') ? obj.norm : vect_sous(pos_col, obj.o);
+	else if (obj.type == 'c')
+	{
+		vect = vect_sous(init_rays.pos, obj.o);
+		res = vect_scal_prod(init_rays.dir, vect_mult(obj.norm, obj.dist)) +
+			vect_scal_prod(vect, obj.norm);
+		vect = vect_sous(vect_sous(pos_col, obj.o), vect_mult(obj.norm,
+					res * (1.0 + pow(tan(obj.radius * M_PI / 180.00), 2.0))));
+	}
+	else
+	{
+		vect = vect_norm(obj.norm);
+		res = ((double)((vect.x * (pos_col.x - obj.o.x) +
+			vect.y * (pos_col.y - obj.o.y) +
+		vect.z * (pos_col.z - obj.o.z)) / vect_scal_prod(vect, vect)));
+		vect = vect_add(obj.o, vect_mult(vect, res));
+		vect = vect_sous(pos_col, vect);
+	}
+	return ((vect = vect_norm(vect)));
 }
 
 int			which_obj_col(t_env *env)
@@ -69,7 +96,7 @@ void		rays(t_env *env)
 		while ((i = 0) == 0 && x < WIN_X &&
 				init_ray(env, x + alias_coef / 2, y + alias_coef / 2))
 		{
-			col = get_col(env, env->init_rays.dir);
+			col = get_col(env, env->init_rays.dir, &col);
 			((int *)env->surf->pixels)[x + y * env->surf->w] = col.color;
 			while (alias_coef > 1 && ++i < alias_coef * alias_coef)
 				if (x + i % alias_coef < WIN_X && y + i / alias_coef < WIN_Y)
