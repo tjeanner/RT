@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 03:22:07 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 05:12:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,7 @@ int			            brackets(char *str, int len);
 */
 void					malloc_env(t_env *env);
 int						putlineerr(char *str, int i);
-
-/*
-**get_scene.c
-*/
 t_color					get_color(char *hexa);
-
-/*
-**fill_env.c
-*/
 void					set_struct(t_env *env, t_par *par);
 
 /*

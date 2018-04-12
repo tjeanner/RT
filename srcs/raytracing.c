@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/07 17:07:21 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/10 05:28:29 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,10 @@ void		rays(t_env *env)
 	int		y;
 	int		x;
 	int		alias_coef;
-	t_color	col;
+	t_color	*col;
 
+	if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))
+		return ;
 	env->cams[env->curr_cam].v3cam = vect_inv(vect_prod(
 		env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam));
 	y = 0;
@@ -71,16 +73,17 @@ void		rays(t_env *env)
 		while ((i = 0) == 0 && x < WIN_X &&
 				init_ray(env, x + alias_coef / 2, y + alias_coef / 2))
 		{
-			col = get_col(env, env->init_rays.dir);
-			((int *)env->surf->pixels)[x + y * env->surf->w] = col.color;
+			*col = get_col(env, env->init_rays.dir, col);
+			((int *)env->surf->pixels)[x + y * env->surf->w] = col->color;
 			while (alias_coef > 1 && ++i < alias_coef * alias_coef)
 				if (x + i % alias_coef < WIN_X && y + i / alias_coef < WIN_Y)
 					((int *)env->surf->pixels)[x + i % alias_coef +
-						(y + i / alias_coef) * env->surf->w] = col.color;
+						(y + i / alias_coef) * env->surf->w] = col->color;
 			x += alias_coef;
 		}
 		y += alias_coef;
 	}
 	set_filter(env);
 	SDL_UpdateWindowSurface(env->win);
+	free(col);
 }

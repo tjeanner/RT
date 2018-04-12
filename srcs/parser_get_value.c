@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 03:56:14 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/11 00:27:00 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,22 @@ t_v			j_get_vec(t_json *json)
 
 	cpt = 0;
 	nb = (t_v){0, 0, 0};
-	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "x") && ++cpt)
+	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "x") 
+		&& json->val.data.obj->val.type == TYPE_DOUBLE && ++cpt)
 	{
 		nb.x = json->val.data.obj->val.data.nb;
 		free(json->val.data.obj->key);
 		json->val.data.obj = json->val.data.obj->next;
 	}
-	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "y") && ++cpt)
+	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "y")
+		&& json->val.data.obj->val.type == TYPE_DOUBLE && ++cpt)
 	{
 		nb.y = json->val.data.obj->val.data.nb;
 		free(json->val.data.obj->key);
 		json->val.data.obj = json->val.data.obj->next;
 	}
-	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "z") && ++cpt)
+	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "z")
+		&& json->val.data.obj->val.type == TYPE_DOUBLE && ++cpt)
 	{
 		nb.z = json->val.data.obj->val.data.nb;
 		free(json->val.data.obj->key);
@@ -39,6 +42,8 @@ t_v			j_get_vec(t_json *json)
 	}
 	if (cpt == 3)
 		json = json->next;
+	else 
+		ft_put_err("invalid scene");
 	return (nb);
 }
 

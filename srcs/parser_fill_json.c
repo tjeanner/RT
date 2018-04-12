@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 01:49:37 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 03:55:25 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/10 23:48:01 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void		j_fill_scn(t_json *json, t_env *env)
 	{
 		free(env->filter);
 		env->filter = ft_strdup(json->val.data.str);
+//		free(json->val.data.str); //ARGH
 		json = json->next;
 	}
 }
@@ -32,7 +33,9 @@ void		j_fill_arr(t_json_arr *arr, t_par *par, t_env *env)
 {
 	j_fill_obj(&arr->val, par, env);
 	if (arr->next)
+	{
 		j_fill_arr(arr->next, par, env);
+	}
 }
 
 void		j_fill_obj(t_val *val, t_par *par, t_env *env)
@@ -55,19 +58,23 @@ void		j_fill_env(t_json *json, t_par *par, t_env *env)
 		if (!ft_strcmp(json->key, "objects") && json->val.type == TYPE_ARR)
 		{
 			j_get_obj(json->val.data.tab, &obj, par, env);
-			free(json->key);
+//			free(json->key);
 		}
 		else if (!ft_strcmp(json->key, "lights") && json->val.type == TYPE_ARR)
 		{
 			j_get_lights(json->val.data.tab, &lum, par, env);
-			free(json->key);
+//			free(json->key);
 		}
 		else if (!ft_strcmp(json->key, "cameras") && json->val.type == TYPE_ARR)
 		{
 			j_get_cam(json->val.data.tab, &cam, par, env);
-			free(json->key);
+//			free(json->key);
 		}
 		j_fill_obj(&json->val, par, env);
+		free(json->key);
+//		if (json->val.type == TYPE_STRING)
+//			free(json->val.data.str);
+		ft_memdel((void **)&json->val.data);
 		json = json->next;
 		j_fill_env(json, par, env);
 	}

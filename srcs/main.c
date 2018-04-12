@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/07 17:03:27 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/10 05:10:49 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,20 @@ t_v			get_norm(t_obj obj, t_ray init_rays, t_v pos_col)
 	return ((vect = vect_norm(vect)));
 }
 
-t_color		*get_lums(t_env *env, int lumcur, int ob)
+t_color		*get_lums(t_env *env, int lumcur, int ob, t_color *col)
 {
 	int		i;//index that run through all objects
 	double	res;//to store the value of the distance when we find the object
-	t_color	*col;
+//	t_color	*col;
 	t_v		tmp;
 	t_v		tmp2;
 	t_v		pos_col;
 	t_v		col_2_lum;
 	t_v		col_2_lum_norm;
 
-	if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))
-		return (NULL);
+//	
+//	if (!(col = (t_color *)malloc(sizeof(t_color) * 1)))
+//		return ();
 	i = -1;
 	pos_col = vect_add(env->init_rays.pos, vect_mult(env->init_rays.dir,
 				env->objs[ob].dist));//pos toucher
@@ -109,7 +110,7 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 	}
 //env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
 
-t_color		get_col(t_env *env, t_v vect)
+t_color		get_col(t_env *env, t_v vect, t_color *col)
 {
 	t_color	colo;
 	int		i;
@@ -144,7 +145,7 @@ t_color		get_col(t_env *env, t_v vect)
 			env->init_rays.dir = rotation(vect_inv(u1), vect, 180.000);
 		}
 //		ob = which_obj_col(env);
-		return(get_col(env, vect));
+		return(get_col(env, vect, col));
 	}
 	if (ob < 0 || env->objs[ob].dist <= 0.0)//there has been no collision with any object
 	{
@@ -162,11 +163,11 @@ t_color		get_col(t_env *env, t_v vect)
 	colo = get_black();
 	while (i < env->nb_lum)
 	{
-		if ((tmp = get_lums(env, i, ob)) != NULL)
+		if ((tmp = get_lums(env, i, ob, col)) != NULL)
 		{
 			colo = add_color(colo, mult_color(*tmp, 0.500 / env->nb_lum));
 			ft_bzero(tmp, sizeof(t_color));
-			ft_memdel((void **)&tmp);
+//			ft_memdel((void **)&tmp);
 		}
 		if (vect_scal_prod(vect, vect_norm(vect_sous(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum))) < -0.999995)
 //			test = vect_scal_prod(vect, vect_norm(vect_sous(env->cams[env->curr_cam].pos_cam, env->lums[i].pos_lum)));
