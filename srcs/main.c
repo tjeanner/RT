@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/07 17:03:27 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/11 19:34:43 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,15 @@ t_v			get_norm(t_obj obj, t_ray init_rays, t_v pos_col)
 	else if (obj.type == 't')
 	{
 		vect = vect_norm(obj.norm);
-	//	res = ((double)((vect.x * (init_rays.pos.x - obj.o.x) +
-	//					vect.y * (init_rays.pos.y - obj.o.y) +
-	//	vect.z * (init_rays.pos.z - obj.o.z)) / vect_scal_prod(vect, vect)));
-	//	vect = vect_add(obj.o, vect_mult(vect, res));//CC
-	//	vect = vect_sous(init_rays.pos, vect);//CCPC
-		res = vect_scal_prod(init_rays.dir, vect_mult(vect, obj.dist)) + vect_scal_prod(vect_sous(init_rays.pos, obj.o), vect);
-		vect = vect_norm(vect_sous(vect_sous(vect_mult(vect, res), obj.o), pos_col));
-		vect = vect_inv(vect);
+		res = ((double)((vect.x * (init_rays.pos.x - obj.o.x) +
+			vect.y * (init_rays.pos.y - obj.o.y) +
+		vect.z * (init_rays.pos.z - obj.o.z)) / vect_scal_prod(vect, vect)));
+		vect = vect_add(obj.o, vect_mult(vect, res));//CC
+		vect = vect_sous(init_rays.pos, vect);//CCPC
+	//	res = vect_scal_prod(init_rays.dir, vect_mult(vect, obj.dist)) + vect_scal_prod(vect_sous(init_rays.pos, obj.o), vect);
+	//	vect = vect_norm(vect_sous(vect_sous(vect_mult(vect, res), obj.o), pos_col));
+//		vect = vect_norm(vect_sous(vect_mult(vect, res), vect_sous(obj.o, pos_col)));
+	//	vect = vect_inv(vect);
 	}
 	else
 	{
@@ -68,7 +69,14 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 				env->objs[ob].dist));//pos toucher
 	col_2_lum = vect_sous(env->lums[lumcur].pos_lum, pos_col);
 	col_2_lum_norm = vect_norm(col_2_lum);
+//	pos_col = get_norm(env->objs[ob], env->init_rays, pos_col);
+//////	pos_col = vect_norm(pos_col);
 	tmp = vect_mult(get_norm(env->objs[ob], env->init_rays, pos_col), 0.000100);
+//	col->c.r = 255 * fabs(pos_col.x);
+//	col->c.g = 255 * fabs(pos_col.y);
+//	col->c.b = 255 * fabs(pos_col.z);
+//	col->c.a = 0;
+//	return (col);
 	tmp = (env->objs[ob].type == 'p' && vect_scal_prod(env->objs[ob].norm, env->init_rays.dir) > 0.0) ? vect_inv(tmp): tmp;
 	pos_col = vect_add(pos_col, tmp);
 //	col_2_lum = vect_sous(env->lums[lumcur].pos_lum, pos_col);
@@ -105,6 +113,10 @@ t_color		*get_lums(t_env *env, int lumcur, int ob)
 //	col->c.g = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.g * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.g * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.g * res);
 //	col->c.b = fmin(255.0, fmax(0.0, env->lums[lumcur].col.c.b * fmin(1.0, ((1.0 - env->portion) + env->objs[ob].col.c.b * env->portion) * pow(vect_scal_prod(tmp, pos_col), env->objs[ob].p))) * res + env->objs[ob].col.c.b * res);
 	*col = mult_color(env->objs[ob].col, res);
+//	col->c.r = 255 * fabs(pos_col.x);
+//	col->c.g = 255 * fabs(pos_col.y);
+//	col->c.b = 255 * fabs(pos_col.z);
+//	col->c.a = 0;
 	return (col);
 	}
 //env->portion:p, env->objs.p:n(rugosite), constante2test for ksy
@@ -120,7 +132,8 @@ t_color		get_col(t_env *env, t_v vect)
 	t_color	*tmp;
 
 	i = 0;
-	ob = which_obj_col(env);
+//	ob = which_obj_col(env);
+	return (env->objs[which_obj_col(env)].col);
 	if (env->objs[ob].radius < 0.0)
 	{
 		if (env->objs[ob].type == 's')
@@ -221,6 +234,8 @@ t_env		*init(char *filename)
 		env->state = 0;
 		env->constante2test = 1.0;
 		env->portion = 0.0003;
+		env->cams[env->curr_cam].v3cam = vect_inv(vect_prod(
+		env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam));
 		return (env);
 	}
 	ft_putendl("failed to init sdl");

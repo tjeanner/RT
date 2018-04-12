@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/07 17:07:21 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/11 19:20:26 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int			init_ray(t_env *env, double x, double y)
 {
-	env->cams[env->curr_cam].v3cam = vect_inv(vect_prod(//////////////////////
-	env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam));////////////////
 	env->init_rays.dir = vect_norm(vect_add(vect_mult(
 	env->cams[env->curr_cam].vcam, DIST), vect_add(vect_mult(
 	env->cams[env->curr_cam].v3cam, (x - WIN_X / 2.0) /
