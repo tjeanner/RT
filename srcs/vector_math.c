@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 18:20:50 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/05 14:41:52 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/15 14:09:20 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@ double		get_vect_norm(t_v a)
 {
 	double	n;
 
-	n = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+	n = sqrt(vect_scal(a, a));
 	return (n);
 }
 
 t_v			vect_norm(t_v a)
 {
-	double	n;
 	t_v		b;
 
-	n = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-	b = vect_div(a, n);
+	b = vect_div(a, get_vect_norm(a));
 	return (b);
 }
 
@@ -43,10 +41,12 @@ t_v			vect_mult(t_v a, double n)
 t_v			vect_div(t_v a, double n)
 {
 	t_v		b;
+	double	o;
 
-	b.x = a.x / n;
-	b.y = a.y / n;
-	b.z = a.z / n;
+	o = 1.000000 / n;
+	b.x = a.x * o;
+	b.y = a.y * o;
+	b.z = a.z * o;
 	return (b);
 }
 
@@ -80,7 +80,7 @@ t_v			vect_sous(t_v a, t_v b)
 	return (c);
 }
 
-double		vect_scal_prod(t_v a, t_v b)
+double		vect_scal(t_v a, t_v b)
 {
 	double	n;
 

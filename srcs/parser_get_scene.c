@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 23:26:31 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:58:36 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 				lum->col = j_get_color(tab->val.data.obj);
 			else if (!ft_strcmp(tab->val.data.obj->key, "pos")
 				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				lum->pos_lum = j_get_vec(tab->val.data.obj);
+				lum->pos = j_get_vec(tab->val.data.obj);
 			else
 				ft_put_err("invalid light");
 			free(tab->val.data.obj->key);
@@ -69,7 +69,7 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 		}
 		if (j_is_valid_lum(lum))
 		{
-			lum->coef = 0.5;
+	//		lum->coef = 0.5;
 			ft_lstadd(&par->lst_lum, ft_lstnew(lum, sizeof(t_lum)));
 			env->nb_lum++;
 		}
@@ -86,7 +86,7 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 		{
 			if (!ft_strcmp(tab->val.data.obj->key, "pos")
 				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				cam->pos_cam = j_get_vec(tab->val.data.obj);
+				cam->pos = j_get_vec(tab->val.data.obj);
 			else if (!ft_strcmp(tab->val.data.obj->key, "v")
 				&& tab->val.data.obj->val.type == TYPE_OBJ)
 				cam->vcam = j_get_vec(tab->val.data.obj);

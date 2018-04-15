@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 04:25:24 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:58:25 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static void	j_print_cam(t_env *env, int i, int fd)
 {
 	ft_putstr_fd("{\"pos\":{\"x\":", fd);
-	ft_putfloat_fd(env->cams[i].pos_cam.x, fd);
+	ft_putfloat_fd(env->cams[i].pos.x, fd);
 	ft_putstr_fd(",\"y\":", fd);
-	ft_putfloat_fd(env->cams[i].pos_cam.y, fd);
+	ft_putfloat_fd(env->cams[i].pos.y, fd);
 	ft_putstr_fd(",\"z\":", fd);
-	ft_putfloat_fd(env->cams[i].pos_cam.z, fd);
+	ft_putfloat_fd(env->cams[i].pos.z, fd);
 	ft_putstr_fd("},\"v\":{\"x\":", fd);
 	ft_putfloat_fd(env->cams[i].vcam.x, fd);
 	ft_putstr_fd(",\"y\":", fd);
@@ -48,11 +48,11 @@ static void	j_print_lum(t_env *env, int i, int fd)
 		ft_putchar_fd('0', fd);
 	ft_putnbrbase_fd(env->lums[i].col.c.b, 16, fd);
 	ft_putstr_fd("\",\"pos\":{\"x\":", fd);
-	ft_putfloat_fd(env->lums[i].pos_lum.x, fd);
+	ft_putfloat_fd(env->lums[i].pos.x, fd);
 	ft_putstr_fd(",\"y\":", fd);
-	ft_putfloat_fd(env->lums[i].pos_lum.y, fd);
+	ft_putfloat_fd(env->lums[i].pos.y, fd);
 	ft_putstr_fd(",\"z\":", fd);
-	ft_putfloat_fd(env->lums[i].pos_lum.z, fd);
+	ft_putfloat_fd(env->lums[i].pos.z, fd);
 	ft_putstr_fd("}}", fd);
 }
 
