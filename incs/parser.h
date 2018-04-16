@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 05:12:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/14 09:28:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,34 +25,34 @@ typedef struct s_json_arr   t_json_arr;
 
 enum
 {
-    TYPE_STRING, TYPE_DOUBLE, TYPE_OBJ, TYPE_ARR
+	TYPE_STRING, TYPE_DOUBLE, TYPE_OBJ, TYPE_ARR
 };
 
 typedef union			    u_data
 {
-    char                    *str;
-    float                   nb;
-    t_json                  *obj;
-    t_json_arr              *tab;
+	char                    *str;
+	float                   nb;
+	t_json                  *obj;
+	t_json_arr              *tab;
 }                           t_data;
 
 typedef struct              s_val
 {   
-    int                     type;
-    t_data                  data;
+	int                     type;
+	t_data                  data;
 }                           t_val;
 
 typedef struct              s_json
 {       
-    char                    *key;
-    t_val                   val;
-    t_json                  *next;
+	char                    *key;
+	t_val                   val;
+	t_json                  *next;
 }                           t_json;
-        
+		
 typedef struct              s_json_arr
 {       
-    t_val                   val;
-    t_json_arr              *next;              
+	t_val                   val;
+	t_json_arr              *next;              
 }                           t_json_arr;
 
 /*
@@ -72,7 +72,7 @@ void                    j_fill_obj(t_val *val, t_par *par, t_env *env);
 **parse_function.c
 */
 char                    *parse_str(char **str);
-float                   parse_float(char **str);
+double                   parse_float(char **str);
 void                    skip_whitespaces(char **str);
 int			            init_json(t_json **json);
 
@@ -112,5 +112,10 @@ void					set_struct(t_env *env, t_par *par);
 */
 void					scene_generator(t_env *env);
 void					j_scene_generator(t_env *env);
+
+/*
+**parser_free.c
+*/
+void                    ft_parser_free(t_json *json);
 
 #endif

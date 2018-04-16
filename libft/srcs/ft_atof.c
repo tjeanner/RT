@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 01:24:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/13 02:21:22 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/14 02:35:37 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,5 @@ double		ft_atof(char *s)
 			j++;
 		}
 	}
-	printf("%f\n", res);
 	return (res);
 }
