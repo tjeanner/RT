@@ -228,5 +228,6 @@ int						get_dist_sphere(t_ray *init_rays, t_obj obj);
 void 					set_filter(t_env *env);
 
 void					ft_free4all(t_env *env, char *str);
+void					error_mgt(int status);
 
 #endif
