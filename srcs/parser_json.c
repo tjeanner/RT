@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/15 18:18:30 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/17 15:41:53 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,8 @@ void			j_init(t_env *env)
 	free(line);
 	j_fill_env(fjson, &par, env);
 //	ft_memdel((void **)&(env->json));
+	ft_parser_free(env->json);
+	free(env->json);
 	if (env->nb_cam == 0)
 		ft_put_err("invalid scene");
 	malloc_env(env);
