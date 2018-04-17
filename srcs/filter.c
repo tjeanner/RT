@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/04 03:46:11 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/13 05:25:45 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	motionblur_filter(t_env *env)
 {
 	(void)env;
 }
+
 void	bw_filter(t_env *env)
 {
 	size_t			i;

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 05:12:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/17 13:55:02 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void                    j_fill_obj(t_val *val, t_par *par, t_env *env);
 **parse_function.c
 */
 char                    *parse_str(char **str);
-float                   parse_float(char **str);
+double                   parse_float(char **str);
 void                    skip_whitespaces(char **str);
 int			            init_json(t_json **json);
 

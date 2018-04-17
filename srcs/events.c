@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/07 16:27:06 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/15 17:54:03 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,32 @@ static int		move_events(t_env *env, SDL_Event event)
 {
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_z)
 	{
-		env->portion *= (env->portion > 0.00001) ? 10.00 / 13.00 : 1.0;
+		env->portion -= 1;
 		ft_putstr(", portion:");
-		ft_putnbr(100 * env->portion);
+		ft_putnbr(env->portion);
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_x)
 	{
-		env->portion *= 13.00 / 10.00;
+		env->portion += 1;
 		ft_putstr(", portion:");
-		ft_putnbr(100 * env->portion);
+		ft_putnbr(env->portion);
 	}
-	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c)
-	{
-		env->constante2test -= 0.05;
-		ft_putstr(", ksy:");
-		ft_putnbr(100 * env->constante2test);
-	}
-	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v)
-	{
-		env->constante2test += 0.05;
-		ft_putstr(", ksy:");
-		ft_putnbr(100 * env->constante2test);
-	}
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c && env->amb_coef >= 0.020)
+		env->amb_coef -= 0.020;
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v && env->amb_coef <= 0.980)
+		env->amb_coef += 0.020;
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_n)
 	{
-		env->objs[env->curr_obj].p *= 11.00 / 10.00;
+		env->objs[env->curr_obj].k_diff *= 11.00 / 10.00;
 		ft_putstr(", rugos:");
-		ft_putnbr(100 * env->objs[env->curr_obj].p);
+		ft_putnbr(100 * env->objs[env->curr_obj].k_diff);
 	}
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_b)
 	{
-		env->objs[env->curr_obj].p *= (env->objs[env->curr_obj].p > 0.1)
+		env->objs[env->curr_obj].k_diff *= (env->objs[env->curr_obj].k_diff > 0.1)
 									? 10.00 / 11.00 : 1.0;
 		ft_putstr(", rugos:");
-		ft_putnbr(100 * env->objs[env->curr_obj].p);
+		ft_putnbr(100 * env->objs[env->curr_obj].k_diff);
 	}
 	else
 		return (0);
@@ -71,19 +63,23 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 	}
 	else if (sym == SDLK_MINUS && env->curr_obj >= 0)
 	{
-	//	if (env->objs[env->curr_obj].type == 'c')
-	//		env->objs[env->curr_obj].radius /= 1.1;
-	//	else
-		env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0 || env->objs[env->curr_obj].type == 's') ? 10 : 0;
+		if (env->objs[env->curr_obj].type == 'c' && env->objs[env->curr_obj].radius > 0.0)
+			env->objs[env->curr_obj].radius -= 0.5;
+		else if (env->objs[env->curr_obj].type != 'c')
+			env->objs[env->curr_obj].radius -= (env->objs[env->curr_obj].radius >= 0 || env->objs[env->curr_obj].type == 's') ? 10 : 0;
+		ft_putnbr(env->objs[env->curr_obj].radius);
+		ft_putstr(", ");
 	}
 	else if (sym == SDLK_MINUS && env->curr_obj == -2)
 		env->lums[env->curr_lum].coef /= (env->lums[env->curr_lum].coef > 0) ? 1.1000000 : 10;
 	else if (sym == SDLK_EQUALS && env->curr_obj >= 0)
 	{
-	//	if (env->objs[env->curr_obj].type == 'c')
-	//		env->objs[env->curr_obj].radius *= 1.1;
-	//	else
-		env->objs[env->curr_obj].radius += 10;
+		if (env->objs[env->curr_obj].type == 'c' && env->objs[env->curr_obj].radius < 89.5)
+			env->objs[env->curr_obj].radius += 0.5;
+		else if (env->objs[env->curr_obj].type != 'c')
+			env->objs[env->curr_obj].radius += 10;
+		ft_putnbr(env->objs[env->curr_obj].radius);
+		ft_putstr(", ");
 	}
 	else if (sym == SDLK_EQUALS && env->curr_obj == -2)
 		env->lums[env->curr_lum].coef *= 1.1000000;
@@ -129,17 +125,17 @@ int			events_special_move_cam(t_env *env, unsigned int sym, SDL_Event event)
 	{
 		if (env->curr_obj == -1 && (sym == SDLK_5 || sym == SDLK_6))
 		{
-			env->cams[env->curr_cam].pos_cam = rotation(env->cams[env->curr_cam].pos_cam, (t_v){0, 1, 0}, angle = (sym == SDLK_5) ? 1.0 : -1.0);
-			env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].pos_cam, -1.0);
+			env->cams[env->curr_cam].pos = rotation(env->cams[env->curr_cam].pos, (t_v){0, 1, 0}, angle = (sym == SDLK_5) ? 1.0 : -1.0);
+			env->cams[env->curr_cam].vcam = vect_mult(env->cams[env->curr_cam].pos, -1.0);
 			env->cams[env->curr_cam].vcam = vect_norm(env->cams[env->curr_cam].vcam);
-			env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam);
+			env->cams[env->curr_cam].v3cam = vect_inv(vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam));
 		}
 		else if (env->curr_obj >= 0 && (sym == SDLK_5 || sym == SDLK_6))
 		{
-			env->cams[env->curr_cam].pos_cam = vect_add(env->objs[env->curr_obj].o, rotation(vect_add(env->cams[env->curr_cam].pos_cam, vect_mult(env->objs[env->curr_obj].o, -1.0)), (t_v){0, 1, 0}, angle = (sym == SDLK_5) ? 1.0 : -1.0));
-			env->cams[env->curr_cam].vcam = vect_add(env->objs[env->curr_obj].o, vect_mult(env->cams[env->curr_cam].pos_cam, -1.0));
+			env->cams[env->curr_cam].pos = vect_add(env->objs[env->curr_obj].o, rotation(vect_add(env->cams[env->curr_cam].pos, vect_mult(env->objs[env->curr_obj].o, -1.0)), (t_v){0, 1, 0}, angle = (sym == SDLK_5) ? 1.0 : -1.0));
+			env->cams[env->curr_cam].vcam = vect_add(env->objs[env->curr_obj].o, vect_mult(env->cams[env->curr_cam].pos, -1.0));
 			env->cams[env->curr_cam].vcam = vect_norm(env->cams[env->curr_cam].vcam);
-			env->cams[env->curr_cam].v3cam = vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam);
+			env->cams[env->curr_cam].v3cam = vect_inv(vect_prod(env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v3cam));
 		}
 		else
 			return (0);

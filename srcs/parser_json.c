@@ -6,11 +6,13 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/17 10:35:50 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:18:30 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+void		destrucainitialiserquonveutaussiapresreload(t_env *env);
 
 t_json_arr		*parse_arr(char **str)
 {
@@ -135,5 +137,5 @@ void			j_init(t_env *env)
 		ft_put_err("invalid scene");
 	malloc_env(env);
 	set_struct(env, &par);
-	ft_parser_free(env->json);
+	destrucainitialiserquonveutaussiapresreload(env);
 }

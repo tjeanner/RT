@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/17 12:07:43 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/17 13:55:21 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 				lum->col = j_get_color(po);
 			else if (!ft_strcmp(po->key, "pos")
 				&& po->val.type == TYPE_OBJ)
-				lum->pos_lum = j_get_vec(po);
+				lum->pos = j_get_vec(po);
 			else
 				error_mgt(2);
 			po = po->next;
 		}
 		if (j_is_valid_lum(lum))
 		{
-			lum->coef = 0.5;
+	//		lum->coef = 0.5;
 			ft_lstadd(&par->lst_lum, ft_lstnew(lum, sizeof(t_lum)));
 			env->nb_lum++;
 		}
@@ -100,7 +100,7 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 		{
 			if (!ft_strcmp(po->key, "pos")
 				&& po->val.type == TYPE_OBJ)
-				cam->pos_cam = j_get_vec(po);
+				cam->pos = j_get_vec(po);
 			else if (!ft_strcmp(po->key, "v")
 				&& po->val.type == TYPE_OBJ)
 				cam->vcam = j_get_vec(po);

@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/10 23:37:16 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/04/17 13:55:43 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC =		main.c \
 			parser_valid_json.c \
 			filter.c \
 			raytracing.c \
+			error_mgt.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror
