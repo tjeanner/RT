@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 23:26:31 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/17 12:07:43 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,47 +25,56 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 	else if (!ft_strcmp(key, "pos") && type == TYPE_OBJ)
 		obj->o = j_get_vec(j_obj);
 	else
-		ft_put_err("invalid json");
+		error_mgt(1);
 }
 
 void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 {
-	while (tab)
+	t_json_arr	*p;
+	t_json		*po;
+
+	p = tab;
+	while (p)
 	{
+		po = p->val.data.obj;
 		ft_bzero(obj, sizeof(t_obj));
-		while (tab->val.data.obj)
+		while (po)
 		{
-			j_set_obj(tab->val.data.obj->key, tab->val.data.obj->val.type,
-					tab->val.data.obj, obj);
-			free(tab->val.data.obj->key);
-			tab->val.data.obj = tab->val.data.obj->next;
+			j_set_obj(po->key, po->val.type,
+					po, obj);
+			po = po->next;
 		}
 		if (j_is_valid_obj(obj))
 		{
 			ft_lstadd(&par->lst_obj, ft_lstnew(obj, sizeof(t_obj)));
 			env->nb_obj++;
 		}
-		tab = tab->next;
+		p = p->next;
 	}
 }
 
 void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 {
-	while (tab)
+	t_json_arr	*p;
+	t_json		*po;
+
+	p = tab;
+	while (p)
 	{
+		po = p->val.data.obj;
+//		printf(": %d\n", p->val.type);
 		ft_bzero(lum, sizeof(t_lum));
-		while (tab->val.data.obj)
+		while (po)
 		{
-			if (!ft_strcmp(tab->val.data.obj->key, "color")
-				&& tab->val.data.obj->val.type == TYPE_STRING)
-				lum->col = j_get_color(tab->val.data.obj);
-			else if (!ft_strcmp(tab->val.data.obj->key, "pos")
-				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				lum->pos_lum = j_get_vec(tab->val.data.obj);
+			if (!ft_strcmp(po->key, "color")
+				&& po->val.type == TYPE_STRING)
+				lum->col = j_get_color(po);
+			else if (!ft_strcmp(po->key, "pos")
+				&& po->val.type == TYPE_OBJ)
+				lum->pos_lum = j_get_vec(po);
 			else
-				ft_put_err("invalid light");
-			free(tab->val.data.obj->key);
-			tab->val.data.obj = tab->val.data.obj->next;
+				error_mgt(2);
+			po = po->next;
 		}
 		if (j_is_valid_lum(lum))
 		{
@@ -73,36 +82,40 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 			ft_lstadd(&par->lst_lum, ft_lstnew(lum, sizeof(t_lum)));
 			env->nb_lum++;
 		}
-		tab = tab->next;
+		p = p->next;
 	}
 }
 
 void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 {
-	while (tab)
+	t_json_arr	*p;
+	t_json		*po;
+
+	p = tab;
+	while (p)
 	{
+		po = p->val.data.obj;
 		ft_bzero(cam, sizeof(t_cam));
-		while (tab->val.data.obj)
+		while (po)
 		{
-			if (!ft_strcmp(tab->val.data.obj->key, "pos")
-				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				cam->pos_cam = j_get_vec(tab->val.data.obj);
-			else if (!ft_strcmp(tab->val.data.obj->key, "v")
-				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				cam->vcam = j_get_vec(tab->val.data.obj);
-			else if (!ft_strcmp(tab->val.data.obj->key, "v2")
-				&& tab->val.data.obj->val.type == TYPE_OBJ)
-				cam->v2cam = j_get_vec(tab->val.data.obj);
+			if (!ft_strcmp(po->key, "pos")
+				&& po->val.type == TYPE_OBJ)
+				cam->pos_cam = j_get_vec(po);
+			else if (!ft_strcmp(po->key, "v")
+				&& po->val.type == TYPE_OBJ)
+				cam->vcam = j_get_vec(po);
+			else if (!ft_strcmp(po->key, "v2")
+				&& po->val.type == TYPE_OBJ)
+				cam->v2cam = j_get_vec(po);
 			else
-				ft_put_err("invalid camera");
-			free(tab->val.data.obj->key);
-			tab->val.data.obj = tab->val.data.obj->next;
+				error_mgt(3);
+			po = po->next;
 		}
 		if (j_is_valid_cam(cam))
 		{
 			ft_lstadd(&par->lst_cam, ft_lstnew(cam, sizeof(t_cam)));
 			env->nb_cam++;
 		}
-		tab = tab->next;
+		p = p->next;
 	}
 }
