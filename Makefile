@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/15 04:06:08 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/04/17 12:03:22 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC =		main.c \
 			parser_free.c	\
 			filter.c \
 			raytracing.c \
+			error_mgt.c	\
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror

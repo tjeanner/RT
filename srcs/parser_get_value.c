@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/16 16:37:46 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/17 12:15:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,25 @@ t_v			j_get_vec(t_json *json)
 	o = p->val.data.obj;
 	cpt = 0;
 	nb = (t_v){0, 0, 0};
-	if (o && !ft_strcmp(o->key, "x") 
-		&& o->val.type == TYPE_DOUBLE && ++cpt)
+	if (o && !ft_strcmp(o->key, "x") && o->val.type == TYPE_DOUBLE && ++cpt)
 	{
 		nb.x = o->val.data.nb;
 		o = o->next;
 	}
-	if (o && !ft_strcmp(o->key, "y")
-		&& o->val.type == TYPE_DOUBLE && ++cpt)
+	if (o && !ft_strcmp(o->key, "y") && o->val.type == TYPE_DOUBLE && ++cpt)
 	{
 		nb.y = o->val.data.nb;
 		o = o->next;
 	}
-	if (o && !ft_strcmp(o->key, "z")
-		&& o->val.type == TYPE_DOUBLE && ++cpt)
+	if (o && !ft_strcmp(o->key, "z") && o->val.type == TYPE_DOUBLE && ++cpt)
 	{
 		nb.z = o->val.data.nb;
 		o = o->next;
 	}
 	if (cpt == 3)
 		p = p->next;
-//	else 
+	else 
+		error_mgt(4);
 //		ft_put_err("invalid scene");
 	return (nb);
 }
