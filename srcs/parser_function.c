@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 14:29:16 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 03:28:31 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/13 06:57:32 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ char		*parse_str(char **str)
 	return (tmp);
 }
 
-float		parse_float(char **str)
+double		parse_float(char **str)
 {
 	int		cpt;
-	float	nb;
+	double	nb;
 
 	cpt = 0;
 	nb = ft_atof(*str);
@@ -37,6 +37,7 @@ float		parse_float(char **str)
 			cpt++;
 		*str += 1;
 	}
+	skip_whitespaces(str);
 	return (nb);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 01:49:37 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 23:48:01 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/14 09:21:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void		j_fill_scn(t_json *json, t_env *env)
 	{
 		free(env->filter);
 		env->filter = ft_strdup(json->val.data.str);
-//		free(json->val.data.str); //ARGH
 		json = json->next;
 	}
 }
@@ -51,31 +50,26 @@ void		j_fill_env(t_json *json, t_par *par, t_env *env)
 	t_obj	obj;
 	t_lum	lum;
 	t_cam	cam;
+	t_json	*p;
 
-	if (json)
+	p = json;
+	if (p)
 	{
-		j_fill_scn(json, env);
-		if (!ft_strcmp(json->key, "objects") && json->val.type == TYPE_ARR)
+		j_fill_scn(p, env);
+		if (!ft_strcmp(p->key, "objects") && p->val.type == TYPE_ARR)
 		{
-			j_get_obj(json->val.data.tab, &obj, par, env);
-//			free(json->key);
+			j_get_obj(p->val.data.tab, &obj, par, env);
 		}
-		else if (!ft_strcmp(json->key, "lights") && json->val.type == TYPE_ARR)
+		else if (!ft_strcmp(p->key, "lights") && p->val.type == TYPE_ARR)
 		{
-			j_get_lights(json->val.data.tab, &lum, par, env);
-//			free(json->key);
+			j_get_lights(p->val.data.tab, &lum, par, env);
 		}
-		else if (!ft_strcmp(json->key, "cameras") && json->val.type == TYPE_ARR)
+		else if (!ft_strcmp(p->key, "cameras") && p->val.type == TYPE_ARR)
 		{
-			j_get_cam(json->val.data.tab, &cam, par, env);
-//			free(json->key);
+			j_get_cam(p->val.data.tab, &cam, par, env);
 		}
-		j_fill_obj(&json->val, par, env);
-		free(json->key);
-//		if (json->val.type == TYPE_STRING)
-//			free(json->val.data.str);
-		ft_memdel((void **)&json->val.data);
-		json = json->next;
-		j_fill_env(json, par, env);
+		j_fill_obj(&p->val, par, env);
+		p = p->next;
+		j_fill_env(p, par, env);
 	}
 }

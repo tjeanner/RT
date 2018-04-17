@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 09:58:18 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/10 03:31:18 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/15 14:42:38 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int			j_is_valid_obj(t_obj *obj)
 
 int			j_is_valid_cam(t_cam *cam)
 {
-	if (vect_scal_prod(cam->vcam, cam->v2cam))
+	if (vect_scal(cam->vcam, cam->v2cam))
 		return (0);
 	if (!get_vect_norm(cam->vcam) && !get_vect_norm(cam->v2cam))
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/10 04:55:27 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/15 18:05:44 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,16 @@
 # include <pthread.h>
 # include "parser.h"
 
-# define WIN_X 1920
-# define WIN_Y 1080
+# define WIN_X 1357
+# define WIN_Y 867
 //# define WIN_X 640
 //# define WIN_Y 480
-# define DIST ((int)WIN_X / tan(30 * M_PI / 180))
+# define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define FCTS "sptc"
 # define S "0123456789ABCDEF"
+# define TORAD M_PI / 180.000
+# define TODEG 180.000 / M_PI
 
 typedef union			u_color
 {
@@ -63,13 +65,14 @@ typedef struct			s_obj
 	t_v					norm;
 	t_color				col;
 	double				dist;
-	t_v					r;
-	float				p;
+	float				k_diff;
+	float				k_spec;
+	float				k_phong;
 }						t_obj;
 
 typedef struct			s_cam
 {
-	t_v					pos_cam;
+	t_v					pos;
 	t_v					vcam;
 	t_v					v2cam;
 	t_v					v3cam;	
@@ -77,15 +80,15 @@ typedef struct			s_cam
 
 typedef struct			s_lum
 {
-	t_v					pos_lum;
+	t_v					pos;
 	float				coef;
 	t_color				col;
 }						t_lum;
 
 typedef struct			s_ray
 {
-	double				v1;
-	double				v2;
+	double				d1;
+	double				d2;
 	t_v					pos;
 	t_v					dir;
 }						t_ray;
@@ -115,6 +118,8 @@ typedef struct			s_env
 	t_lum				*lums;
 	t_ray				init_rays;
 	int					flou;
+	float				amb_coef;
+	float				coefs_sum;
 	float				constante2test;
 	float				portion;
 	char				*file;
@@ -129,7 +134,6 @@ typedef struct			s_env
 void					rays(t_env *env);
 int						init_ray(t_env *env, double x, double y);
 int						which_obj_col(t_env *env);
-t_color					get_col(t_env *env, t_v vect, t_color *col);
 
 /*
 **vector_math.c
@@ -140,7 +144,7 @@ t_v						vect_mult(t_v a, double n);
 t_v						vect_div(t_v a, double n);
 t_v						vect_add(t_v a, t_v b);
 t_v						vect_sous(t_v a, t_v b);
-double					vect_scal_prod(t_v a, t_v b);
+double					vect_scal(t_v a, t_v b);
 t_v						vect_prod(t_v a, t_v b);
 t_v						vect_inv(t_v a);
 
@@ -171,6 +175,8 @@ void					ft_putfloat_fd(double nbr, int fd);
 void					rays(t_env *env);
 int						which_obj_col(t_env *env);
 int						init_ray(t_env *env, double x, double y);
+t_v						get_norm(t_obj obj, t_ray init_rays, t_v pos_col);
+t_color					get_col(t_env *env, t_v ray_dir, t_color *colsi);
 
 /*
 **events.c
@@ -221,5 +227,6 @@ int						get_dist_sphere(t_ray *init_rays, t_obj obj);
 void 					set_filter(t_env *env);
 
 void					ft_free4all(t_env *env, char *str);
+void					error_mgt(int status);
 
 #endif
