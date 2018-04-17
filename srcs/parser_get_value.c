@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/11 00:27:00 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/16 16:37:46 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,43 @@ t_v			j_get_vec(t_json *json)
 {
 	int		cpt;
 	t_v		nb;
+	t_json	*p;
+	t_json 	*o;
 
+	p = json;
+	o = p->val.data.obj;
 	cpt = 0;
 	nb = (t_v){0, 0, 0};
-	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "x") 
-		&& json->val.data.obj->val.type == TYPE_DOUBLE && ++cpt)
+	if (o && !ft_strcmp(o->key, "x") 
+		&& o->val.type == TYPE_DOUBLE && ++cpt)
 	{
-		nb.x = json->val.data.obj->val.data.nb;
-		free(json->val.data.obj->key);
-		json->val.data.obj = json->val.data.obj->next;
+		nb.x = o->val.data.nb;
+		o = o->next;
 	}
-	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "y")
-		&& json->val.data.obj->val.type == TYPE_DOUBLE && ++cpt)
+	if (o && !ft_strcmp(o->key, "y")
+		&& o->val.type == TYPE_DOUBLE && ++cpt)
 	{
-		nb.y = json->val.data.obj->val.data.nb;
-		free(json->val.data.obj->key);
-		json->val.data.obj = json->val.data.obj->next;
+		nb.y = o->val.data.nb;
+		o = o->next;
 	}
-	if (json->val.data.obj && !ft_strcmp(json->val.data.obj->key, "z")
-		&& json->val.data.obj->val.type == TYPE_DOUBLE && ++cpt)
+	if (o && !ft_strcmp(o->key, "z")
+		&& o->val.type == TYPE_DOUBLE && ++cpt)
 	{
-		nb.z = json->val.data.obj->val.data.nb;
-		free(json->val.data.obj->key);
-		json->val.data.obj = json->val.data.obj->next;
+		nb.z = o->val.data.nb;
+		o = o->next;
 	}
 	if (cpt == 3)
-		json = json->next;
-	else 
-		ft_put_err("invalid scene");
+		p = p->next;
+//	else 
+//		ft_put_err("invalid scene");
 	return (nb);
 }
 
 void		j_get_type(t_json *json, t_obj *obj)
 {
+	t_json	*p;
+
+	p = json;
 	if (!ft_strcmp(json->val.data.str, "plane")
 		|| !ft_strcmp(json->val.data.str, "sphere")
 		|| !ft_strcmp(json->val.data.str, "tube")
@@ -56,8 +60,7 @@ void		j_get_type(t_json *json, t_obj *obj)
 		obj->type = json->val.data.str[0];
 	else if (!ft_strcmp(json->val.data.str, "cylindre"))
 		obj->type = 't';
-	free(json->val.data.str);
-	json = json->next;
+	p = p->next;
 }
 
 t_color		get_color(char *hexa)
@@ -92,15 +95,22 @@ t_color		get_color(char *hexa)
 t_color		j_get_color(t_json *json)
 {
 	t_color col;
+	t_json	*p;
 
-	col = get_color(json->val.data.str);
-	free(json->val.data.str);
-	json = json->next;
+	p = json;
+	if (!ft_strcmp(json->val.data.str, "RANDOM"))
+		col = get_rand();
+	else
+		col = get_color(json->val.data.str);
+	p = p->next;
 	return (col);
 }
 
 void		j_get_radius(t_json *json, t_obj *obj)
 {
+	t_json	*p;
+
+	p = json;
 	obj->radius = json->val.data.nb;
-	json = json->next;
+	p = p->next;
 }
