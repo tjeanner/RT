@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 02:37:14 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/17 16:28:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 16:02:28 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void		ft_free_arr(t_json_arr *tab)
 	free(tab->val.data.obj);
 }
 
-void		ft_parser_free(t_json *json)
+void			ft_parser_free(t_json *json)
 {
 	if (json->next)
 	{

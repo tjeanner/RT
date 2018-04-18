@@ -6,21 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/13 05:25:45 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:18:21 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-void	stereo_filter(t_env *env)
-{
-	(void)env;
-}
-
-void	motionblur_filter(t_env *env)
-{
-	(void)env;
-}
 
 void	bw_filter(t_env *env)
 {
@@ -40,73 +30,6 @@ void	bw_filter(t_env *env)
 		data[i + 2] = moy;
 		i += 4;
 	}
-}
-
-void	sobel_filter(t_env *env)
-{
-	int	y;
-	int x;
-	int gx, gy, gn;
-	unsigned int *data;
-	unsigned int *tmp = NULL;
-
-	tmp = malloc(sizeof(unsigned int) * WIN_X * WIN_Y);
-	data = (unsigned int *)env->surf->pixels;
-	ft_bzero(tmp, sizeof(tmp));
-	y = 1;
-	while (y < WIN_Y - 1)
-	{
-		x = 1;
-		while (x < WIN_X - 1)
-		{
-			gx = ((data[(y - 1) * WIN_X + x + 1] - data[(y - 1) * WIN_X + x - 1]) + 3 
-					* (data[(y) * WIN_X + x + 1] - data[(y) * WIN_X + x - 1])
-					+ (data[(y + 1) * WIN_X + x + 1] - data[(y + 1) * WIN_X + x - 1]))
-				* 3;
-			gy = ((data[(y + 1) * WIN_X + x - 1] - data[(y - 1) * WIN_X + x - 1]) + 3 
-					* (data[(y + 1) * WIN_X + x] - data[(y - 1) * WIN_X + x])
-					+ (data[(y + 1) * WIN_X + x + 1] - data[(y - 1) * WIN_X + x + 1]))
-				* 3;
-			gn = (unsigned int)sqrt(gx * gx + gy * gy);
-			tmp[(y * WIN_X) + x] = gn;
-			x++;
-		}
-		y++;
-	}
-	y = 1;
-	while (y < WIN_Y)
-	{
-		x = 1;
-		while (x < WIN_X)
-		{
-			if (tmp[(y * WIN_X) + x] > 1)
-				data[(y * WIN_X) + x] =  get_black().color;
-//			data[(y * WIN_X) + x] = tmp[(y * WIN_X) + x];
-			x++;
-		}
-		y++;
-	}
-}
-
-void	cartoon_filter(t_env *env)
-{
-	size_t			i;
-	unsigned int	max;
-	unsigned char 	*data;
-	int				pas;
-
-	data = (unsigned char *)env->surf->pixels;
-	max = ((WIN_X * WIN_Y) * 4);
-	i = 0;
-	if (env->seuil <= 4 || env->seuil >= 15)
-		env->seuil = 8;
-	pas = 255 / env->seuil;
-	while (i < max)
-	{
-		data[i] = (int)(data[i] / pas) * pas;
-		i++;
-	}
-//	sobel_filter(env);
 }
 
 void	sepia_filter(t_env *env)

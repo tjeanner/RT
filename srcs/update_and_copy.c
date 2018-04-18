@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update_and_copy.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/15 17:54:58 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:53:34 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		update_and_copy_r(t_env *env, int obj)
 	i = 0;
 	j = 0;
 	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->nb_obj - 1))))
-		exit (0);
+		error_mgt(0);
 	while (i < env->nb_obj)
 	{
 		if (i != obj)
@@ -43,25 +43,15 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type)
 	t_obj	*new;
 	int		i;
 
-	i = 0;
+	i = -1;
 	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->nb_obj + 1))))
-		exit (0);
-	while (i < env->nb_obj)
-	{
+		error_mgt(0);
+	while (++i < env->nb_obj)
 		ft_memcpy((void *)&new[i], (void *)&env->objs[i], sizeof(t_obj));
-		i++;
-	}
-	if (type == SDLK_1)
-		new[i].type = 's';
-	else if (type == SDLK_2)
-		new[i].type = 'c';
-	else if (type == SDLK_3)
-		new[i].type = 'p';
-	else
-		new[i].type = 't';
+	new[i].type = FCTS[type - 49];
 	new[i].o = vect_add(vect_add(env->cams[env->curr_cam].pos,
-						vect_mult(env->cams[env->curr_cam].vcam, 4000)),
-						vect_mult(env->cams[env->curr_cam].v2cam, -300));
+		vect_mult(env->cams[env->curr_cam].vcam, 4000)),
+		vect_mult(env->cams[env->curr_cam].v2cam, -300));
 	new[i].norm = env->cams[env->curr_cam].v2cam;
 	new[i].radius = 150;
 	set_white(&new[i].col);

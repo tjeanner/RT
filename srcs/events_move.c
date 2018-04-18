@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 07:30:16 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/15 18:23:19 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:35:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	lum_move(t_env *env, unsigned int sym)
 	return (1);
 }
 
-void	mouse_move(t_env *env, SDL_Event event, t_cam *cam, t_obj *obj)
+void		mouse_move(t_env *env, SDL_Event event, t_cam *cam, t_obj *obj)
 {
 	if (env->curr_obj == -1)
 		cam->pos = vect_add(cam->pos,

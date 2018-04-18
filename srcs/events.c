@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/15 17:54:03 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:36:55 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 	return (1);
 }
 
-static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
+static int		events_random(t_env *env, unsigned int sym, SDL_Event event)
 {
 	if ((event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
 		|| event.type == SDL_QUIT)
@@ -117,7 +117,7 @@ static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
 	return (1);
 }
 
-int			events_special_move_cam(t_env *env, unsigned int sym, SDL_Event event)
+int				events_special_move_cam(t_env *env, unsigned int sym, SDL_Event event)
 {
 	int		angle;
 
@@ -144,7 +144,7 @@ int			events_special_move_cam(t_env *env, unsigned int sym, SDL_Event event)
 	return (0);
 }
 
-int			events(t_env *env)
+int				events(t_env *env)
 {
 	SDL_Event		event;
 	unsigned int	sym;

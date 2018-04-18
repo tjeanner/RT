@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 14:29:16 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/13 06:57:32 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 14:06:39 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void		skip_whitespaces(char **str)
 int			init_json(t_json **json)
 {
 	if (!(*json = malloc(sizeof(t_json) * 1)))
-		ft_put_err("Malloc error");
+		error_mgt(0);
 	(*json)->next = NULL;
 	(*json)->key = NULL;
 	return (0);

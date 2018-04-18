@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/18 13:59:19 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 16:27:02 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,8 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 				error_mgt(3);
 			po = po->next;
 		}
-		if (j_is_valid_cam(cam))
-		{
+		if (j_is_valid_cam(cam) && ++env->nb_cam)
 			ft_lstadd(&par->lst_cam, ft_lstnew(cam, sizeof(t_cam)));
-			env->nb_cam++;
-		}
 		p = p->next;
 	}
 }
