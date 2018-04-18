@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/17 12:15:13 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 13:59:00 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,23 @@ t_v			j_get_vec(t_json *json)
 		p = p->next;
 	else 
 		error_mgt(4);
-//		ft_put_err("invalid scene");
 	return (nb);
+}
+
+void		j_get_rot(t_json *json, t_obj *obj)
+{
+	t_json	*p;
+	double	th;
+
+	p = json->val.data.obj;
+	(void)obj;
+	if (!ft_strcmp(p->key, "th") && p->val.type == TYPE_DOUBLE)
+		th = p->val.data.nb;
+	else
+		return ;
+	p = p->next;
+	if (!ft_strcmp(p->key, "axe") && p->val.type == TYPE_OBJ)
+		obj->norm = rotation(obj->norm, vect_norm(j_get_vec(p)), th);
 }
 
 void		j_get_type(t_json *json, t_obj *obj)
