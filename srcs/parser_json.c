@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/15 18:18:30 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 14:17:33 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_val			parse_obj(char **str)
 		val.data.tab = parse_arr(str);
 	}
 	else
-		ft_put_err("invalid json");
+		error_mgt(2);
 	skip_whitespaces(str);
 	return (val);
 }
@@ -94,13 +94,13 @@ t_json			*parse_json(char **str)
 			*str += 1;
 			skip_whitespaces(str);
 			if (**str == ',' || **str == '}')
-				ft_put_err("invalid json");
+				error_mgt(2);
 			json->val = parse_obj(str);
 		}
 		if (**str == ',' && ++cpt)
 			json->next = parse_json(str);
 		if (!cpt)
-			ft_put_err("invalid json");
+			error_mgt(2);
 	}
 	return ((!json->key) ? NULL : json);
 }
@@ -120,21 +120,21 @@ void			j_init(t_env *env)
 	env->name = ft_strdup("RT");
 	env->filter = ft_strdup("NONE");
 	if (!(fd = open(env->file, O_RDONLY)))
-		ft_put_err("usage : ./rtv1 <scene.json>");
+		error_mgt(6);
 	tmp = ft_strnew(0);
 	while ((ret = get_next_line(fd, &line)) > 0)
 		tmp = ft_strjoinfree(tmp, line, 'B');
 	free(line);
 	line = tmp;
 	if (!brackets(tmp, ft_strlen(tmp)))
-		ft_put_err("invalid json");
+		error_mgt(2);
 	env->json = parse_json(&tmp);
 	fjson = env->json;
 	free(line);
 	j_fill_env(fjson, &par, env);
 //	ft_memdel((void **)&(env->json));
 	if (env->nb_cam == 0)
-		ft_put_err("invalid scene");
+		error_mgt(9);
 	malloc_env(env);
 	set_struct(env, &par);
 	destrucainitialiserquonveutaussiapresreload(env);

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/15 18:05:44 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 14:18:16 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,6 @@ int						get_dist_sphere(t_ray *init_rays, t_obj obj);
 */
 void 					set_filter(t_env *env);
 
-void					ft_free4all(t_env *env, char *str);
 void					error_mgt(int status);
 
 #endif

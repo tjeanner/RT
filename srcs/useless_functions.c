@@ -6,18 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/06 02:46:45 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 14:18:02 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-void	ft_free4all(t_env *env, char *str)
-{
-	if (env->json)
-		free(env->json);
-	ft_put_err(str);
-}
 
 void	ft_putfloat_fd(double nbr, int fd)
 {

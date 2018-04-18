@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/15 18:21:33 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 14:12:15 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,19 +187,13 @@ t_env		*init(char *filename)
 		env->file = ft_strdup(filename);
 		j_init(env);
 		if (!(env->win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
-						SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
-						{
-							ft_putendl("error");
-							return (NULL);
-						}
+			SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
+			error_mgt(8);
 		if (!(env->surf = SDL_GetWindowSurface(env->win)))
-		{
-			ft_putendl("error");
-			return (NULL);
-		}
+			error_mgt(8);
 		return (env);
 	}
-	ft_putendl("failed to init sdl");
+	error_mgt(8);
 	return (NULL);
 }
 
@@ -241,10 +235,9 @@ int			main(int ac, char **av)
 	t_env		*env;
 
 	if (ac != 2 || !ft_strstr(av[1], ".json"))
-		ft_put_err("usage : ./rtv1 <scene.json>");
+		error_mgt(6);
 	if (!(env = init(av[1])))
-		ft_put_err("error in init");
-//	init_scene(env);
+		error_mgt(6);
 	rays(env);
 	while (!env->state)
 	{
@@ -264,8 +257,6 @@ int			main(int ac, char **av)
 	}*/
 	SDL_DestroyWindow(env->win);
 	free(env);
-//	(void)i;
-//	(void)env;
 	SDL_Quit();
 	return (1);
 }
