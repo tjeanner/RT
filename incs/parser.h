@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/17 13:55:02 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 13:38:24 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_v		                j_get_vec(t_json *json);
 void	            	j_get_type(t_json *json, t_obj *obj);
 t_color	            	j_get_color(t_json *json);
 void            		j_get_radius(t_json *json, t_obj *obj);
+void					j_get_rot(t_json *json, t_obj *obj);
 
 /*
 **get_scene_json.c
