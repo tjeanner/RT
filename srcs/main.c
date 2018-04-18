@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/18 14:12:15 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 17:03:27 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,14 +217,10 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 	env->coefs_sum = 0.0;
 	i = -1;
 	while (++i < env->nb_obj)
-	{
 		env->objs[i].k_diff = 1.0;
-	}
 	i = -1;
 	while (++i < env->nb_lum)
-	{
 		env->lums[i].coef = 0.4;
-	}
 	i = -1;
 	while (++i < env->nb_lum)
 		env->coefs_sum += env->lums[i].coef;

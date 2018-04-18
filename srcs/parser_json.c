@@ -6,13 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/18 14:17:33 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 16:46:49 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-void		destrucainitialiserquonveutaussiapresreload(t_env *env);
 
 t_json_arr		*parse_arr(char **str)
 {
@@ -103,39 +101,4 @@ t_json			*parse_json(char **str)
 			error_mgt(2);
 	}
 	return ((!json->key) ? NULL : json);
-}
-
-void			j_init(t_env *env)
-{
-	int		ret;
-	int		fd;
-	char	*line;
-	char	*tmp;
-	t_par	par;
-	t_json	*fjson;
-
-	env->nb_obj = 0;
-	env->nb_cam = 0;
-	env->nb_lum = 0;
-	env->name = ft_strdup("RT");
-	env->filter = ft_strdup("NONE");
-	if (!(fd = open(env->file, O_RDONLY)))
-		error_mgt(6);
-	tmp = ft_strnew(0);
-	while ((ret = get_next_line(fd, &line)) > 0)
-		tmp = ft_strjoinfree(tmp, line, 'B');
-	free(line);
-	line = tmp;
-	if (!brackets(tmp, ft_strlen(tmp)))
-		error_mgt(2);
-	env->json = parse_json(&tmp);
-	fjson = env->json;
-	free(line);
-	j_fill_env(fjson, &par, env);
-//	ft_memdel((void **)&(env->json));
-	if (env->nb_cam == 0)
-		error_mgt(9);
-	malloc_env(env);
-	set_struct(env, &par);
-	destrucainitialiserquonveutaussiapresreload(env);
 }

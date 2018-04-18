@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/17 13:55:43 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/04/18 16:46:33 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,11 +25,13 @@ SRC =		main.c \
 			update_and_copy.c \
 			generator_json.c \
 			parser_json.c \
+			parser_init.c \
 			parser.c \
 			parser_fill_json.c \
 			parser_function.c \
 			parser_get_scene.c \
 			parser_get_value.c \
+			parser_get_value2.c \
 			parser_valid_json.c \
 			parser_free.c	\
 			filter.c \

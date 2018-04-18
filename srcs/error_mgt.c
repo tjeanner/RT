@@ -6,13 +6,13 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/17 12:02:56 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/18 14:13:51 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 16:05:43 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-void		error_mgt(int status)
+void		*error_mgt(int status)
 {
 	if (status == 0)
 		ft_put_err("malloc error");
@@ -36,4 +36,5 @@ void		error_mgt(int status)
 		ft_put_err("invalid scene");
 	else
 		ft_put_err("error");
+	return (NULL);
 }
