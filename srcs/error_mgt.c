@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/17 12:02:56 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/17 12:09:55 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 12:58:39 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void		error_mgt(int status)
 		ft_put_err("invalid camera");
 	else if (status == 4)
 		ft_put_err("invalid vector");
+	else if (status == 5)
+		ft_put_err("invalid object");
 	else
 		ft_put_err("error");
 }
