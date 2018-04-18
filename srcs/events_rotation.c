@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 06:35:34 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/02 00:01:28 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:35:05 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void		cam_rotation_z(t_env *env, float angle)
 						get_vect_norm(env->cams[env->curr_cam].v3cam));
 }
 
-int			events_rotation(t_env *env, unsigned int sym, t_v *norm)
+static int		events_rotation2(t_env *env, unsigned int sym, t_v *norm)
 {
 	if (sym == SDLK_i && env->curr_obj == -1)
 		cam_rotation_x(env, 1.0);
@@ -66,6 +66,15 @@ int			events_rotation(t_env *env, unsigned int sym, t_v *norm)
 		cam_rotation_y(env, -1.0);
 	else if (sym == SDLK_j && env->curr_obj >= -1)
 		*norm = rotation(*norm, (t_v){0, 1, 0}, 1);
+	else
+		return (0);
+	return (1);
+}
+
+int				events_rotation(t_env *env, unsigned int sym, t_v *norm)
+{
+	if (events_rotation2(env, sym, norm))
+		;
 	else if (sym == SDLK_l && env->curr_obj == -1)
 		cam_rotation_y(env, 1.0);
 	else if (sym == SDLK_l && env->curr_obj >= -1)

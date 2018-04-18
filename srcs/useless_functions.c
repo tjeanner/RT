@@ -6,11 +6,57 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/18 14:18:02 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:16:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+/*
+void	sobel_filter(t_env *env)
+{
+	int	y;
+	int x;
+	int gx, gy, gn;
+	unsigned int *data;
+	unsigned int *tmp = NULL;
+
+	tmp = malloc(sizeof(unsigned int) * WIN_X * WIN_Y);
+	data = (unsigned int *)env->surf->pixels;
+	ft_bzero(tmp, sizeof(tmp));
+	y = 1;
+	while (y < WIN_Y - 1)
+	{
+		x = 1;
+		while (x < WIN_X - 1)
+		{
+			gx = ((data[(y - 1) * WIN_X + x + 1] - data[(y - 1) * WIN_X + x - 1]) + 3 
+					* (data[(y) * WIN_X + x + 1] - data[(y) * WIN_X + x - 1])
+					+ (data[(y + 1) * WIN_X + x + 1] - data[(y + 1) * WIN_X + x - 1]))
+				* 3;
+			gy = ((data[(y + 1) * WIN_X + x - 1] - data[(y - 1) * WIN_X + x - 1]) + 3 
+					* (data[(y + 1) * WIN_X + x] - data[(y - 1) * WIN_X + x])
+					+ (data[(y + 1) * WIN_X + x + 1] - data[(y - 1) * WIN_X + x + 1]))
+				* 3;
+			gn = (unsigned int)sqrt(gx * gx + gy * gy);
+			tmp[(y * WIN_X) + x] = gn;
+			x++;
+		}
+		y++;
+	}
+	y = 1;
+	while (y < WIN_Y)
+	{
+		x = 1;
+		while (x < WIN_X)
+		{
+			if (tmp[(y * WIN_X) + x] > 1)
+				data[(y * WIN_X) + x] =  get_black().color;
+			x++;
+		}
+		y++;
+	}
+}*/
 
 void	ft_putfloat_fd(double nbr, int fd)
 {

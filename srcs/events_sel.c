@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 06:29:51 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/03/13 14:25:26 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:21:48 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,18 @@ int		events_sel(t_env *env, SDL_Event event, unsigned int sym)
 							? env->curr_lum + 1 : 0;
 		else if (sym == SDLK_NUMLOCKCLEAR)
 			env->curr_obj = (env->curr_obj < 0) ? env->curr_obj + 1 : -2;
-		else 
+		else
 			return (0);
 		return (1);
 	}
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+	else if (event.type == SDL_MOUSEBUTTONDOWN
+		&& event.button.button == SDL_BUTTON_LEFT)
 	{
 		init_ray(env, event.button.x, event.button.y);
 		env->curr_obj = which_obj_col(env);
 		return (0);
 	}
-	else 
+	else
 		return (0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/18 13:38:24 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:11:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void                    j_fill_obj(t_val *val, t_par *par, t_env *env);
 **parse_function.c
 */
 char                    *parse_str(char **str);
-double                   parse_float(char **str);
+double                  parse_float(char **str);
 void                    skip_whitespaces(char **str);
 int			            init_json(t_json **json);
 
@@ -109,9 +109,17 @@ t_color					get_color(char *hexa);
 void					set_struct(t_env *env, t_par *par);
 
 /*
-**generator.c
+**generator_json.c
 */
-void					scene_generator(t_env *env);
+void					j_print_obj(t_env *env, int i, int fd);
+void					j_print_cam(t_env *env, int i, int fd);
+void					j_print_lum(t_env *env, int i, int fd);
+void					j_print_d_obj(t_env *env, int i, int fd);
+
+/*
+**generator_json2.c
+*/
+int						j_print_env(t_env *env, int i);
 void					j_scene_generator(t_env *env);
 
 /*
