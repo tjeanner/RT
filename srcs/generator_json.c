@@ -6,13 +6,13 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/15 17:58:25 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:05:49 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-static void	j_print_cam(t_env *env, int i, int fd)
+void	j_print_cam(t_env *env, int i, int fd)
 {
 	ft_putstr_fd("{\"pos\":{\"x\":", fd);
 	ft_putfloat_fd(env->cams[i].pos.x, fd);
@@ -35,7 +35,7 @@ static void	j_print_cam(t_env *env, int i, int fd)
 	ft_putstr_fd("}}", fd);
 }
 
-static void	j_print_lum(t_env *env, int i, int fd)
+void	j_print_lum(t_env *env, int i, int fd)
 {
 	ft_putstr_fd("{\"color\":\"", fd);
 	if (env->lums[i].col.c.r < 16)
@@ -56,7 +56,7 @@ static void	j_print_lum(t_env *env, int i, int fd)
 	ft_putstr_fd("}}", fd);
 }
 
-static void	j_print_d_obj(t_env *env, int i, int fd)
+void	j_print_d_obj(t_env *env, int i, int fd)
 {
 	ft_putstr_fd("{\"type\":\"", fd);
 	if (env->objs[i].type == 's')
@@ -84,7 +84,7 @@ static void	j_print_d_obj(t_env *env, int i, int fd)
 	}
 }
 
-static void	j_print_obj(t_env *env, int i, int fd)
+void	j_print_obj(t_env *env, int i, int fd)
 {
 	j_print_d_obj(env, i, fd);
 	ft_putstr_fd("},\"radius\":", fd);
@@ -100,55 +100,4 @@ static void	j_print_obj(t_env *env, int i, int fd)
 		ft_putchar_fd('0', fd);
 	ft_putnbrbase_fd(env->objs[i].col.c.b, 16, fd);
 	ft_putstr_fd("\"}", fd);
-}
-
-//void		j_print_scene()
-void		j_scene_generator(t_env *env)
-{
-	int	i;
-	int fd;
-
-	i = 0;
-	while ((fd = open(ft_strjoin("./scenes/scene", ft_strjoin(ft_itoa(i), ".json")),
-			O_CREAT | O_EXCL | O_RDONLY, 0666)) == -1 && i < 20)
-		i++;
-	fd = open(ft_strjoin("./scenes/scene", ft_strjoin(ft_itoa(i), ".json")),
-		O_CREAT | O_WRONLY | O_APPEND, 0666);
-	ft_putstr_fd("{\"name\":\"", fd);
-	ft_putstr_fd(env->name, fd);
-	ft_putstr_fd("\",\"filter\":\"", fd);
-	ft_putstr_fd(env->filter, fd);
-	ft_putstr_fd("\",\"scene\":{", fd);
-	i = env->nb_cam;
-	ft_putstr_fd("\"cameras\":[", fd);
-	while (--i >= 0)
-	{
-		env->cams[i].vcam = vect_norm(env->cams[i].vcam);
-		env->cams[i].v2cam = vect_norm(env->cams[i].v2cam);
-		env->cams[i].v3cam = vect_norm(env->cams[i].v3cam);
-		j_print_cam(env, i, fd);
-		if (i != 0)
-			ft_putstr_fd(",", fd);
-	}
-	ft_putstr_fd("],", fd);
-	i = env->nb_lum;
-	ft_putstr_fd("\"lights\":[", fd);
-	while (--i >= 0)
-	{
-		j_print_lum(env, i, fd);
-		if (i != 0)
-			ft_putstr_fd(",", fd);
-	}
-	ft_putstr_fd("],", fd);
-	i = 0;
-	ft_putstr_fd("\"objects\":[", fd);
-	while (i < env->nb_obj)
-	{
-		env->objs[i].norm = vect_norm(env->objs[i].norm);
-		j_print_obj(env, i, fd);
-		if (i != env->nb_obj - 1)
-			ft_putstr_fd(",", fd);
-		i++;
-	}
-	ft_putstr_fd("]}}", fd);
 }

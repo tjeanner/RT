@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/16 14:10:40 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/18 18:20:06 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,8 +226,13 @@ int						get_dist_sphere(t_ray *init_rays, t_obj obj);
 **filter.c
 */
 void 					set_filter(t_env *env);
+void					stereo_filter(t_env *env);
+void					motionblur_filter(t_env *env);
+void					cartoon_filter(t_env *env);
 
-void					ft_free4all(t_env *env, char *str);
-void					error_mgt(int status);
+/*
+**error_mgt.c
+*/
+void					*error_mgt(int status);
 
 #endif
