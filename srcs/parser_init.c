@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/20 22:35:19 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 01:17:26 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void		j_init_env_var(t_env *env)
 	env->nb_lum = 0;
 	env->name = ft_strdup("RT");
 	env->filter = ft_strdup("NONE");
+	env->amb_coef = 0.2;
 }
 
 void			j_init_env_struc(t_env *env)

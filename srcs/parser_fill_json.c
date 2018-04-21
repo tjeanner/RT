@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 01:49:37 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/14 09:21:13 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 01:12:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@ void		j_fill_scn(t_json *json, t_env *env)
 	{
 		free(env->filter);
 		env->filter = ft_strdup(json->val.data.str);
+		json = json->next;
+	}
+	if (!ft_strcmp(json->key, "ambient") && json->val.type == TYPE_DOUBLE)
+	{
+		if (json->val.data.nb >= 0 && json->val.data.nb <= 1)
+			env->amb_coef = json->val.data.nb;
+		else
+			env->amb_coef = (json->val.data.nb < 0) ? 0 : 1;
 		json = json->next;
 	}
 }
