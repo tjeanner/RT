@@ -66,6 +66,7 @@ typedef struct			s_obj
 	t_color				col;
 	double				dist;
 	float				k_diff;
+	float				transp;
 	float				k_spec;
 	float				k_phong;
 }						t_obj;
@@ -176,7 +177,7 @@ void					rays(t_env *env);
 int						which_obj_col(t_env *env);
 int						init_ray(t_env *env, double x, double y);
 t_v						get_norm(t_obj obj, t_ray init_rays, t_v pos_col);
-t_color					get_col(t_env *env, t_v ray_dir, t_color *colsi);
+t_color					get_col(t_env *env, t_v ray_dir);
 
 /*
 **events.c

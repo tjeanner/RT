@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/15 18:25:31 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/17 20:11:46 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int			init_ray(t_env *env, double x, double y)
 {
 	env->init_rays.dir = vect_norm(vect_add(vect_mult(
-	env->cams[env->curr_cam].vcam, DIST), vect_add(vect_mult(
-	vect_inv(env->cams[env->curr_cam].v3cam), (double)((x - WIN_X / 2.0) /
-	get_vect_norm(env->cams[env->curr_cam].v3cam))),
-		vect_mult(env->cams[env->curr_cam].v2cam, (double)((WIN_Y / 2.0 - y) /
-				get_vect_norm(env->cams[env->curr_cam].v2cam))))));
+					env->cams[env->curr_cam].vcam, DIST), vect_add(vect_mult(
+							vect_inv(env->cams[env->curr_cam].v3cam), (double)((x - WIN_X / 2.0) /
+								get_vect_norm(env->cams[env->curr_cam].v3cam))),
+						vect_mult(env->cams[env->curr_cam].v2cam, (double)((WIN_Y / 2.0 - y) /
+								get_vect_norm(env->cams[env->curr_cam].v2cam))))));
 	env->init_rays.pos = env->cams[env->curr_cam].pos;
 	return (1);
 }
@@ -69,11 +69,10 @@ int			which_obj_col(t_env *env)
 > env->init_rays.d2 || env->init_rays.d1 < 0.0)) ? env->init_rays.d2 : env->objs[i].dist;
 		}
 		if ((i == 0 || (env->objs[i].dist > 0.0 &&
-			(res == -1.0 || res > env->objs[i].dist))) && (ob = i) == i)
+		(res == -1.0 || res > env->objs[i].dist))) && (ob = i) == i)
 			res = env->objs[i].dist;
 	}
-	i = -1;
-	while (++i < env->nb_obj && res > 0.0)
+	while ((i = (i == env->nb_obj) ? 0 : i + 1) < env->nb_obj && res > 0.0)
 		if (i != ob && env->objs[i].dist > 0.0 && env->objs[i].dist - res <
 				0.50 && (env->objs[i].dist = ob) == ob)
 			return (-1.0 * i - 2);
@@ -102,59 +101,55 @@ t_color		get_lum(t_env *env, int obj, int lum)
 	i = -1;
 	while (++i < env->nb_obj && (tutu.d1 = -1.0) < 0)
 		if ((tutu.d2 = -1.0) < 0 && env->col_fcts[ft_strchr(FCTS,
-	env->objs[i].type) - FCTS](&tutu, env->objs[i]) == 1 &&
-	(((tutu.d1 > 0.0 && tutu.d1 < res) || ((tutu.d2 > 0.0 && tutu.d2 < res)))))
+					env->objs[i].type) - FCTS](&tutu, env->objs[i]) == 1 &&
+				(((tutu.d1 > 0.0 && tutu.d1 < res) || ((tutu.d2 > 0.0 && tutu.d2 < res)))))
 			return (get_black());
 	res = fmax(0.0, vect_scal(norm, tutu.dir));
 	return (mult_color(env->objs[obj].col, res));
 }
 
-t_color		get_col(t_env *env, t_v ray_dir, t_color *colsi)
+t_color		get_col(t_env *env, t_v ray_dir)
 {
 	int		obj;
 	int		obj2;
 	int		i;
 	t_color	ambi_col;
-	t_color	cols[env->nb_lum];
+	t_color	cols[3];
 	t_v		tmp;
 	t_v		tmp2;
 
 	(void)ray_dir;
-	(void)colsi;
 	if ((obj = which_obj_col(env)) == -1)
 		return (get_black());
-	else if (obj < 0)
+	if (env->amb_coef < 0.980)
 	{
-		obj += 2;
-		obj *= -1;
-		obj2 = obj;
-		obj = env->objs[obj2].dist;
-		tmp = get_norm(env->objs[obj], env->init_rays, vect_add(env->init_rays.pos, vect_mult(ray_dir, env->objs[obj].dist)));
-		tmp2 = get_norm(env->objs[obj2], env->init_rays, vect_add(env->init_rays.pos, vect_mult(ray_dir, env->objs[obj].dist)));
-		env->init_rays.pos = vect_add(env->init_rays.pos, vect_mult(vect_add(tmp, tmp2), 0.500));
+		if (obj < 0)
+		{
+			obj += 2;
+			obj *= -1;
+			obj2 = obj;
+			obj = env->objs[obj2].dist;
+			tmp = get_norm(env->objs[obj], env->init_rays, vect_add(env->init_rays.pos, vect_mult(ray_dir, env->objs[obj].dist)));
+			tmp2 = get_norm(env->objs[obj2], env->init_rays, vect_add(env->init_rays.pos, vect_mult(ray_dir, env->objs[obj].dist)));
+			env->init_rays.pos = vect_add(env->init_rays.pos, vect_mult(vect_add(tmp, tmp2), 0.500));
+		}
+		ambi_col = mult_color(env->objs[obj].col, env->amb_coef);
+		cols[0] = get_black();
+		cols[1] = get_black();
+		i = -1;
+		while (++i < env->nb_lum)
+		{
+				cols[1] = get_lum(env, obj, i);
+				cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * env->lums[i].coef / env->coefs_sum);
+				cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * env->lums[i].coef / env->coefs_sum);
+				cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * env->lums[i].coef / env->coefs_sum);
+		}
+		env->init_rays.pos = vect_sous(env->init_rays.pos, vect_mult(vect_add(tmp, tmp2), 50.00));
+		cols[0] = mult_color(cols[0], 1.000 - env->amb_coef);
+		cols[0] = add_color(cols[0], ambi_col);
 	}
-	ambi_col = mult_color(env->objs[obj].col, env->amb_coef);
-	cols[0] = get_black();
-	i = -1;
-	while (++i < env->nb_lum)
-	{
-		cols[0].c.r = fmin(255, cols[0].c.r + get_lum(env, obj, i).c.r * env->lums[i].coef / env->coefs_sum);
-		cols[0].c.g = fmin(255, cols[0].c.g + get_lum(env, obj, i).c.g * env->lums[i].coef / env->coefs_sum);
-		cols[0].c.b = fmin(255, cols[0].c.b + get_lum(env, obj, i).c.b * env->lums[i].coef / env->coefs_sum);
-	}
-	env->init_rays.pos = vect_sous(env->init_rays.pos, vect_mult(vect_add(tmp, tmp2), 50.00));
-	cols[0] = mult_color(cols[0], 1.000 - env->amb_coef);
-	cols[0] = add_color(cols[0], ambi_col);
-/*	if (env->objs[obj].transp != 0.0)
-	{
-//		cols[0] = mult_color()
-	}
-	if (env->objs[obj].refl != 0.0)
-	{
-//		cols[0] = mult_color()
-	}
-//		return (get_black());
-//	else*/
+	else
+		cols[0] = env->objs[obj].col;
 	return (cols[0]);
 }
 
@@ -164,21 +159,21 @@ void		rays(t_env *env)
 	int		y;
 	int		x;
 	int		alias_coef;
-	t_color	col;
+	t_color	col[2];
 
 	y = 0;
 	alias_coef = env->flou;
 	while ((x = 0) == 0 && y < WIN_Y)
 	{
 		while ((i = 0) == 0 && x < WIN_X &&
-	init_ray(env, (double)(x + alias_coef / 2), (double)(y + alias_coef / 2)))
+				init_ray(env, (double)(x + alias_coef / 2), (double)(y + alias_coef / 2)))
 		{
-			col = get_col(env, env->init_rays.dir, &col);
-			((int *)env->surf->pixels)[x + y * env->surf->w] = col.color;
+			col[0] = get_col(env, env->init_rays.dir);
+			((int *)env->surf->pixels)[x + y * env->surf->w] = col[0].color;
 			while (alias_coef > 1 && ++i < alias_coef * alias_coef)
 				if (x + i % alias_coef < WIN_X && y + i / alias_coef < WIN_Y)
 					((int *)env->surf->pixels)[x + i % alias_coef +
-						(y + i / alias_coef) * env->surf->w] = col.color;
+						(y + i / alias_coef) * env->surf->w] = col[0].color;
 			x += alias_coef;
 		}
 		y += alias_coef;
