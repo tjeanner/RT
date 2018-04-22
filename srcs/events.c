@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/18 18:36:55 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 03:14:15 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ int				events(t_env *env)
 						&env->objs[env->curr_obj]);
 		else if (!move_events(env, event))
 			return (0);
-		rays(env);
+		tutu(env);
 	}
 	return (1);
 }
