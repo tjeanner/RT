@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:17:30 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/22 06:13:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 20:39:02 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,18 @@ void	stereo_filter(t_env *env)
 	unsigned char	*data;
 	unsigned char	*data2;
 
-//	env->cams[env->curr_cam].col = get_color("FF0000");
-//	env->cams[env->curr_cam + 1].col = get_color("00FFFF");
-	color_filter(env, env->surf, get_color("FF0000"));
-	color_filter(env, env->surf2, get_color("00FFfF"));
+	color_filter(env, env->surf, get_color("00FFFF"));
+	color_filter(env, env->surf2, get_color("FF0000"));
 	data = (unsigned char *)env->surf->pixels;
 	data2 = (unsigned char *)env->surf2->pixels;
 	max = ((WIN_X * WIN_Y) * 4) - 4;
 	i = 0;
-	printf("%d\n", data[i + 2]);
-	printf("%d\n", data2[i + 2]);
 	while (i < max)
 	{
 		data[i] = (data[i] + data2[i]);
 		data[i + 1] = (data[i + 1] + data2[i + 1]);
 		data[i + 2] = (data[i + 2] + data2[i + 2]);
 		i += 4;
-//		data[i] = data2[i]; i++;
 	}
 }
 

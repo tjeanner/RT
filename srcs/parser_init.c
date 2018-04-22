@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/22 01:37:57 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 20:34:43 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void			j_init_env_struc(t_env *env)
 	malloc_env(env);
 	set_struct(env, &par);
 	ft_parser_free(env->json);
+	env->stereo = (!ft_strcmp(env->filter, "3D")) ? 1 : 0;
 //	free(env->json);
 	destrucainitialiserquonveutaussiapresreload(env);
 }

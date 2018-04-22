@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/22 06:45:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 20:38:44 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,14 +231,14 @@ void		tutu(t_env *env)
 {
 	t_cam	tmp;
 
-	tmp = env->cams[env->curr_cam];
-	env->cams[env->curr_cam].pos.x += 20;
-/*	env->cams[env->curr_cam].vcam = vect_norm(vect_sous((t_v){0, 0, 0}, env->cams[env->curr_cam].pos));
-	env->cams[env->curr_cam].v3cam = vect_prod(
-		env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam);
-*/	rays(env, env->surf);
-	env->cams[env->curr_cam] = tmp;
-	rays(env, env->surf2);
+	if (env->stereo)
+	{
+		tmp = env->cams[env->curr_cam];
+		env->cams[env->curr_cam].pos.x -= 20;
+		rays(env, env->surf2);
+		env->cams[env->curr_cam] = tmp;
+	}
+	rays(env, env->surf);
 	set_filter(env);
 	SDL_UpdateWindowSurface(env->win);
 
