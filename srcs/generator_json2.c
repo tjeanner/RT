@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:04:19 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/18 18:07:37 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 20:05:50 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ int		j_print_env(t_env *env, int i)
 	ft_putstr_fd(env->name, fd);
 	ft_putstr_fd("\",\"filter\":\"", fd);
 	ft_putstr_fd(env->filter, fd);
-	ft_putstr_fd("\",\"scene\":{", fd);
+	ft_putstr_fd("\",\"ambient\":", fd);
+	ft_putfloat_fd(env->amb_coef, fd);
+	ft_putstr_fd(",\"scene\":{", fd);
 	ft_putstr_fd("\"cameras\":[", fd);
 	i = env->nb_cam;
 	while (--i >= 0)
