@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/18 16:27:02 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 02:36:16 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,20 @@ void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
 	{
 		po = p->val.data.obj;
 		ft_bzero(lum, sizeof(t_lum));
+		lum->coef = 0.4;
 		while (po)
 		{
 			if (!ft_strcmp(po->key, "color") && po->val.type == TYPE_STRING)
 				lum->col = j_get_color(po);
 			else if (!ft_strcmp(po->key, "pos") && po->val.type == TYPE_OBJ)
 				lum->pos = j_get_vec(po);
+			else if (!ft_strcmp(po->key, "intensity") && po->val.type == TYPE_DOUBLE)
+			{
+				if (po->val.data.nb >= 0 && po->val.data.nb <= 1)
+					lum->coef = po->val.data.nb;
+				else
+					lum->coef = (po->val.data.nb < 0) ? 0 : 1;
+			}
 			else
 				error_mgt(2);
 			po = po->next;
@@ -103,6 +111,8 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 				cam->vcam = j_get_vec(po);
 			else if (!ft_strcmp(po->key, "v2") && po->val.type == TYPE_OBJ)
 				cam->v2cam = j_get_vec(po);
+			else if (!ft_strcmp(po->key, "color") && po->val.type == TYPE_STRING)
+				cam->col = j_get_color(po);
 			else
 				error_mgt(3);
 			po = po->next;

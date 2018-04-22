@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/22 03:32:04 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/22 06:45:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,8 @@ t_env		*init(char *filename)
 			error_mgt(8);
 		if (!(env->surf = SDL_GetWindowSurface(env->win)))
 			error_mgt(8);
-		if (!(env->surf2 = SDL_GetWindowSurface(env->win)))
+		if (!(env->surf2 = SDL_CreateRGBSurface(0, WIN_X, WIN_Y, 32,
+								   0, 0, 0, 0)))
 			error_mgt(8);
 		return (env);
 	}
@@ -212,17 +213,15 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 	env->curr_cam = 0;
 	env->curr_lum = 0;
 	env->state = 0;
-//	env->amb_coef = 0.2;
 	env->portion = 3;
-	env->cams[env->curr_cam].v3cam = vect_prod(
-	env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam);
 	env->coefs_sum = 0.0;
+	i = -1;
+	while (++i < env->nb_cam)
+		env->cams[env->curr_cam].v3cam = vect_prod(
+		env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam);
 	i = -1;
 	while (++i < env->nb_obj)
 		env->objs[i].k_diff = 1.0;
-	i = -1;
-	while (++i < env->nb_lum)
-		env->lums[i].coef = 0.4;
 	i = -1;
 	while (++i < env->nb_lum)
 		env->coefs_sum += env->lums[i].coef;
@@ -230,9 +229,19 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 
 void		tutu(t_env *env)
 {
-	rays(env, env->surf, 0);
-	rays(env, env->surf2, 1);
+	t_cam	tmp;
+
+	tmp = env->cams[env->curr_cam];
+	env->cams[env->curr_cam].pos.x += 20;
+/*	env->cams[env->curr_cam].vcam = vect_norm(vect_sous((t_v){0, 0, 0}, env->cams[env->curr_cam].pos));
+	env->cams[env->curr_cam].v3cam = vect_prod(
+		env->cams[env->curr_cam].vcam, env->cams[env->curr_cam].v2cam);
+*/	rays(env, env->surf);
+	env->cams[env->curr_cam] = tmp;
+	rays(env, env->surf2);
+	set_filter(env);
 	SDL_UpdateWindowSurface(env->win);
+
 }
 
 int			main(int ac, char **av)
