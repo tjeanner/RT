@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/22 06:36:53 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 20:30:34 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct			s_cam
 	t_v					vcam;
 	t_v					v2cam;
 	t_v					v3cam;
-	t_color				col;	
+	t_color				col;
 }						t_cam;
 
 typedef struct			s_lum
@@ -127,6 +127,7 @@ typedef struct			s_env
 	float				portion;
 	char				*file;
 	char				*name;
+	char				stereo;
 	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
 	t_json				*json;
 }						t_env;
