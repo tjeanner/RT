@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/18 18:20:06 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 02:36:30 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ typedef struct			s_cam
 	t_v					pos;
 	t_v					vcam;
 	t_v					v2cam;
-	t_v					v3cam;	
+	t_v					v3cam;
+	t_color				col;	
 }						t_cam;
 
 typedef struct			s_lum
