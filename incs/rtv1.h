@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/22 03:32:29 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/22 06:36:53 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,8 @@ typedef struct			s_env
 **main.c
 */
 void					tutu(t_env *env);
-void					rays(t_env *env, SDL_Surface *surf, int cam);
-int						init_ray(t_env *env, double x, double y, int cam);
+void					rays(t_env *env, SDL_Surface *surf);
+int						init_ray(t_env *env, double x, double y);
 int						which_obj_col(t_env *env);
 
 /*
@@ -230,6 +230,7 @@ void 					set_filter(t_env *env);
 void					stereo_filter(t_env *env);
 void					motionblur_filter(t_env *env);
 void					cartoon_filter(t_env *env);
+void					color_filter(t_env *env, SDL_Surface *surf, t_color color);
 
 /*
 **error_mgt.c
