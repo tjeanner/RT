@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/22 01:08:27 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 03:32:04 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,8 @@ t_env		*init(char *filename)
 			error_mgt(8);
 		if (!(env->surf = SDL_GetWindowSurface(env->win)))
 			error_mgt(8);
+		if (!(env->surf2 = SDL_GetWindowSurface(env->win)))
+			error_mgt(8);
 		return (env);
 	}
 	error_mgt(8);
@@ -226,6 +228,13 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 		env->coefs_sum += env->lums[i].coef;
 }
 
+void		tutu(t_env *env)
+{
+	rays(env, env->surf, 0);
+	rays(env, env->surf2, 1);
+	SDL_UpdateWindowSurface(env->win);
+}
+
 int			main(int ac, char **av)
 {
 	t_env		*env;
@@ -234,7 +243,7 @@ int			main(int ac, char **av)
 		error_mgt(6);
 	if (!(env = init(av[1])))
 		error_mgt(6);
-	rays(env);
+	tutu(env);
 	while (!env->state)
 	{
 		events(env);

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/18 18:20:06 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/22 03:32:29 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct			s_env
 {
 	SDL_Window			*win;
 	SDL_Surface			*surf;
+	SDL_Surface			*surf2;
 	int					state;
 	int					nb_obj;
 	int					curr_obj;
@@ -132,8 +133,9 @@ typedef struct			s_env
 /*
 **main.c
 */
-void					rays(t_env *env);
-int						init_ray(t_env *env, double x, double y);
+void					tutu(t_env *env);
+void					rays(t_env *env, SDL_Surface *surf, int cam);
+int						init_ray(t_env *env, double x, double y, int cam);
 int						which_obj_col(t_env *env);
 
 /*
@@ -173,9 +175,7 @@ void					ft_putfloat_fd(double nbr, int fd);
 /*
 **raytracing.c
 */
-void					rays(t_env *env);
 int						which_obj_col(t_env *env);
-int						init_ray(t_env *env, double x, double y);
 t_v						get_norm(t_obj obj, t_ray init_rays, t_v pos_col);
 t_color					get_col(t_env *env, t_v ray_dir);
 

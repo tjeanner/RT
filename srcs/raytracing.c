@@ -6,21 +6,21 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/17 20:11:46 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/22 03:31:25 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-int			init_ray(t_env *env, double x, double y)
+int			init_ray(t_env *env, double x, double y, int cam)
 {
 	env->init_rays.dir = vect_norm(vect_add(vect_mult(
-					env->cams[env->curr_cam].vcam, DIST), vect_add(vect_mult(
-							vect_inv(env->cams[env->curr_cam].v3cam), (double)((x - WIN_X / 2.0) /
-								get_vect_norm(env->cams[env->curr_cam].v3cam))),
-						vect_mult(env->cams[env->curr_cam].v2cam, (double)((WIN_Y / 2.0 - y) /
-								get_vect_norm(env->cams[env->curr_cam].v2cam))))));
-	env->init_rays.pos = env->cams[env->curr_cam].pos;
+					env->cams[cam].vcam, DIST), vect_add(vect_mult(
+							vect_inv(env->cams[cam].v3cam), (double)((x - WIN_X / 2.0) /
+								get_vect_norm(env->cams[cam].v3cam))),
+						vect_mult(env->cams[cam].v2cam, (double)((WIN_Y / 2.0 - y) /
+								get_vect_norm(env->cams[cam].v2cam))))));
+	env->init_rays.pos = env->cams[cam].pos;
 	return (1);
 }
 
@@ -153,7 +153,7 @@ t_color		get_col(t_env *env, t_v ray_dir)
 	return (cols[0]);
 }
 
-void		rays(t_env *env)
+void		rays(t_env *env, SDL_Surface *surf, int cam)
 {
 	int		i;
 	int		y;
@@ -166,18 +166,17 @@ void		rays(t_env *env)
 	while ((x = 0) == 0 && y < WIN_Y)
 	{
 		while ((i = 0) == 0 && x < WIN_X &&
-				init_ray(env, (double)(x + alias_coef / 2), (double)(y + alias_coef / 2)))
+				init_ray(env, (double)(x + alias_coef / 2), (double)(y + alias_coef / 2), cam))
 		{
 			col[0] = get_col(env, env->init_rays.dir);
-			((int *)env->surf->pixels)[x + y * env->surf->w] = col[0].color;
+			((int *)surf->pixels)[x + y * surf->w] = col[0].color;
 			while (alias_coef > 1 && ++i < alias_coef * alias_coef)
 				if (x + i % alias_coef < WIN_X && y + i / alias_coef < WIN_Y)
-					((int *)env->surf->pixels)[x + i % alias_coef +
-						(y + i / alias_coef) * env->surf->w] = col[0].color;
+					((int *)surf->pixels)[x + i % alias_coef +
+						(y + i / alias_coef) * surf->w] = col[0].color;
 			x += alias_coef;
 		}
 		y += alias_coef;
 	}
 	set_filter(env);
-	SDL_UpdateWindowSurface(env->win);
 }
