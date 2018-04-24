@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 01:49:37 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/22 20:32:13 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/23 19:37:54 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ void		j_fill_arr(t_json_arr *arr, t_par *par, t_env *env)
 {
 	j_fill_obj(&arr->val, par, env);
 	if (arr->next)
-	{
 		j_fill_arr(arr->next, par, env);
-	}
 }
 
 void		j_fill_obj(t_val *val, t_par *par, t_env *env)
@@ -65,17 +63,11 @@ void		j_fill_env(t_json *json, t_par *par, t_env *env)
 	{
 		j_fill_scn(p, env);
 		if (!ft_strcmp(p->key, "objects") && p->val.type == TYPE_ARR)
-		{
 			j_get_obj(p->val.data.tab, &obj, par, env);
-		}
 		else if (!ft_strcmp(p->key, "lights") && p->val.type == TYPE_ARR)
-		{
 			j_get_lights(p->val.data.tab, &lum, par, env);
-		}
 		else if (!ft_strcmp(p->key, "cameras") && p->val.type == TYPE_ARR)
-		{
 			j_get_cam(p->val.data.tab, &cam, par, env);
-		}
 		j_fill_obj(&p->val, par, env);
 		p = p->next;
 		j_fill_env(p, par, env);

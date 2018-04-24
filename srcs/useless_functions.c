@@ -6,11 +6,24 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/18 18:16:13 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/23 21:55:31 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
+
+void	ft_freeenv(t_env *env)
+{
+	SDL_FreeSurface(env->surf2);
+	SDL_DestroyWindow(env->win);
+	free(env->file);
+	free(env->name);
+	free(env->filter);
+	ft_memdel((void *)&env->objs);
+	ft_memdel((void *)&env->lums);
+	ft_memdel((void *)&env->cams);
+	free(env);
+}
 
 /*
 void	sobel_filter(t_env *env)

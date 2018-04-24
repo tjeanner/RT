@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/12 04:31:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/23 19:39:00 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,33 @@ void		malloc_env(t_env *env)
 void		set_struct(t_env *env, t_par *par)
 {
 	int		i;
+	void	*p;
 
 	i = -1;
 	while (++i < env->nb_obj)
 	{
 		ft_memcpy((void *)&env->objs[i], par->lst_obj->content, sizeof(t_obj));
 		free(par->lst_obj->content);
+		p = par->lst_obj;
 		par->lst_obj = par->lst_obj->next;
+		free(p);
 	}
 	i = -1;
 	while (++i < env->nb_cam)
 	{
 		ft_memcpy((void *)&env->cams[i], par->lst_cam->content, sizeof(t_cam));
 		free(par->lst_cam->content);
+		p = par->lst_cam;
 		par->lst_cam = par->lst_cam->next;
+		free(p);
 	}
 	i = -1;
 	while (++i < env->nb_lum)
 	{
 		ft_memcpy((void *)&env->lums[i], par->lst_lum->content, sizeof(t_lum));
+		p = par->lst_lum;
 		free(par->lst_lum->content);
 		par->lst_lum = par->lst_lum->next;
+		free(p);
 	}
 }

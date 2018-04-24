@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/20 23:41:06 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/23 02:47:03 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ t_val			parse_obj(char **str)
 {
 	t_val		val;
 
-	val.type = def_type(str);
 	skip_whitespaces(str);
+	val.type = def_type(str);
 	if (**str == '"')
 		val.data.str = parse_str(str);
 	else if (**str == '-' || **str == '+' || ft_isdigit(**str))

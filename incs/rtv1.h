@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/22 20:30:34 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/23 21:54:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,5 +237,6 @@ void					color_filter(t_env *env, SDL_Surface *surf, t_color color);
 **error_mgt.c
 */
 void					*error_mgt(int status);
+void					ft_freeenv(t_env *env);
 
 #endif
