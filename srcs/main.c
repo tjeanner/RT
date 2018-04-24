@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/22 20:38:44 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/24 23:02:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,8 +257,7 @@ int			main(int ac, char **av)
 	{
 		events(env);
 	}
-	SDL_DestroyWindow(env->win);
-	free(env);
+	ft_freeenv(env);
 	SDL_Quit();
 	return (1);
 }
