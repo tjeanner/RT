@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 15:06:18 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 16:33:21 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,6 @@ typedef struct			s_lums
 	t_lum				*lum;
 }						t_lums;
 
-/*
-typedef struct			s_ray
-{
-	double				d1;
-	double				d2;
-	t_v					pos;
-	t_v					dir;
-}						t_ray;
-*/
 typedef struct			s_par
 {
 	t_list				*lst_obj;
