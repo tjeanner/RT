@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 15:09:15 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 15:57:32 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 	env->col_fcts[2] = get_dist_tube;
 	env->col_fcts[3] = get_dist_cone;
 	env->flou = 1;
-	env->nb_thread = 64;
+	env->nb_thread = 8;
 	env->objs.curr = -1;
 	env->cams.curr = 0;
 	env->lums.curr = 0;
@@ -63,7 +63,7 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 		env->cams.cam[env->cams.curr].vcam, env->cams.cam[env->cams.curr].v2cam);
 	env->lums.coefs_sum = 0.0;
 	i = -1;
-	while (++i < env->objs.nb && (env->lums.coefs_sum += env->lums.lum[i].coef))
+	while (++i < env->objs.nb)// && (env->lums.coefs_sum += env->lums.lum[i].coef))
 		env->objs.obj[i].k_diff = 1.0;
 	ft_putfloat_fd(env->lums.coefs_sum, 1);
 	ft_putstr(", ");
