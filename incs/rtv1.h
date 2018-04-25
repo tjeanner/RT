@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 18:55:16 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:59:41 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ typedef struct			s_env
 	t_threads			*threads;
 	char				*file;
 	char				*name;
-	t_json				*json;
 }						t_env;
 
 /*
