@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 06:29:51 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 11:26:50 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 16:42:05 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ int		events_sel(t_env *env, SDL_Event event, unsigned int sym)
 	else if (event.type == SDL_MOUSEBUTTONDOWN
 		&& event.button.button == SDL_BUTTON_LEFT)
 	{
-	//	init_ray(env, event.button.x, event.button.y);
-	//	env->objs.curr = which_obj_col(env);
+		env->objs.curr = which_obj_col(&env->objs, init_line(event.button.x, event.button.y, env->cams.cam[env->cams.curr]), env->col_fcts);
 		return (0);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 12:24:20 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 16:34:33 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static int		move_events(t_env *env, SDL_Event event)
 		ft_putstr(", portion:");
 		ft_putnbr(env->portion);
 	}
-//	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c && env->amb_coef >= 0.020)
-//		env->amb_coef -= 0.020;
-//	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v && env->amb_coef <= 0.980)
-//		env->amb_coef += 0.020;
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c && env->lums.amb_coef >= 0.020)
+		env->lums.amb_coef -= 0.020;
+	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v && env->lums.amb_coef <= 0.980)
+		env->lums.amb_coef += 0.020;
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_n)
 	{
 		env->objs.obj[env->objs.curr].k_diff *= 11.00 / 10.00;
