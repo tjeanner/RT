@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 16:31:55 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:48:47 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_v			get_norm(t_obj obj, t_line line, t_v pos_col)
 			? vect_norm(vect_inv(vect)) : vect_norm(vect));
 }
 
-int			which_obj_col(t_objs *objs, t_line line, int (*col_fcts[4])(t_line line, t_obj obj, double *dists))
+int			which_obj_col(t_objs *objs, t_line line)
 {
 	double	res;
 	double	obj_dist[2];
@@ -62,7 +62,7 @@ int			which_obj_col(t_objs *objs, t_line line, int (*col_fcts[4])(t_line line, t
 	res = -1.0;
 	while (++i < objs->nb && (all_dists[i] = -1.0) == -1.0)
 	{
-		if (col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS](line, objs->obj[i],
+		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS](line, objs->obj[i],
 		obj_dist) == 1 && (obj_dist[0] > 0.000 || obj_dist[1] > 0.000))
 		{
 			all_dists[i] = (obj_dist[0] > 0.0 && (obj_dist[0]
@@ -80,37 +80,38 @@ int			which_obj_col(t_objs *objs, t_line line, int (*col_fcts[4])(t_line line, t
 			return (-1.0 * i - 2);
 	return (ob = (res <= 0.0) ? -1 : ob);
 }
-/*
-t_color		get_lum(t_env *env, int obj, int lum)
+
+t_color		get_lum(t_objs *objs, int obj, t_lums *lums, int lum, t_line line)
 {
 	int		i;
 	t_v		pos_col;
 	t_v		col_2_lum;
 	t_v		norm;
 	double	res;
-	t_ray	tutu;
+	double	dist[2];
+	t_line	tutu;
 
-	pos_col = vect_add(env->init_rays.pos, vect_mult(env->init_rays.dir,
-				env->objs.obj[obj].dist));
-	norm = get_norm(env->objs.obj[obj], env->init_rays, pos_col);
-	norm = (env->objs.obj[obj].type == 'p' && vect_scal(norm, env->init_rays.dir) > 0.0) ? vect_inv(norm) : norm;
+	pos_col = vect_add(line.pos, vect_mult(line.dir,
+				objs->obj[obj].dist));
+	norm = get_norm(objs->obj[obj], line, pos_col);
+	norm = (objs->obj[obj].type == 'p' && vect_scal(norm, line.dir) > 0.0) ? vect_inv(norm) : norm;
 	pos_col = vect_add(pos_col, vect_mult(norm, 0.00000001000));
-	norm = get_norm(env->objs.obj[obj], env->init_rays, pos_col);
-	col_2_lum = vect_sous(env->lums.lum[lum].pos, pos_col);
+	norm = get_norm(objs->obj[obj], line, pos_col);
+	col_2_lum = vect_sous(lums->lum[lum].pos, pos_col);
 	res = get_vect_norm(col_2_lum);
 	tutu.dir = vect_norm(col_2_lum);
 	tutu.pos = pos_col;
 	i = -1;
-	while (++i < env->objs.nb && (tutu.d1 = -1.0) < 0)
-		if ((tutu.d2 = -1.0) < 0 && env->col_fcts[ft_strchr(FCTS,
-					env->objs.obj[i].type) - FCTS](&tutu, env->objs.obj[i]) == 1 &&
-				(((tutu.d1 > 0.0 && tutu.d1 < res) || ((tutu.d2 > 0.0 && tutu.d2 < res)))))
+	while (++i < objs->nb && (dist[0] = -1.0) < 0)
+		if ((dist[1]= -1.0) < 0 && objs->col_fcts[ft_strchr(FCTS,
+					objs->obj[i].type) - FCTS](tutu, objs->obj[i], dist) == 1 &&
+				(((dist[0] > 0.0 && dist[0] < res) || ((dist[1] > 0.0 && dist[1] < res)))))
 			return (get_black());
 	res = fmax(0.0, vect_scal(norm, tutu.dir));
-	return (mult_color(env->objs.obj[obj].col, res));
-}*/
+	return (mult_color(objs->obj[obj].col, res));
+}
 
-t_color		get_col(t_objs *objs, t_lums *lums, t_line line, int (*col_fcts[4])(t_line line, t_obj obj, double *dists))
+t_color		get_col(t_objs *objs, t_lums *lums, t_line line)
 {
 	int		obj;
 //	int		obj2;
@@ -120,7 +121,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_line line, int (*col_fcts[4])(t_l
 //	t_v		tmp;
 //	t_v		tmp2;
 
-	if ((obj = which_obj_col(objs, line, col_fcts)) <= -1)
+	if ((obj = which_obj_col(objs, line)) <= -1)
 		return (get_black());
 	if (lums->amb_coef < 1.000)
 	{
@@ -130,7 +131,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_line line, int (*col_fcts[4])(t_l
 		i = -1;
 		while (++i < lums->nb)
 		{
-				//cols[1] = get_lum(env, obj, i);
+				cols[1] = get_lum(objs, obj, lums, i, line);
 				cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * lums->lum[i].coef / lums->coefs_sum);
 				cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
 				cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
@@ -154,20 +155,21 @@ void		*rays(void *tmp)
 
 	env = ((t_threads *)tmp)->env;
 	y = ((t_threads *)tmp)->start;
-	while ((x = 0) == 0 && y < WIN_Y)
+	i = ((t_threads *)tmp)->incr;
+	while (y < WIN_Y)
 	{
-		while ((i = 0) == 0 && x < WIN_X)
+		x = -1;
+		while (++x < WIN_X)
 		{
 			col = get_col(&env->objs, &env->lums, init_line(
 				(double)(x + 0.5), (double)(y + 0.5),
-				env->cams.cam[env->cams.curr]), env->col_fcts);
-			if (env->sur == 1)
-				((int *)env->surf->pixels)[x + y * env->surf->w] = col.color;
+				env->cams.cam[env->cams.curr]));
+			if (env->display.sur == 1)
+				((int *)env->display.surf->pixels)[x + y * env->display.surf->w] = col.color;
 			else
-				((int *)env->surf2->pixels)[x + y * env->surf->w] = col.color;
-			x += 1;
+				((int *)env->display.surf2->pixels)[x + y * env->display.surf->w] = col.color;
 		}
-		y += ((t_threads *)tmp)->incr;
+		y += i;
 	}
 	return (env);
 }

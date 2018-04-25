@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:17:30 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/23 21:50:56 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:20:37 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	stereo_filter(t_env *env)
 	unsigned char	*data;
 	unsigned char	*data2;
 
-	color_filter(env, env->surf, get_color("00FFFF"));
-	color_filter(env, env->surf2, get_color("FF0000"));
-	data = (unsigned char *)env->surf->pixels;
-	data2 = (unsigned char *)env->surf2->pixels;
+	color_filter(env, env->display.surf, get_color("00FFFF"));
+	color_filter(env, env->display.surf2, get_color("FF0000"));
+	data = (unsigned char *)env->display.surf->pixels;
+	data2 = (unsigned char *)env->display.surf2->pixels;
 	max = ((WIN_X * WIN_Y) * 4) - 4;
 	i = 0;
 	while (i < max)
@@ -46,12 +46,12 @@ void	cartoon_filter(t_env *env)
 	unsigned char 	*data;
 	int				pas;
 
-	data = (unsigned char *)env->surf->pixels;
+	data = (unsigned char *)env->display.surf->pixels;
 	max = ((WIN_X * WIN_Y) * 4);
 	i = 0;
-	if (env->seuil <= 4 || env->seuil >= 15)
-		env->seuil = 8;
-	pas = 255 / env->seuil;
+	if (env->effects.seuil <= 4 || env->effects.seuil >= 15)
+		env->effects.seuil = 8;
+	pas = 255 / env->effects.seuil;
 	while (i < max)
 	{
 		data[i] = (int)(data[i] / pas) * pas;

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 11:14:36 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:19:31 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	bw_filter(t_env *env)
 	unsigned int	max;
 	unsigned char	*data;
 
-	data = (unsigned char *)env->surf->pixels;
+	data = (unsigned char *)env->display.surf->pixels;
 	max = ((WIN_X * WIN_Y) * 4) - 4;
 	i = 0;
 	while (i < max)
@@ -39,7 +39,7 @@ void	sepia_filter(t_env *env)
 	unsigned int	max;
 	unsigned char	*data;
 
-	data = (unsigned char *)env->surf->pixels;
+	data = (unsigned char *)env->display.surf->pixels;
 	max = ((WIN_X * WIN_Y) * 4) - 4;
 	i = 0;
 	while (i < max)
@@ -58,7 +58,7 @@ void	neg_filter(t_env *env)
 	unsigned int	max;
 	unsigned char	*data;
 
-	data = (unsigned char *)env->surf->pixels;
+	data = (unsigned char *)env->display.surf->pixels;
 	max = ((WIN_X * WIN_Y) * 4) - 4;
 	i = 0;
 	while (i < max)
@@ -91,24 +91,24 @@ void	color_filter(t_env *env, SDL_Surface *surf, t_color color)
 
 void	set_filter(t_env *env)
 {
-	if (!ft_strcmp(env->filter, "NEGATIVE"))
+	if (!ft_strcmp(env->effects.filter, "NEGATIVE"))
 		neg_filter(env);
-	else if (!ft_strcmp(env->filter, "B&W"))
+	else if (!ft_strcmp(env->effects.filter, "B&W"))
 		bw_filter(env);
-	else if (!ft_strcmp(env->filter, "SEPIA"))
+	else if (!ft_strcmp(env->effects.filter, "SEPIA"))
 		sepia_filter(env);
-	else if (!ft_strcmp(env->filter, "MOTIONBLUR"))
+	else if (!ft_strcmp(env->effects.filter, "MOTIONBLUR"))
 		motionblur_filter(env);
-	else if (!ft_strcmp(env->filter, "3D"))
+	else if (!ft_strcmp(env->effects.filter, "3D"))
 		stereo_filter(env);
-	else if (!ft_strncmp(env->filter, "CARTOON", 7))
+	else if (!ft_strncmp(env->effects.filter, "CARTOON", 7))
 	{
-		if (!ft_strncmp(env->filter, "CARTOON:", 8) && ft_strlen(env->filter) > 8)
-			env->seuil = ft_atoi(env->filter + 8);
+		if (!ft_strncmp(env->effects.filter, "CARTOON:", 8) && ft_strlen(env->effects.filter) > 8)
+			env->effects.seuil = ft_atoi(env->effects.filter + 8);
 		else
-			env->seuil = 8;
+			env->effects.seuil = 8;
 		cartoon_filter(env);
 	}
-	if (ft_strcmp(env->filter, "3D") && env->cams.cam[env->cams.curr].col.color && env->cams.cam[env->cams.curr].col.color != 16777216)
-		color_filter(env, env->surf, env->cams.cam[env->cams.curr].col);
+	if (ft_strcmp(env->effects.filter, "3D") && env->cams.cam[env->cams.curr].col.color && env->cams.cam[env->cams.curr].col.color != 16777216)
+		color_filter(env, env->display.surf, env->cams.cam[env->cams.curr].col);
 }

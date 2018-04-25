@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 14:55:43 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:08:40 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	ft_freeenv(t_env *env)
 {
-	SDL_FreeSurface(env->surf2);
-	SDL_DestroyWindow(env->win);
+	SDL_FreeSurface(env->display.surf2);
+	SDL_DestroyWindow(env->display.win);
 	free(env->file);
 	free(env->name);
-	free(env->filter);
+	free(env->effects.filter);
 	free(env->threads);
 	ft_memdel((void *)&env->objs.obj);
 	ft_memdel((void *)&env->lums.lum);

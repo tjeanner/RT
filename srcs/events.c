@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 16:34:33 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:11:18 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int		move_events(t_env *env, SDL_Event event)
 {
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_z)
+/*	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_z)
 	{
 		env->portion -= 1;
 		ft_putstr(", portion:");
@@ -25,8 +25,8 @@ static int		move_events(t_env *env, SDL_Event event)
 		env->portion += 1;
 		ft_putstr(", portion:");
 		ft_putnbr(env->portion);
-	}
-	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c && env->lums.amb_coef >= 0.020)
+	}*/
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_c && env->lums.amb_coef >= 0.020)
 		env->lums.amb_coef -= 0.020;
 	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_v && env->lums.amb_coef <= 0.980)
 		env->lums.amb_coef += 0.020;
@@ -102,14 +102,14 @@ static int		events_random(t_env *env, unsigned int sym, SDL_Event event)
 		ft_memdel((void **)&env->objs.obj);
 		ft_memdel((void **)&env->cams);
 		ft_memdel((void **)&env->lums);
-		free(env->filter);
+		free(env->effects.filter);
 		j_init(env);
 //		init_scene(env);
 	}
-	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_MINUS)
+/*	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_MINUS)
 		env->flou *= (env->flou > WIN_X  / 2 || env->flou > WIN_Y  / 2) ? 1.0 : 2.0;
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_KP_PLUS)
-		env->flou /= (env->flou <= 1) ? 1 : 2;
+		env->flou /= (env->flou <= 1) ? 1 : 2;*/
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_END)
 		j_scene_generator(env);
 	else

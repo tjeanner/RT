@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 12:26:21 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:15:19 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void		j_init_env_var(t_env *env)
 	env->cams.nb = 0;
 	env->lums.nb = 0;
 	env->name = ft_strdup("RT");
-	env->filter = ft_strdup("NONE");
+	env->effects.filter = ft_strdup("NONE");
 	env->lums.amb_coef = 0.2;
 }
 
@@ -36,7 +36,7 @@ void			j_init_env_struc(t_env *env)
 	malloc_env(env);
 	set_struct(env, &par);
 	ft_parser_free(env->json);
-	env->stereo = (!ft_strcmp(env->filter, "3D")) ? 1 : 0;
+	env->effects.stereo = (!ft_strcmp(env->effects.filter, "3D")) ? 1 : 0;
 	destrucainitialiserquonveutaussiapresreload(env);
 }
 

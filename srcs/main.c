@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 15:57:32 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 18:06:08 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ t_env		*init(char *filename)
 			return (0);
 		env->file = ft_strdup(filename);
 		j_init(env);
-		if (!(env->win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
+		if (!(env->display.win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 			error_mgt(8);
-		if (!(env->surf = SDL_GetWindowSurface(env->win)))
+		if (!(env->display.surf = SDL_GetWindowSurface(env->display.win)))
 			error_mgt(8);
-		if (!(env->surf2 = SDL_CreateRGBSurface(0, WIN_X, WIN_Y, 32,
+		if (!(env->display.surf2 = SDL_CreateRGBSurface(0, WIN_X, WIN_Y, 32,
 								   0, 0, 0, 0)))
 			error_mgt(8);
 		return (env);
@@ -44,24 +44,22 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 {
 	int		i;
 
-	env->col_fcts[0] = get_dist_sphere;
-	env->col_fcts[1] = get_dist_plan;
-	env->col_fcts[2] = get_dist_tube;
-	env->col_fcts[3] = get_dist_cone;
-	env->flou = 1;
-	env->nb_thread = 8;
+	env->objs.col_fcts[0] = get_dist_sphere;
+	env->objs.col_fcts[1] = get_dist_plan;
+	env->objs.col_fcts[2] = get_dist_tube;
+	env->objs.col_fcts[3] = get_dist_cone;
 	env->objs.curr = -1;
 	env->cams.curr = 0;
 	env->lums.curr = 0;
 	env->state = 0;
-	env->portion = 3;
+//	env->portion = 3;
 	env->lums.coefs_sum = 0.0;
-	env->lums.amb_coef = 0.2;
+	env->lums.amb_coef = 1.0;
 	i = -1;
 	while (++i < env->cams.nb)
 		env->cams.cam[env->cams.curr].v3cam = vect_prod(
 		env->cams.cam[env->cams.curr].vcam, env->cams.cam[env->cams.curr].v2cam);
-	env->lums.coefs_sum = 0.0;
+	env->lums.coefs_sum = 1.0;
 	i = -1;
 	while (++i < env->objs.nb)// && (env->lums.coefs_sum += env->lums.lum[i].coef))
 		env->objs.obj[i].k_diff = 1.0;
@@ -70,13 +68,13 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 	i = -1;
 	while (++i < env->lums.nb)
 		env->lums.coefs_sum += env->lums.lum[i].coef;
-	if (!(env->threads = (t_threads *)malloc(sizeof(t_threads) * env->nb_thread)))
+	if (!(env->threads = (t_threads *)malloc(sizeof(t_threads) * NB_THREADS)))
 		return ;
 	i = -1;
-	while (++i < env->nb_thread)
+	while (++i < NB_THREADS)
 	{
 		env->threads[i].start = i;
-		env->threads[i].incr = env->nb_thread;
+		env->threads[i].incr = NB_THREADS;
 		env->threads[i].env = env;
 	}
 }
@@ -86,33 +84,33 @@ void		tutu(t_env *env)
 	int		i;
 	t_cam	tmp;
 
-	env->sur = 1;
-	if (env->stereo)
+	env->display.sur = 1;
+	if (env->effects.stereo)
 	{
 		tmp = env->cams.cam[env->cams.curr];
 		env->cams.cam[env->cams.curr].pos.x -= 20;
 //		rays(env, env->surf2);
-		env->sur = 2;
+		env->display.sur = 2;
 		i = -1;
-		while (++i < env->nb_thread)
+		while (++i < NB_THREADS)
 			if (pthread_create(&env->threads[i].id, NULL, rays, (void *)&env->threads[i]) != 0)
 				return ;
 		i = -1;
-		while (++i < env->nb_thread)
+		while (++i < NB_THREADS)
 			pthread_join(env->threads[i].id, NULL);
 		env->cams.cam[env->cams.curr] = tmp;
 	}
 //	rays(env, env->surf);
-	env->sur = 1;
+	env->display.sur = 1;
 	i = -1;
-	while (++i < env->nb_thread)
+	while (++i < NB_THREADS)
 		if (pthread_create(&env->threads[i].id, NULL, rays, (void *)&env->threads[i]) != 0)
 			return ;
 	i = -1;
-	while (++i < env->nb_thread)
+	while (++i < NB_THREADS)
 		pthread_join(env->threads[i].id, NULL);
 	set_filter(env);
-	SDL_UpdateWindowSurface(env->win);
+	SDL_UpdateWindowSurface(env->display.win);
 }
 
 int			main(int ac, char **av)
