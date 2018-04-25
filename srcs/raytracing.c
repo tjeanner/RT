@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 15:10:48 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 16:31:55 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_line line, int (*col_fcts[4])(t_l
 //	t_v		tmp;
 //	t_v		tmp2;
 
-	if ((obj = which_obj_col(objs, line, col_fcts)) == -1)
+	if ((obj = which_obj_col(objs, line, col_fcts)) <= -1)
 		return (get_black());
 	if (lums->amb_coef < 0.980)
 	{
