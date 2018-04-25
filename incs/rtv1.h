@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/23 21:54:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 15:06:18 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define S "0123456789ABCDEF"
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
+//# define [0-9].0\> .0000000
 
 typedef union			u_color
 {
@@ -56,6 +57,12 @@ typedef struct			s_v
 	double				y;
 	double				z;
 }						t_v;
+
+typedef struct			s_line
+{
+	t_v					pos;
+	t_v					dir;
+}						t_line;
 
 typedef struct			s_obj
 {
@@ -87,6 +94,30 @@ typedef struct			s_lum
 	t_color				col;
 }						t_lum;
 
+typedef struct			s_objs
+{
+	int					nb;
+	int					curr;
+	t_obj				*obj;
+}						t_objs;
+
+typedef struct			s_cams
+{
+	int					nb;
+	int					curr;
+	t_cam				*cam;
+}						t_cams;
+
+typedef struct			s_lums
+{
+	int					nb;
+	int					curr;
+	float				amb_coef;
+	float				coefs_sum;
+	t_lum				*lum;
+}						t_lums;
+
+/*
 typedef struct			s_ray
 {
 	double				d1;
@@ -94,7 +125,7 @@ typedef struct			s_ray
 	t_v					pos;
 	t_v					dir;
 }						t_ray;
-
+*/
 typedef struct			s_par
 {
 	t_list				*lst_obj;
@@ -102,33 +133,74 @@ typedef struct			s_par
 	t_list				*lst_lum;
 }						t_par;
 
+typedef struct			s_effects
+{
+	char				alias;
+	char				stereo;
+	char				filter;
+	int					seuil;
+}						t_effects;
+
+typedef struct			s_threads
+{
+	pthread_t			id;
+	int					start;
+	int					incr;
+	t_env				*env;
+}						t_threads;
+
+typedef struct			s_display
+{
+	SDL_Window			*win;
+	SDL_Surface			*surf;
+}						t_display;
+
+typedef struct			s_new_env
+{
+	int					state;
+
+	int					nb_obj;
+	int					curr_obj;
+	t_obj				*objs;
+
+	int					nb_cam;
+	int					curr_cam;
+	t_cam				*cams;
+
+	int					nb_lum;
+	int					curr_lum;
+	t_lum				*lums;
+	float				amb_coef;
+
+	t_display			display;
+	t_effects			effects;
+
+	t_threads			*threads;
+
+	int					(*col_fcts[4])(t_line line, t_obj obj, double *dists);
+}						t_new_env;
+
 typedef struct			s_env
 {
+	t_objs				objs;
+	t_cams				cams;
+	t_lums				lums;
+	int					sur;
+	t_threads			*threads;
+	int					nb_thread;
 	SDL_Window			*win;
 	SDL_Surface			*surf;
 	SDL_Surface			*surf2;
 	int					state;
-	int					nb_obj;
-	int					curr_obj;
-	int					nb_cam;
-	int					curr_cam;
-	int					nb_lum;
-	int					curr_lum;
 	char				*filter;
 	int					seuil;
-	t_obj				*objs;
-	t_cam				*cams;
-	t_lum				*lums;
-	t_ray				init_rays;
 	int					flou;
-	float				amb_coef;
-	float				coefs_sum;
 	float				constante2test;
 	float				portion;
 	char				*file;
 	char				*name;
 	char				stereo;
-	int					(*col_fcts[4])(t_ray *init_rays, t_obj obj);
+	int					(*col_fcts[4])(t_line line, t_obj obj, double *dists);
 	t_json				*json;
 }						t_env;
 
@@ -136,9 +208,9 @@ typedef struct			s_env
 **main.c
 */
 void					tutu(t_env *env);
-void					rays(t_env *env, SDL_Surface *surf);
-int						init_ray(t_env *env, double x, double y);
-int						which_obj_col(t_env *env);
+void					*rays(void *tmp);
+t_line					init_line(double x, double y, t_cam cam);
+
 
 /*
 **vector_math.c
@@ -177,9 +249,9 @@ void					ft_putfloat_fd(double nbr, int fd);
 /*
 **raytracing.c
 */
-int						which_obj_col(t_env *env);
-t_v						get_norm(t_obj obj, t_ray init_rays, t_v pos_col);
-t_color					get_col(t_env *env, t_v ray_dir);
+int						which_obj_col(t_objs *objs, t_line line, int (*col_fcts[4])(t_line line, t_obj obj, double *dists));
+t_v						get_norm(t_obj obj, t_line line, t_v pos_col);
+t_color		get_col(t_objs *objs, t_lums *lums, t_line line, int (*col_fcts[4])(t_line line, t_obj obj, double *dists));
 
 /*
 **events.c
@@ -219,10 +291,10 @@ void					update_and_copy_a(t_env *env, SDL_Keycode type);
 /*
 **distances_functions.c
 */
-int						get_dist_cone(t_ray *init_rays, t_obj obj);
-int						get_dist_tube(t_ray *init_rays, t_obj obj);
-int						get_dist_plan(t_ray *init_rays, t_obj obj);
-int						get_dist_sphere(t_ray *init_rays, t_obj obj);
+int						get_dist_cone(t_line line, t_obj obj, double *dists);
+int						get_dist_tube(t_line line, t_obj obj, double *dists);
+int						get_dist_plan(t_line line, t_obj obj, double *dists);
+int						get_dist_sphere(t_line line, t_obj obj, double *dists);
 
 /*
 **filter.c

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/23 19:40:16 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 12:26:21 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void			destrucainitialiserquonveutaussiapresreload(t_env *env);
 
 static void		j_init_env_var(t_env *env)
 {
-	env->nb_obj = 0;
-	env->nb_cam = 0;
-	env->nb_lum = 0;
+	env->objs.nb = 0;
+	env->cams.nb = 0;
+	env->lums.nb = 0;
 	env->name = ft_strdup("RT");
 	env->filter = ft_strdup("NONE");
-	env->amb_coef = 0.2;
+	env->lums.amb_coef = 0.2;
 }
 
 void			j_init_env_struc(t_env *env)
@@ -31,7 +31,7 @@ void			j_init_env_struc(t_env *env)
 
 	fjson = env->json;
 	j_fill_env(fjson, &par, env);
-	if (env->nb_cam == 0)
+	if (env->cams.nb == 0)
 		error_mgt(9);
 	malloc_env(env);
 	set_struct(env, &par);

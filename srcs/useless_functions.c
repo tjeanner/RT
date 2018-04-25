@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 00:39:43 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/23 21:55:31 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 14:55:43 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ void	ft_freeenv(t_env *env)
 	free(env->file);
 	free(env->name);
 	free(env->filter);
-	ft_memdel((void *)&env->objs);
-	ft_memdel((void *)&env->lums);
-	ft_memdel((void *)&env->cams);
+	free(env->threads);
+	ft_memdel((void *)&env->objs.obj);
+	ft_memdel((void *)&env->lums.lum);
+	ft_memdel((void *)&env->cams.cam);
 	free(env);
 }
 
@@ -131,20 +132,20 @@ t_env	*fill_env(t_env *env)
 {
 	t_obj	obj;
 
-	env->cams[0].pos_cam.x = 0;
-	env->cams[0].pos_cam.y = 0;
-	env->cams[0].pos_cam.z = -8000;
-	env->lums[0].pos_lum.x = 0;
-	env->lums[0].pos_lum.y = 400;
-	env->lums[0].pos_lum.z = -800;
-	env->lums[0].coef = 1.0;
-	set_white(&env->lums[0].col);
-	env->cams[0].vcam.x = 0;
-	env->cams[0].vcam.y = 0;
-	env->cams[0].vcam.z = 1;
-	env->cams[0].v2cam.x = 0;
-	env->cams[0].v2cam.y = 1;
-	env->cams[0].v2cam.z = 0;
+	env->cams.cam[0].pos_cam.x = 0;
+	env->cams.cam[0].pos_cam.y = 0;
+	env->cams.cam[0].pos_cam.z = -8000;
+	env->lums.lum[0].pos_lum.x = 0;
+	env->lums.lum[0].pos_lum.y = 400;
+	env->lums.lum[0].pos_lum.z = -800;
+	env->lums.lum[0].coef = 1.0;
+	set_white(&env->lums.lum[0].col);
+	env->cams.cam[0].vcam.x = 0;
+	env->cams.cam[0].vcam.y = 0;
+	env->cams.cam[0].vcam.z = 1;
+	env->cams.cam[0].v2cam.x = 0;
+	env->cams.cam[0].v2cam.y = 1;
+	env->cams.cam[0].v2cam.z = 0;
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = 0;
@@ -156,7 +157,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[0], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[0], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 1000;
 	obj.o.y = 0;
@@ -168,7 +169,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[1], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[1], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = -1000;
 	obj.o.y = 0;
@@ -180,7 +181,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[2], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[2], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = 1000;
@@ -192,7 +193,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[3], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[3], &obj, sizeof(t_obj));
 	obj.type = 'p';
 	obj.o.x = 0;
 	obj.o.y = -1000;
@@ -204,7 +205,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 0;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[4], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[4], &obj, sizeof(t_obj));
 	obj.type = 't';
 	obj.radius = 100;
 	obj.o.x = 11;
@@ -217,7 +218,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[5], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[5], &obj, sizeof(t_obj));
 	obj.type = 's';
 	obj.o.x = 0;
 	obj.o.y = 0;
@@ -227,7 +228,7 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 255;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[6], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[6], &obj, sizeof(t_obj));
 	obj.type = 'c';
 	obj.radius = 5;
 	obj.o.x = -11;
@@ -240,10 +241,10 @@ t_env	*fill_env(t_env *env)
 	obj.col.c.g = 0;
 	obj.col.c.b = 255;
 	obj.col.c.a = 0;
-	//ft_memcpy(&env->objs[7], &obj, sizeof(t_obj));
+	//ft_memcpy(&env->objs.obj[7], &obj, sizeof(t_obj));
 //	if (!(env->init_rays = (t_ray *)malloc(sizeof(t_ray) * 1)))
 //		return (0);
-//	env->nb_obj = 8;
+//	env->objs.nb = 8;
 	return (env);
 }
 */

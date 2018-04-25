@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:04:19 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/22 20:05:50 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 12:25:54 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ int		j_print_env(t_env *env, int i)
 	ft_putstr_fd("\",\"filter\":\"", fd);
 	ft_putstr_fd(env->filter, fd);
 	ft_putstr_fd("\",\"ambient\":", fd);
-	ft_putfloat_fd(env->amb_coef, fd);
+	ft_putfloat_fd(env->lums.amb_coef, fd);
 	ft_putstr_fd(",\"scene\":{", fd);
 	ft_putstr_fd("\"cameras\":[", fd);
-	i = env->nb_cam;
+	i = env->cams.nb;
 	while (--i >= 0)
 	{
-		env->cams[i].vcam = vect_norm(env->cams[i].vcam);
-		env->cams[i].v2cam = vect_norm(env->cams[i].v2cam);
-		env->cams[i].v3cam = vect_norm(env->cams[i].v3cam);
+		env->cams.cam[i].vcam = vect_norm(env->cams.cam[i].vcam);
+		env->cams.cam[i].v2cam = vect_norm(env->cams.cam[i].v2cam);
+		env->cams.cam[i].v3cam = vect_norm(env->cams.cam[i].v3cam);
 		j_print_cam(env, i, fd);
 		if (i != 0)
 			ft_putstr_fd(",", fd);
@@ -48,7 +48,7 @@ void	j_scene_generator(t_env *env)
 	int fd;
 
 	fd = j_print_env(env, 0);
-	i = env->nb_lum;
+	i = env->lums.nb;
 	ft_putstr_fd("],", fd);
 	ft_putstr_fd("\"lights\":[", fd);
 	while (--i >= 0)
@@ -60,11 +60,11 @@ void	j_scene_generator(t_env *env)
 	ft_putstr_fd("],", fd);
 	i = 0;
 	ft_putstr_fd("\"objects\":[", fd);
-	while (i < env->nb_obj)
+	while (i < env->objs.nb)
 	{
-		env->objs[i].norm = vect_norm(env->objs[i].norm);
+		env->objs.obj[i].norm = vect_norm(env->objs.obj[i].norm);
 		j_print_obj(env, i, fd);
-		if (i != env->nb_obj - 1)
+		if (i != env->objs.nb - 1)
 			ft_putstr_fd(",", fd);
 		i++;
 	}

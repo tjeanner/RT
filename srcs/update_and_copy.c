@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/18 18:53:34 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 11:26:50 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,22 @@ void		update_and_copy_r(t_env *env, int obj)
 
 	i = 0;
 	j = 0;
-	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->nb_obj - 1))))
+	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->objs.nb - 1))))
 		error_mgt(0);
-	while (i < env->nb_obj)
+	while (i < env->objs.nb)
 	{
 		if (i != obj)
 		{
-			ft_memcpy((void *)&new[j], (void *)&env->objs[i], sizeof(t_obj));
+			ft_memcpy((void *)&new[j], (void *)&env->objs.obj[i], sizeof(t_obj));
 			j++;
 		}
 		i++;
 	}
-	if (obj == env->nb_obj - 1)
-		env->curr_obj--;
-	env->nb_obj--;
-	ft_memdel((void *)&env->objs);
-	env->objs = new;
+	if (obj == env->objs.nb - 1)
+		env->objs.curr--;
+	env->objs.nb--;
+	ft_memdel((void *)&env->objs.obj);
+	env->objs.obj = new;
 }
 
 void		update_and_copy_a(t_env *env, SDL_Keycode type)
@@ -44,19 +44,19 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type)
 	int		i;
 
 	i = -1;
-	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->nb_obj + 1))))
+	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->objs.nb + 1))))
 		error_mgt(0);
-	while (++i < env->nb_obj)
-		ft_memcpy((void *)&new[i], (void *)&env->objs[i], sizeof(t_obj));
+	while (++i < env->objs.nb)
+		ft_memcpy((void *)&new[i], (void *)&env->objs.obj[i], sizeof(t_obj));
 	new[i].type = FCTS[type - 49];
-	new[i].o = vect_add(vect_add(env->cams[env->curr_cam].pos,
-		vect_mult(env->cams[env->curr_cam].vcam, 4000)),
-		vect_mult(env->cams[env->curr_cam].v2cam, -300));
-	new[i].norm = env->cams[env->curr_cam].v2cam;
+	new[i].o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
+		vect_mult(env->cams.cam[env->cams.curr].vcam, 4000)),
+		vect_mult(env->cams.cam[env->cams.curr].v2cam, -300));
+	new[i].norm = env->cams.cam[env->cams.curr].v2cam;
 	new[i].radius = 150;
 	set_white(&new[i].col);
-	env->nb_obj++;
-	env->curr_obj = i;
+	env->objs.nb++;
+	env->objs.curr = i;
 	ft_memdel((void *)&env->objs);
-	env->objs = new;
+	env->objs.obj = new;
 }

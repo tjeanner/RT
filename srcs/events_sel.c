@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 06:29:51 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/22 06:38:05 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 11:26:50 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,26 @@
 
 int		event_cam_switch(t_env *env, unsigned int sym)
 {
-	if (sym == SDLK_KP_0 && env->curr_cam != 0)
-		env->curr_cam = 0;
-	else if (sym == SDLK_KP_1 && env->nb_cam > 1 && env->curr_cam != 1)
-		env->curr_cam = 1;
-	else if (sym == SDLK_KP_2 && env->nb_cam > 2 && env->curr_cam != 2)
-		env->curr_cam = 2;
-	else if (sym == SDLK_KP_3 && env->nb_cam > 3 && env->curr_cam != 3)
-		env->curr_cam = 3;
-	else if (sym == SDLK_KP_4 && env->nb_cam > 4 && env->curr_cam != 4)
-		env->curr_cam = 4;
-	else if (sym == SDLK_KP_5 && env->nb_cam > 5 && env->curr_cam != 5)
-		env->curr_cam = 5;
-	else if (sym == SDLK_KP_6 && env->nb_cam > 6 && env->curr_cam != 6)
-		env->curr_cam = 6;
-	else if (sym == SDLK_KP_7 && env->nb_cam > 7 && env->curr_cam != 7)
-		env->curr_cam = 7;
-	else if (sym == SDLK_KP_8 && env->nb_cam > 8 && env->curr_cam != 8)
-		env->curr_cam = 8;
-	else if (sym == SDLK_KP_9 && env->nb_cam > 9 && env->curr_cam != 9)
-		env->curr_cam = 9;
+	if (sym == SDLK_KP_0 && env->cams.curr != 0)
+		env->cams.curr = 0;
+	else if (sym == SDLK_KP_1 && env->cams.nb > 1 && env->cams.curr != 1)
+		env->cams.curr = 1;
+	else if (sym == SDLK_KP_2 && env->cams.nb > 2 && env->cams.curr != 2)
+		env->cams.curr = 2;
+	else if (sym == SDLK_KP_3 && env->cams.nb > 3 && env->cams.curr != 3)
+		env->cams.curr = 3;
+	else if (sym == SDLK_KP_4 && env->cams.nb > 4 && env->cams.curr != 4)
+		env->cams.curr = 4;
+	else if (sym == SDLK_KP_5 && env->cams.nb > 5 && env->cams.curr != 5)
+		env->cams.curr = 5;
+	else if (sym == SDLK_KP_6 && env->cams.nb > 6 && env->cams.curr != 6)
+		env->cams.curr = 6;
+	else if (sym == SDLK_KP_7 && env->cams.nb > 7 && env->cams.curr != 7)
+		env->cams.curr = 7;
+	else if (sym == SDLK_KP_8 && env->cams.nb > 8 && env->cams.curr != 8)
+		env->cams.curr = 8;
+	else if (sym == SDLK_KP_9 && env->cams.nb > 9 && env->cams.curr != 9)
+		env->cams.curr = 9;
 	else
 		return (0);
 	return (1);
@@ -44,13 +44,13 @@ int		events_sel(t_env *env, SDL_Event event, unsigned int sym)
 	if (event.type == SDL_KEYDOWN)
 	{
 		if (sym == SDLK_p)
-			env->curr_obj = (env->curr_obj < env->nb_obj - 1)
-							? env->curr_obj + 1 : 0;
+			env->objs.curr = (env->objs.curr < env->objs.nb - 1)
+							? env->objs.curr + 1 : 0;
 		else if (sym == SDLK_SEMICOLON)
-			env->curr_lum = (env->curr_lum < env->nb_lum - 1)
-							? env->curr_lum + 1 : 0;
+			env->lums.curr = (env->lums.curr < env->lums.nb - 1)
+							? env->lums.curr + 1 : 0;
 		else if (sym == SDLK_NUMLOCKCLEAR)
-			env->curr_obj = (env->curr_obj < 0) ? env->curr_obj + 1 : -2;
+			env->objs.curr = (env->objs.curr < 0) ? env->objs.curr + 1 : -2;
 		else
 			return (0);
 		return (1);
@@ -58,8 +58,8 @@ int		events_sel(t_env *env, SDL_Event event, unsigned int sym)
 	else if (event.type == SDL_MOUSEBUTTONDOWN
 		&& event.button.button == SDL_BUTTON_LEFT)
 	{
-		init_ray(env, event.button.x, event.button.y);
-		env->curr_obj = which_obj_col(env);
+	//	init_ray(env, event.button.x, event.button.y);
+	//	env->objs.curr = which_obj_col(env);
 		return (0);
 	}
 	else

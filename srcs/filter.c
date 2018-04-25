@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/22 20:33:01 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/25 11:14:36 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,6 @@ void	set_filter(t_env *env)
 			env->seuil = 8;
 		cartoon_filter(env);
 	}
-	if (ft_strcmp(env->filter, "3D") && env->cams[env->curr_cam].col.color && env->cams[env->curr_cam].col.color != 16777216)
-		color_filter(env, env->surf, env->cams[env->curr_cam].col);
+	if (ft_strcmp(env->filter, "3D") && env->cams.cam[env->cams.curr].col.color && env->cams.cam[env->cams.curr].col.color != 16777216)
+		color_filter(env, env->surf, env->cams.cam[env->cams.curr].col);
 }
