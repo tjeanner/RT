@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 11:26:50 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/25 16:50:37 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type)
 		vect_mult(env->cams.cam[env->cams.curr].vcam, 4000)),
 		vect_mult(env->cams.cam[env->cams.curr].v2cam, -300));
 	new[i].norm = env->cams.cam[env->cams.curr].v2cam;
-	new[i].radius = 150;
+	new[i].radius = (new[i].type == 'c') ? 30 : 150;
 	set_white(&new[i].col);
 	env->objs.nb++;
 	env->objs.curr = i;
-	ft_memdel((void *)&env->objs);
+	ft_memdel((void *)&env->objs.obj);
 	env->objs.obj = new;
 }
