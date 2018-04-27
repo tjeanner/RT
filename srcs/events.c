@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 18:11:18 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 14:44:05 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ static int		events_random(t_env *env, unsigned int sym, SDL_Event event)
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_m)
 	{
 		ft_memdel((void **)&env->objs.obj);
-		ft_memdel((void **)&env->cams);
-		ft_memdel((void **)&env->lums);
+		ft_memdel((void **)&env->cams.cam);
+		ft_memdel((void **)&env->lums.lum);
 		free(env->effects.filter);
 		j_init(env);
 //		init_scene(env);
