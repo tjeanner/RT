@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 06:21:20 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 08:04:15 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,7 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	while (++i < objs->nb)
 	{
 		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
-				(line->from, objs->obj[i], &tutu) == 1)
-			//			tutu = -1;
-			if ((i == 0 || (tutu > 0.0 &&
+				(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
 							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
 				tmp = tutu;
 	}
@@ -84,12 +82,6 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 	double	tmp;
 	t_ray	tutu;
 
-	//	pos_col = vect_add(line->from.pos, vect_mult(line->from.dir,
-	//				dista));
-	//	norm = get_norm(objs->obj[obj], line, pos_col, dista);
-	//	norm = (objs->obj[obj].type == 'p' && vect_scal(norm, line->from.dir) > 0.0) ? vect_inv(norm) : norm;
-//	pos_col = vect_add(pos_col, vect_mult(norm, 0.00000001000));
-	//	norm = get_norm(objs->obj[obj], line, pos_col, dista);
 	col_2_lum = vect_sous(lum.pos, line->to.pos);
 	tmp = get_vect_norm(col_2_lum);
 	tutu.from.dir = vect_norm(col_2_lum);
@@ -109,10 +101,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line)
 	int		i;
 	t_color	ambi_col;
 	t_color	cols[3];
-//	t_v		tmp;
-//	t_v		tmp2;
 
-	(void)lums;
 	if (which_obj_col(objs, line) <= -1)
 		return (get_black());
 	if (lums->amb_coef < 1.000)
@@ -128,12 +117,11 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line)
 				cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
 				cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
 		}
-	//	line->from.pos = vect_sous(line->from.pos, vect_mult(vect_add(tmp, tmp2), 50.00));
 		cols[0] = mult_color(cols[0], 1.000 - lums->amb_coef);
 		cols[0] = add_color(cols[0], ambi_col);
 	}
 	else
-	cols[0] = objs->obj[line->obj].col;
+		cols[0] = objs->obj[line->obj].col;
 	return (cols[0]);
 }
 
