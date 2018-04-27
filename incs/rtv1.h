@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 06:07:03 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:54:50 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <stdbool.h>
 # include <pthread.h>
 # include "parser.h"
+# include "ui.h"
 
 # define WIN_X 1357
 # define WIN_Y 867
@@ -50,13 +51,6 @@ typedef union			u_color
 		unsigned char	a;
 	}					c;
 }						t_color;
-
-typedef struct			s_v
-{
-	double				x;
-	double				y;
-	double				z;
-}						t_v;
 
 typedef struct			s_line
 {
@@ -166,6 +160,7 @@ typedef struct			s_env
 	t_display			display;
 	t_effects			effects;
 	t_threads			*threads;
+	t_ui				*ui;
 	char				*file;
 	char				*name;
 }						t_env;

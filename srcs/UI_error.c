@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/17 21:41:47 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/26 16:22:43 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:58:14 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 void	UI_init_error(int e)
 {
 	if (e == 1)
-		ft_putendlcolor("Malloc failed", RED);
+		ft_putendl("Malloc failed");
 	exit (1);
 }

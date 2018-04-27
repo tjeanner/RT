@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
+#    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/23 21:57:57 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/04/27 19:49:25 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,11 +39,20 @@ SRC =		main.c \
 			filter2.c \
 			raytracing.c \
 			error_mgt.c \
+			UI_button.c \
+			UI_error.c \
+			UI_event.c \
+			UI_help.c \
+			UI_id.c \
+			UI_init.c \
+			UI_input.c \
+			UI_main.c \
+			UI_onglet.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror
 CFLAGS +=	-Ofast -march=native -flto
-CFLAGS +=	-g3 -fsanitize=address 
+CFLAGS +=	-g3 -fsanitize=address
 
 SRCDIR =	srcs
 INCDIR =	incs
@@ -62,6 +71,27 @@ FT_LIB =	$(addprefix $(FT)/,libft.a)
 SDL =		sdl/SDL2.framework/Headers
 SDL_LNK =	sdl/SDL2.framework/SDL2
 SDL_INC =	-I $(SDL)
+SDL2LIB		= $(shell sdl2-config --libs) -L ~/.brew/Cellar/sdl_ttf/2.0.11_1/lib/
+SDL2CFLAGS	= $(shell sdl2-config --cflags) -I ~/.brew/Cellar/sdl_ttf/2.0.11_1/include/SDL
+SDL2TTFLIB	= -lSDL_ttf
+
+ifeq "$(shell brew info sdl2 | grep -o 'Not installed')" "Not installed"
+INSTALL1	= install1
+else
+INSTALL1	=
+endif
+
+ifeq "$(shell brew info sdl_ttf | grep -o 'Not installed')" "Not installed"
+INSTALL2	= install2
+else
+INSTALL2	=
+endif
+
+ifeq "$(shell brew info imagemagick | grep -o 'Not installed')" "Not installed"
+INSTALL3	= install3
+else
+INSTALL3	=
+endif
 
 all: obj
 	@echo "Libft all rule :"
@@ -70,17 +100,26 @@ all: obj
 	@$(MAKE) $(NAME)
 	@echo ""
 
-obj:
+obj: $(INSTALL1) $(INSTALL2) $(INSTALL3)
 	@mkdir -p $(OBJDIR)
 	@rm -rf $(SDLDIR)
 	@mkdir -p $(SDLDIR)
 	@cp -R sdl/SDL2.framework ~/Library/Frameworks
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCFILE)
-	$(CC) $(CFLAGS) $(FT_INC) -I $(INCDIR) $(SDL_INC) -o $@ -c $<
+	$(CC) $(CFLAGS) $(FT_INC) -I $(INCDIR) $(SDL_INC) -o $@ -c $< $(SDL2CFLAGS)
 
 $(NAME): $(OBJ) $(FT_LIB)
-	$(CC) $(CFLAGS) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME) $(SDL2LIB) $(SDL2TTFLIB)
+
+install1:
+	@brew install sdl2
+
+install2:
+	@brew install sdl_ttf
+
+install3:
+	@brew install imagemagick
 
 norme:
 	@norminette $(addprefix $(SRCDIR)/,$(SRC))

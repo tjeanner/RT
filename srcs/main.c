@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 06:28:00 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:53:45 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ void		tutu(t_env *env)
 		pthread_join(env->threads[i].id, NULL);
 	set_filter(env);
 	SDL_UpdateWindowSurface(env->display.win);
+	SDL_UpdateWindowSurface(env->ui->win);
+	UI_main();
 }
 
 int			main(int ac, char **av)

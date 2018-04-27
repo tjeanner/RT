@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/07 18:40:56 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/26 15:01:28 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:58:16 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 t_btn	*add_btn(t_ui *ui, t_btn btn, int onglet)
 {
-			ft_putendlcolor("add_btn", MAGENTA);
 	t_btn	*l;
 
 	if (!ui)
@@ -49,7 +48,6 @@ t_btn	*add_btn(t_ui *ui, t_btn btn, int onglet)
 
 t_btn	*search_btn(t_ui *ui, int id)
 {
-			ft_putendlcolor("search_btn", MAGENTA);
 	t_btn	*l;
 
 	if (id <= 0 || !ui)
@@ -68,7 +66,6 @@ t_btn	*search_btn(t_ui *ui, int id)
 
 void	delete_btn(t_ui *ui, int id)
 {
-			ft_putendlcolor("delete_btn", MAGENTA);
 
 	t_btn	*btn;
 	t_btn	*btn2;
