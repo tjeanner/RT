@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 18:59:41 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 06:07:03 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,14 @@ typedef struct			s_line
 	t_v					dir;
 }						t_line;
 
+typedef struct			s_ray
+{
+	int					obj;
+	double				dist;
+	t_line				from;
+	t_line				to;
+}						t_ray;
+
 typedef struct			s_obj
 {
 	char				type;
@@ -71,7 +79,7 @@ typedef struct			s_obj
 	t_v					o;
 	t_v					norm;
 	t_color				col;
-	double				dist;
+//	double				dist;
 	float				k_diff;
 	float				transp;
 	float				k_spec;
@@ -99,7 +107,7 @@ typedef struct			s_objs
 	int					nb;
 	int					curr;
 	t_obj				*obj;
-	int					(*col_fcts[4])(t_line line, t_obj obj, double *dists);
+	int					(*col_fcts[4])(t_line line, t_obj obj, double *res);
 }						t_objs;
 
 typedef struct			s_cams
@@ -167,7 +175,7 @@ typedef struct			s_env
 */
 void					tutu(t_env *env);
 void					*rays(void *tmp);
-t_line					init_line(double x, double y, t_cam cam);
+t_ray					init_line(double x, double y, t_cam cam);
 
 
 /*
@@ -207,10 +215,10 @@ void					ft_putfloat_fd(double nbr, int fd);
 /*
 **raytracing.c
 */
-int						which_obj_col(t_objs *objs, t_line line);
-t_v						get_norm(t_obj obj, t_line line, t_v pos_col);
-t_color					get_col(t_objs *objs, t_lums *lums, t_line line);
-t_color					get_lum(t_objs *objs, int obj, t_lums *lums, int lum, t_line line);
+int						which_obj_col(t_objs *objs, t_ray *line);
+t_v						get_norm(t_obj obj, t_ray *line);
+t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line);
+t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
 
 /*
 **events.c
@@ -250,10 +258,10 @@ void					update_and_copy_a(t_env *env, SDL_Keycode type);
 /*
 **distances_functions.c
 */
-int						get_dist_cone(t_line line, t_obj obj, double *dists);
-int						get_dist_tube(t_line line, t_obj obj, double *dists);
-int						get_dist_plan(t_line line, t_obj obj, double *dists);
-int						get_dist_sphere(t_line line, t_obj obj, double *dists);
+int						get_dist_cone(t_line line, t_obj obj, double *res);
+int						get_dist_tube(t_line line, t_obj obj, double *res);
+int						get_dist_plan(t_line line, t_obj obj, double *res);
+int						get_dist_sphere(t_line line, t_obj obj, double *res);
 
 /*
 **filter.c

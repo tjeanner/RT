@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/25 18:06:08 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 06:28:00 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,16 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 	env->lums.curr = 0;
 	env->state = 0;
 //	env->portion = 3;
-	env->lums.coefs_sum = 0.0;
-	env->lums.amb_coef = 1.0;
+//	env->lums.coefs_sum = 0.0;
+	env->lums.amb_coef = 0.2;
 	i = -1;
 	while (++i < env->cams.nb)
 		env->cams.cam[env->cams.curr].v3cam = vect_prod(
 		env->cams.cam[env->cams.curr].vcam, env->cams.cam[env->cams.curr].v2cam);
-	env->lums.coefs_sum = 1.0;
-	i = -1;
-	while (++i < env->objs.nb)// && (env->lums.coefs_sum += env->lums.lum[i].coef))
-		env->objs.obj[i].k_diff = 1.0;
-	ft_putfloat_fd(env->lums.coefs_sum, 1);
-	ft_putstr(", ");
+//	env->lums.coefs_sum = 1.0;
+//	i = -1;
+//	while (++i < env->objs.nb)// && (env->lums.coefs_sum += env->lums.lum[i].coef))
+//		env->objs.obj[i].k_diff = 1.0;
 	i = -1;
 	while (++i < env->lums.nb)
 		env->lums.coefs_sum += env->lums.lum[i].coef;
