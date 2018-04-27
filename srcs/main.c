@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 06:28:00 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 18:21:57 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int			main(int ac, char **av)
 		error_mgt(6);
 	if (!(env = init(av[1])))
 		error_mgt(6);
+//	env->objs.obj[0].reflect = 0.;
 	tutu(env);
 	while (!env->state)
 	{

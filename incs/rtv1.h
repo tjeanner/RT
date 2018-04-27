@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 06:07:03 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:36:01 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define NB_THREADS 8
 # define FCTS "sptc"
 # define S "0123456789ABCDEF"
+# define ABS(x) (x < 0 ? -x : x)
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 
@@ -84,6 +85,8 @@ typedef struct			s_obj
 	float				transp;
 	float				k_spec;
 	float				k_phong;
+	float				reflect;
+	float				refract;
 }						t_obj;
 
 typedef struct			s_cam
@@ -190,6 +193,8 @@ t_v						vect_sous(t_v a, t_v b);
 double					vect_scal(t_v a, t_v b);
 t_v						vect_prod(t_v a, t_v b);
 t_v						vect_inv(t_v a);
+t_v						vect_reflect(t_v incident, t_v normal);
+t_v						vect_refract(t_v incident, t_v normal, double k);
 
 /*
 **color_math.c
@@ -217,7 +222,8 @@ void					ft_putfloat_fd(double nbr, int fd);
 */
 int						which_obj_col(t_objs *objs, t_ray *line);
 t_v						get_norm(t_obj obj, t_ray *line);
-t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line);
+t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line,
+																unsigned int d);
 t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
 
 /*
