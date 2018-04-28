@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 22:30:24 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/29 00:45:03 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ t_v			get_norm(t_obj obj, t_ray *line)
 			vect_scal(obj.norm, obj.norm);
 		vect = vect_sous(line->to.pos, vect_add(obj.o, vect_mult(obj.norm, res)));
 	}
-	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
+//	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
+//			? vect_norm(vect_inv(vect)) : vect_norm(vect));
+	return (vect = (vect_scal(vect, line->from.dir) > 0.000)
 			? vect_norm(vect_inv(vect)) : vect_norm(vect));
 }
 
@@ -120,6 +122,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	t_ray	refl;
 	t_ray	refr;
 	double	k;
+//	double	modulo;
 	t_v		lol;
 
 	if (!d || which_obj_col(objs, line) == 0)
@@ -127,14 +130,6 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	if (lums->amb_coef < 1.000)
 	{
 		ambi_col = mult_color(objs->obj[line->obj].col, lums->amb_coef);
-		if (objs->obj[line->obj].tex == 1)
-		{
-			lol.x = ((int)((line->to.pos.x) / 100) % 2) ? 0 : 1;
-			lol.y = ((int)((line->to.pos.y) / 100) % 2) ? 0 : 1;
-			lol.z = ((int)((line->to.pos.z) / 100) % 2) ? 0 : 1;
-			if ((int)lol.x ^ (int)lol.y ^ (int)lol.z)
-				ambi_col = get_black();
-		}
 		cols[0] = get_black();
 		cols[1] = get_black();
 		i = -1;
@@ -144,6 +139,19 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 				cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * lums->lum[i].coef / lums->coefs_sum);
 				cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
 				cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
+		}
+		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == 'p')
+		{
+			lol.x = ((int)((line->to.pos.x) / 100) % 2) ? 0 : 1;
+			lol.y = ((int)((line->to.pos.y) / 100) % 2) ? 0 : 1;
+			lol.z = ((int)((line->to.pos.z) / 100) % 2) ? 0 : 1;
+			if ((int)lol.x ^ (int)lol.y ^ (int)lol.z)
+				ambi_col = get_black();
+/*
+			modulo = line->to.pos.x * 500 - floor(line->to.pos.x * 500);
+			if (modulo < 0.5)
+				ambi_col = get_black();
+*/
 		}
 		cols[0] = mult_color(cols[0], 1.000 - lums->amb_coef);
 		cols[0] = add_color(cols[0], ambi_col);
