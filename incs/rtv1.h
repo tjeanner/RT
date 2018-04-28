@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 19:54:50 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/28 05:03:09 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define NB_THREADS 8
 # define FCTS "sptc"
 # define S "0123456789ABCDEF"
+# define ABS(x) (x < 0 ? -x : x)
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 
@@ -78,6 +79,9 @@ typedef struct			s_obj
 	float				transp;
 	float				k_spec;
 	float				k_phong;
+	float				reflect;
+	float				refract;
+	unsigned int		tex;
 }						t_obj;
 
 typedef struct			s_cam
@@ -133,6 +137,7 @@ typedef struct			s_effects
 	char				stereo;
 	char				*filter;
 	int					seuil;
+	unsigned int		depth;
 }						t_effects;
 
 typedef struct			s_threads
@@ -185,6 +190,8 @@ t_v						vect_sous(t_v a, t_v b);
 double					vect_scal(t_v a, t_v b);
 t_v						vect_prod(t_v a, t_v b);
 t_v						vect_inv(t_v a);
+t_v						vect_reflect(t_v incident, t_v normal);
+t_v						vect_refract(t_v incident, t_v normal, double k);
 
 /*
 **color_math.c
@@ -212,7 +219,8 @@ void					ft_putfloat_fd(double nbr, int fd);
 */
 int						which_obj_col(t_objs *objs, t_ray *line);
 t_v						get_norm(t_obj obj, t_ray *line);
-t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line);
+t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line,
+																unsigned int d);
 t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
 
 /*

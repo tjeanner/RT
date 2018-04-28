@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 18:59:14 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/28 03:06:10 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void		j_init_env_var(t_env *env)
 	env->name = ft_strdup("RT");
 	env->effects.filter = ft_strdup("NONE");
 	env->lums.amb_coef = 0.2;
+	env->effects.depth = 1;
 }
 
 void			j_init_env_struc(t_env *env, t_json *json)

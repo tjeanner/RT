@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 19:53:45 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/28 02:39:25 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 	env->state = 0;
 //	env->portion = 3;
 //	env->lums.coefs_sum = 0.0;
-	env->lums.amb_coef = 0.2;
+//	env->lums.amb_coef = 0.2;
 	i = -1;
 	while (++i < env->cams.nb)
 		env->cams.cam[env->cams.curr].v3cam = vect_prod(
@@ -121,6 +121,7 @@ int			main(int ac, char **av)
 		error_mgt(6);
 	if (!(env = init(av[1])))
 		error_mgt(6);
+//	env->objs.obj[0].reflect = 0.;
 	tutu(env);
 	while (!env->state)
 	{
