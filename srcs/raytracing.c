@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 19:39:18 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/28 03:05:34 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	tmp = -1.0;
 	while (++i < objs->nb)
 	{
-		if (i == 2)
+/*		if (i == 2)
 		{
 			objs->obj[i].reflect = 0.2;
 			objs->obj[i].refract = 0.0;
@@ -76,12 +76,12 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 			objs->obj[i].reflect = 0.0;
 			objs->obj[i].refract = 0.0;
 		}
-		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
+*/		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
 				(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
 							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
 				tmp = tutu;
 	}
-	if (tmp < 0.0)
+	if (tmp < 0.0 || objs->nb == 0)
 		return (0);
 	line->obj = ob;
 	line->to.pos = vect_add(line->from.pos, vect_mult(line->from.dir, tmp));
@@ -121,7 +121,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	t_ray	refr;
 	double	k;
 
-	if (!d || which_obj_col(objs, line) <= -1)
+	if (!d || which_obj_col(objs, line) == 0)
 		return (get_black());
 	if (lums->amb_coef < 1.000)
 	{
@@ -151,9 +151,9 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	else if (objs->obj[line->obj].refract > 0.0)
 	{
 		refr.from.pos = line->to.pos;
-		if (line->obj == 5 && d == 3)
+		if (objs->obj[line->obj].refract >= 1 && d == 3)
 			k = 1.0 / 1.33;
-		else if (line->obj == 5 && d == 2)
+		else if (objs->obj[line->obj].refract >= 1 && d == 2)
 			k = 1.33 / 1.0;
 		else
 			k = 0;
@@ -182,7 +182,7 @@ void		*rays(void *tmp)
 		while (++x < WIN_X)
 		{
 			tutu = init_line((double)(x + 0.5), (double)(y + 0.5), env->cams.cam[env->cams.curr]);
-			col = get_col(&env->objs, &env->lums, &tutu, 3);
+			col = get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
 			if (env->display.sur == 1)
 				((int *)env->display.surf->pixels)[x + y * env->display.surf->w] = col.color;
 			else

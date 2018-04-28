@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 19:36:01 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:54:08 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ typedef struct			s_effects
 	char				stereo;
 	char				*filter;
 	int					seuil;
+	unsigned int		depth;
 }						t_effects;
 
 typedef struct			s_threads
