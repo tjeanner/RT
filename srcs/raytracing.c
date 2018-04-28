@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 03:05:34 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/28 22:30:24 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,21 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	t_ray	refl;
 	t_ray	refr;
 	double	k;
+	t_v		lol;
 
 	if (!d || which_obj_col(objs, line) == 0)
 		return (get_black());
 	if (lums->amb_coef < 1.000)
 	{
 		ambi_col = mult_color(objs->obj[line->obj].col, lums->amb_coef);
+		if (objs->obj[line->obj].tex == 1)
+		{
+			lol.x = ((int)((line->to.pos.x) / 100) % 2) ? 0 : 1;
+			lol.y = ((int)((line->to.pos.y) / 100) % 2) ? 0 : 1;
+			lol.z = ((int)((line->to.pos.z) / 100) % 2) ? 0 : 1;
+			if ((int)lol.x ^ (int)lol.y ^ (int)lol.z)
+				ambi_col = get_black();
+		}
 		cols[0] = get_black();
 		cols[1] = get_black();
 		i = -1;
