@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 19:54:08 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/28 05:03:09 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct			s_obj
 	float				k_phong;
 	float				reflect;
 	float				refract;
+	unsigned int		tex;
 }						t_obj;
 
 typedef struct			s_cam

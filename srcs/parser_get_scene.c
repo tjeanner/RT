@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/28 00:32:43 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/28 05:03:22 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		obj->reflect = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "refract") && type == TYPE_DOUBLE)
 		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 1));
-//	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
-//		j_get_tex(j_obj, obj);
+	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
+		j_get_tex(j_obj, obj);
 	else
 		error_mgt(5);
 }

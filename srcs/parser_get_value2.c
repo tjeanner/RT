@@ -6,12 +6,12 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:19:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/27 15:01:32 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/28 05:03:40 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-/*
+
 void		j_get_tex(t_json *json, t_obj *obj)
 {
 	t_json	*p;
@@ -23,7 +23,7 @@ void		j_get_tex(t_json *json, t_obj *obj)
 		obj->tex = 0;
 	p = p->next;
 }
-*/
+
 void		j_get_rot(t_json *json, t_obj *obj)
 {
 	t_json	*p;
