@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/27 19:49:25 by vmercadi         ###   ########.fr        #
+#    Updated: 2018/04/28 14:53:48 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,6 @@ SRC =		main.c \
 			error_mgt.c \
 			UI_button.c \
 			UI_error.c \
-			UI_event.c \
 			UI_help.c \
 			UI_id.c \
 			UI_init.c \
@@ -49,6 +48,7 @@ SRC =		main.c \
 			UI_main.c \
 			UI_onglet.c \
 
+#			UI_event.c
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror
 CFLAGS +=	-Ofast -march=native -flto

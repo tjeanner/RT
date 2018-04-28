@@ -6,11 +6,11 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 18:34:06 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/20 19:02:11 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/28 14:53:13 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ui.c"
+#include "ui.h"
 
 void	UI_event()
 {
