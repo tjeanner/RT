@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/28 20:45:48 by cquillet         ###   ########.fr        #
+#    Updated: 2018/04/28 21:57:48 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,10 +41,10 @@ SRC =		main.c \
 			error_mgt.c \
 
 CC =		gcc
-CFLAGS =	-Wall -Wextra -Werror -Igsl/include
-#CFLAGS +=	-Ofast -march=native -flto
-CFLAGS +=	-g3 #-fsanitize=address
-LFLAGS =	-Lgsl/lib -lgsl #-lgslcblas
+CFLAGS =	-Wall -Wextra -Werror #-Igsl/include
+CFLAGS +=	-Ofast -march=native -flto
+#CFLAGS +=	-g3 #-fsanitize=address
+#LFLAGS =	-Lgsl/lib -lgsl #-lgslcblas
 
 SRCDIR =	srcs
 INCDIR =	incs

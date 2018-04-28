@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 20:58:50 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/28 22:01:24 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	tmp = -1.0;
 	while (++i < objs->nb)
 	{
-		if (objs->obj[i].type == 'c' && 
+	/*	if (objs->obj[i].type == 'c' && 
 				get_dist_torus(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
-							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
+							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)*/
 				tmp = tutu;
-		else if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
+		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
 				(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
 							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
 				tmp = tutu;

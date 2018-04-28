@@ -6,14 +6,14 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 20:53:34 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/28 22:00:32 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-#include "gsl/gsl_math.h"
-#include "gsl/gsl_poly.h"
-#include "gsl/gsl_errno.h"
+//#include "gsl/gsl_math.h"
+//#include "gsl/gsl_poly.h"
+//#include "gsl/gsl_errno.h"
 
 int			resolve(t_v math, double *res)
 {
@@ -108,7 +108,7 @@ int			get_dist_sphere(t_line line, t_obj obj, double *res)
 		}*/
 	return (resolve(math, res));
 }
-
+/*
 int			get_dist_torus(t_line line, t_obj obj, double *res)
 {
 	int							i;
@@ -155,4 +155,4 @@ int			get_dist_torus(t_line line, t_obj obj, double *res)
 	}
 	gsl_poly_complex_workspace_free(poly);
 	return (0);
-}
+*/
