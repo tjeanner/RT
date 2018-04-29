@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 22:00:32 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/29 14:32:19 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,4 +155,5 @@ int			get_dist_torus(t_line line, t_obj obj, double *res)
 	}
 	gsl_poly_complex_workspace_free(poly);
 	return (0);
+}
 */
