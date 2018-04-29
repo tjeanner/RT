@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 23:01:09 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/29 23:12:55 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ typedef struct			s_line
 typedef struct			s_ray
 {
 	int					obj;
+	int					prev_obj;
 	double				dist;
+	double				total_dist;
 	t_line				from;
 	t_line				to;
 }						t_ray;
@@ -78,6 +80,7 @@ typedef struct			s_obj
 {
 	char				type;
 	float				radius;
+	float				radius2;
 	t_v					o;
 	t_v					norm;
 	t_color				col;
@@ -272,6 +275,7 @@ int						get_dist_cone(t_line line, t_obj obj, double *res);
 int						get_dist_tube(t_line line, t_obj obj, double *res);
 int						get_dist_plan(t_line line, t_obj obj, double *res);
 int						get_dist_sphere(t_line line, t_obj obj, double *res);
+int						get_dist_torus(t_line line, t_obj obj, double *res);
 
 /*
 **filter.c
