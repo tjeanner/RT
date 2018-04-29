@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 17:29:27 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/26 16:21:40 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/28 20:25:29 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@ int		count_word(char *s)
 
 void	UI_btn1(t_ui *ui)
 {
-	SDL_Color col;
+	SDL_Color		col;
+	SDL_Renderer	*r;
 
 	col = init_sdlcolor(255, 255, 255, 255);
-	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 1), 10, 10);
-	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 1), 10, 30);
+
+	r = SDL_CreateRenderer(ui->win, -1, SDL_RENDERER_ACCELERATED);
+	add_btn(ui, create_btn(ui, init_btn(20, "yolo", col, col), 10, 10, r), 1);
+	add_btn(ui, create_btn(ui, init_btn(20, "swag", col, col), 50, 80, r), 1);
 	set_btnid(ui, 1);
 }
 
@@ -53,30 +56,30 @@ void	UI_btn1(t_ui *ui)
 ** Where the differents buttons for UI SCENE are created
 */
 
-void	UI_btn2(t_ui *ui)
-{
-	SDL_Color	col;
+// void	UI_btn2(t_ui *ui)
+// {
+// 	SDL_Color	col;
 
-	col = init_sdlcolor(255, 255, 255, 255);
-	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 2), 10, 10);
-	set_btnid(ui, 2);
-}
+// 	col = init_sdlcolor(255, 255, 255, 255);
+// 	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 2), 10, 10);
+// 	set_btnid(ui, 2);
+// }
 
 /*
 ** Where the differents buttons for UI HELP are created
 */
 
-void	UI_btn3(t_ui *ui)
-{
-	SDL_Color	col;
+// void	UI_btn3(t_ui *ui)
+// {
+// 	SDL_Color	col;
 
-	col = init_sdlcolor(255, 255, 255, 255);
-	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 10);
-	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 20);
-	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 30);
-	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 40);
-	set_btnid(ui, 3);
-}
+// 	col = init_sdlcolor(255, 255, 255, 255);
+// 	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 10);
+// 	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 20);
+// 	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 30);
+// 	create_btn(ui, *add_btn(ui, init_btn(20, "yolo", col, col), 3), 10, 40);
+// 	set_btnid(ui, 3);
+// }
 
 /*
 ** Return an int value of a percentage
@@ -115,18 +118,20 @@ t_ui	UI_main()
 ** Set and display all
 */
 
-void	create_btn(t_ui *ui, t_btn btn, int x, int y)
+t_btn	create_btn(t_ui *ui, t_btn btn, int x, int y, SDL_Renderer *renderer)
 {
 	btn.x = x;
 	btn.y = y;
-	btn.renderer = SDL_CreateRenderer(ui->win, -1, SDL_RENDERER_ACCELERATED);
+	if (!ui)
+		ui = 0;
+	btn.renderer = renderer;
 	SDL_SetRenderDrawColor(btn.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(btn.renderer);
     SDL_SetRenderDrawColor(btn.renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 	TTF_Init();
 	btn.r = init_rect(x, y, (btn.fontsize), (ft_strlen(btn.text) * 10));
 	btn.font = TTF_OpenFont(OPEN_SANS_REGULAR, btn.fontsize);
-	btn.col_text =  init_sdlcolor(144, 77, 255, 255);
+	btn.col_text = init_sdlcolor(144, 77, 255, 255);
 	btn.texSurface = TTF_RenderText_Solid(btn.font, btn.text, btn.col_text);
 	btn.tex = SDL_CreateTextureFromSurface(btn.renderer, btn.texSurface);
 	SDL_QueryTexture(btn.tex, NULL, NULL, &btn.textRect.w, &btn.textRect.h);
@@ -134,5 +139,5 @@ void	create_btn(t_ui *ui, t_btn btn, int x, int y)
 	SDL_RenderPresent(btn.renderer);
 	SDL_FreeSurface(btn.texSurface);
 	SDL_DestroyTexture(btn.tex);
-	ui->btn = &btn;
+	return (btn);
 }

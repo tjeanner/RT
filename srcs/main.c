@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 02:39:25 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/28 19:51:04 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void		tutu(t_env *env)
 {
 	int		i;
 	t_cam	tmp;
-
+	
 	env->display.sur = 1;
 	if (env->effects.stereo)
 	{
@@ -109,13 +109,12 @@ void		tutu(t_env *env)
 		pthread_join(env->threads[i].id, NULL);
 	set_filter(env);
 	SDL_UpdateWindowSurface(env->display.win);
-	SDL_UpdateWindowSurface(env->ui->win);
-	UI_main();
 }
 
 int			main(int ac, char **av)
 {
 	t_env		*env;
+	t_ui ui;
 
 	if (ac != 2 || !ft_strstr(av[1], ".json"))
 		error_mgt(6);
@@ -123,9 +122,12 @@ int			main(int ac, char **av)
 		error_mgt(6);
 //	env->objs.obj[0].reflect = 0.;
 	tutu(env);
+	ui = UI_main();
+	env->ui = &ui;
 	while (!env->state)
 	{
 		events(env);
+		SDL_UpdateWindowSurface(env->ui->win);
 	}
 	ft_freeenv(env);
 	SDL_Quit();

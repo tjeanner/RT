@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/28 14:53:48 by vmercadi         ###   ########.fr        #
+#    Updated: 2018/04/28 17:35:40 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,15 +49,16 @@ SRC =		main.c \
 			UI_onglet.c \
 
 #			UI_event.c
+
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror
-CFLAGS +=	-Ofast -march=native -flto
+CFLAGS +=	-march=native -flto
 CFLAGS +=	-g3 -fsanitize=address
 
 SRCDIR =	srcs
 INCDIR =	incs
 OBJDIR =	objs
-SDLDIR =	~/Library/Frameworks
+# SDLDIR =	~/Library/Frameworks
 
 INCFILE = $(addprefix $(INCDIR)/,$(NAME).h)
 
@@ -68,12 +69,12 @@ FT_LNK =	-L $(FT) -lft
 FT_INC =	-I $(addprefix $(FT)/,$(INCDIR))
 FT_LIB =	$(addprefix $(FT)/,libft.a)
 
-SDL =		sdl/SDL2.framework/Headers
-SDL_LNK =	sdl/SDL2.framework/SDL2
-SDL_INC =	-I $(SDL)
-SDL2LIB		= $(shell sdl2-config --libs) -L ~/.brew/Cellar/sdl_ttf/2.0.11_1/lib/
-SDL2CFLAGS	= $(shell sdl2-config --cflags) -I ~/.brew/Cellar/sdl_ttf/2.0.11_1/include/SDL
-SDL2TTFLIB	= -lSDL_ttf
+# SDL =		sdl/SDL2.framework/Headers
+# SDL_LNK =	sdl/SDL2.framework/SDL2
+# SDL_INC =	-I $(SDL)
+SDL2LIB		= $(shell sdl2-config --libs) -L ~/.brew/Cellar/sdl2_ttf/2.0.14/lib/
+SDL2CFLAGS	= $(shell sdl2-config --cflags) -I ~/.brew/Cellar/sdl2_ttf/2.0.14/include/SDL
+SDL2TTFLIB	= -lSDL2_ttf
 
 ifeq "$(shell brew info sdl2 | grep -o 'Not installed')" "Not installed"
 INSTALL1	= install1
@@ -81,7 +82,7 @@ else
 INSTALL1	=
 endif
 
-ifeq "$(shell brew info sdl_ttf | grep -o 'Not installed')" "Not installed"
+ifeq "$(shell brew info sdl2_ttf | grep -o 'Not installed')" "Not installed"
 INSTALL2	= install2
 else
 INSTALL2	=
@@ -102,9 +103,9 @@ all: obj
 
 obj: $(INSTALL1) $(INSTALL2) $(INSTALL3)
 	@mkdir -p $(OBJDIR)
-	@rm -rf $(SDLDIR)
-	@mkdir -p $(SDLDIR)
-	@cp -R sdl/SDL2.framework ~/Library/Frameworks
+	# @rm -rf $(SDLDIR)
+	# @mkdir -p $(SDLDIR)
+	# @cp -R sdl/SDL2.framework ~/Library/Frameworks
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCFILE)
 	$(CC) $(CFLAGS) $(FT_INC) -I $(INCDIR) $(SDL_INC) -o $@ -c $< $(SDL2CFLAGS)

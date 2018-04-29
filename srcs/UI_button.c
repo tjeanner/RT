@@ -6,11 +6,12 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/07 18:40:56 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/27 19:58:16 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/28 18:50:54 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ui.h"
+#include "rtv1.h"
 
 /*
 **	Add a btn to the list
@@ -24,18 +25,21 @@ t_btn	*add_btn(t_ui *ui, t_btn btn, int onglet)
 		return (NULL);
 	if (!(l = ui->btn))
 	{
-		ui->btn = (t_btn *)malloc(sizeof(t_btn));
-		*(ui->btn) = btn;
+		if (!(ui->btn = (t_btn *)malloc(sizeof(t_btn))))
+			error_mgt(0);
+		ft_memcpy(ui->btn, &btn, sizeof(t_btn));
 		ui->btn->id = ++ui->maxid;
 		ui->btn->onglet = onglet;
 		ui->btn->next = NULL;
 		return (ui->btn);
 	}
+
 	while (l->next)
 		l = l->next;
-	l->next = (t_btn *)malloc(sizeof(t_btn));
+	if (!(l->next = (t_btn *)malloc(sizeof(t_btn))))
+		error_mgt(0);
 	l = l->next;
-	*l = btn;
+	ft_memcpy(l, &btn, sizeof(t_btn));
 	l->id = ++ui->maxid;
 	l->onglet = onglet;
 	l->next = NULL;

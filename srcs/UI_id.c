@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/24 17:32:36 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/26 15:07:27 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/28 19:42:07 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void	set_btnid(t_ui *ui, int id)
 	t_btn	*btn;
 
 	btn = ui->btn;
-	while (btn && btn->id == 0)
-		btn = btn->next;
 	while (btn)
 	{
 		set_btnid2(ui, btn, id);
@@ -85,8 +83,6 @@ void	set_inid(t_ui *ui, int id)
 	t_in	*in;
 
 	in = ui->in;
-	while (in && in->id == 0)
-		in = in->next;
 	while (in)
 	{
 		set_inid2(ui, in, id);

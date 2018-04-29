@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/07 18:24:41 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/26 15:44:52 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/28 19:56:23 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 # include "utils.h"
 # include "color.h"
 # include "libft.h"
-# define OPEN_SANS_REGULAR "lib/font/open-sans/OpenSans-Regular.ttf"
-# define OPEN_SANS_BOLD "lib/font/open-sans/OpenSans-Bold.ttf"
-# define OPEN_SANS_EXTRABOLD "lib/font/open-sans/OpenSans-ExtraBold.ttf"
-# define OPEN_SANS_ITALIC "lib/font/open-sans/OpenSans-Italic.ttf"
-# define OPEN_SANS_LIGHT "lib/font/open-sans/OpenSans-Light.ttf"
+# define OPEN_SANS_REGULAR "font/open-sans/OpenSans-Regular.ttf"
+# define OPEN_SANS_BOLD "font/open-sans/OpenSans-Bold.ttf"
+# define OPEN_SANS_EXTRABOLD "font/open-sans/OpenSans-ExtraBold.ttf"
+# define OPEN_SANS_ITALIC "font/open-sans/OpenSans-Italic.ttf"
+# define OPEN_SANS_LIGHT "font/open-sans/OpenSans-Light.ttf"
 
 /*
 ** UI base struct
@@ -111,7 +111,7 @@ typedef struct			s_ui
 */
 
 t_ui					UI_main();
-void					create_btn(t_ui *ui, t_btn btn, int x, int y);
+t_btn					create_btn(t_ui *ui, t_btn btn, int x, int y, SDL_Renderer *r);
 void					create_area(int x1, int y1, int x2, int y2);
 void					set_btnid2(t_ui *ui, t_btn *btn, int id);
 void					set_btnid(t_ui *ui, int id);
