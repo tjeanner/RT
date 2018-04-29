@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 20:41:48 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/29 19:07:59 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct			s_ray
 	int					prev_obj;
 	double				dist;
 	double				total_dist;
+	double				n1;
+	double				n2;
 	t_line				from;
 	t_line				to;
 }						t_ray;
@@ -230,6 +232,7 @@ t_v						get_norm(t_obj obj, t_ray *line);
 t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line,
 																unsigned int d);
 t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
+t_color					next_rays(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d);
 
 /*
 **events.c

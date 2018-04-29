@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 14:30:43 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/29 21:40:08 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ t_ray			init_line(double x, double y, t_cam cam)
 					vect_mult(cam.v2cam, (double)((WIN_Y / 2.0 - y) /
 							get_vect_norm(cam.v2cam))))));
 	ray.from.pos = cam.pos;
-	ray.dist = 0.;
-	ray.total_dist = 0.;
+	ray.dist = 0.0;
+	ray.total_dist = 0.0;
 	ray.obj = -1;
 	ray.prev_obj = -1;
+	ray.n1 = 1.0;
+	ray.n2 = 1.0;
 	return (ray);
 }
 
@@ -34,25 +36,21 @@ t_v			get_norm(t_obj obj, t_ray *line)
 	double	res;
 	t_v		vect;
 
-	if (obj.type == 's' || obj.type == 'p')
-		vect = (obj.type == 'p') ? obj.norm : vect_sous(line->to.pos, obj.o);
-	else if (obj.type == 'c')
-	{
-		vect = vect_sous(line->from.pos, obj.o);
-		res = vect_scal(line->from.dir, vect_mult(obj.norm, line->dist)) +
-			vect_scal(vect, obj.norm);
-		vect = vect_sous(vect_sous(line->to.pos, obj.o), vect_mult(obj.norm,
-					res * (1.0 + pow(tan(obj.radius * TORAD), 2.0))));
-	}
-	else if (obj.type == 't')
-	{
-		res = vect_scal(obj.norm, vect_sous(line->to.pos, obj.o)) /
-			vect_scal(obj.norm, obj.norm);
-		vect = vect_sous(line->to.pos, vect_add(obj.o, vect_mult(obj.norm, res)));
-	}
+	obj.norm = vect_norm(obj.norm);
+	if (obj.type == 'p')
+		vect = obj.norm;
 	else
+		vect = vect_sous(line->to.pos, obj.o);
+	if (obj.type == 't' || obj.type == 'c')
 	{
-		res = vect_scal(vect_sous(line->to.pos, obj.o), obj.norm);
+		res = (vect_scal(vect, obj.norm));
+		if (obj.type == 'c')
+			res *= (1.0 + pow(tan(obj.radius * TORAD), 2.0));
+		vect = vect_sous(vect, vect_mult(obj.norm, res));
+	}
+	else if (obj.type == 'd')
+	{
+		res = vect_scal(vect, obj.norm);
 		vect = vect_sous(line->to.pos, vect_mult(obj.norm, res));
 		res = sqrt(obj.radius2 * obj.radius2 - res * res);
 		vect = vect_norm(vect_sous(
@@ -60,10 +58,9 @@ t_v			get_norm(t_obj obj, t_ray *line)
 					vect_mult(vect_sous(obj.o, vect), res / (obj.radius + res))
 					));
 	}
-//	return (vect_scal(vect, line->from.dir) > 0.000 ?
-//								vect_norm(vect_inv(vect)) : vect_norm(vect));
-	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
-			? vect_norm(vect_inv(vect)) : vect_norm(vect));
+	return (vect_norm(vect_scal(vect, line->from.dir) > 0.000 ? vect_inv(vect) : vect));
+//	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
+//			? vect_norm(vect_inv(vect)) : vect_norm(vect));
 }
 
 int			which_obj_col(t_objs *objs, t_ray *line)
@@ -75,6 +72,7 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 
 	line->prev_obj = line->obj;
 	line->total_dist += line->dist;
+	line->n1 = line->n2;
 	i = -1;
 	tmp = -1.0;
 	while (++i < objs->nb)
@@ -90,6 +88,7 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	line->to.pos = vect_add(line->from.pos, vect_mult(line->from.dir, tmp));
 	line->to.dir = get_norm(objs->obj[ob], line);
 	line->dist += tmp;
+	line->n2 = objs->obj[ob].refract < 1.0 ? 1.0 : objs->obj[ob].refract;
 	return (1);
 }
 
@@ -131,21 +130,45 @@ t_color		get_refract(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	t_ray	refr;
 	double	k;
 
-	//TODO chercher les objets les plus proches qui ont de la refraction
 	refr.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, -0.00000001));
 	if (objs->obj[line->obj].refract == 0.0)
 		refr.from.dir = vect_norm(line->to.dir);
 	else
 	{
-		if (line->prev_obj < 0 || line->prev_obj != line->obj)
-			k = 1.0 / objs->obj[line->obj].refract;
-		else
-			k = objs->obj[line->prev_obj].refract / 1.0;
+		k = line->n1 / line->n2;
 		refr.from.dir = vect_norm(vect_refract(line->from.dir, line->to.dir, k));
 	}
 	refr.total_dist = line->total_dist;
 	refr.obj = line->obj;
 	return (mult_color(get_col(objs, lums, &refr, d), objs->obj[line->obj].transp));
+}
+
+t_color		next_rays(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
+{
+	t_color	col;
+	double	k;
+	double	r[3];
+	double	c[2];
+
+	//TO_DO chercher les objets les plus proches qui ont de la refraction
+	if (!d)
+		return (get_black());
+	k = line->n1 / line->n2;
+	c[0] = -vect_scal(vect_norm(line->from.dir), vect_norm(line->to.dir));
+	c[1] = k * k * (1.0 - c[0] * c[0]);
+	c[1] = sqrt(1.0 - c[1]);
+	r[0] = (line->n1 * c[0] - line->n2 * c[1]) / (line->n1 * c[0] + line->n2 * c[1]);
+	r[0] = r[0] * r[0];
+	r[1] = (line->n2 * c[0] - line->n1 * c[1]) / (line->n2 * c[0] + line->n1 * c[1]);
+	r[1] = r[1] * r[1];
+	r[2] = (r[0] + r[1]) / 2.0;
+	if (objs->obj[line->obj].transp > 0.0)
+		col = get_refract(objs, lums, line, d);
+	if (objs->obj[line->obj].reflect > 0.0)
+		col = add_color(
+				mult_color(col, 1.0 - 0.9 * objs->obj[line->obj].reflect),
+				get_reflect(objs, lums, line, d));
+	return (col);
 }
 
 t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
@@ -166,25 +189,18 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 		i = -1;
 		while (++i < lums->nb)
 		{
-				cols[1] = get_lum(objs, line->obj, lums->lum[i], line);
-				cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * lums->lum[i].coef / lums->coefs_sum);
-				cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
-				cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
+			cols[1] = get_lum(objs, line->obj, lums->lum[i], line);
+			cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * lums->lum[i].coef / lums->coefs_sum);
+			cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
+			cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
 		}
 		cols[0] = mult_color(cols[0], 1.000 - lums->amb_coef);
 		cols[0] = add_color(cols[0], ambi_col);
 	}
 	else
 		cols[0] = objs->obj[line->obj].col;
-	cols[0] = mult_color(cols[0], 1.0 / d);
-	if (objs->obj[line->obj].reflect > 0.0)
-		cols[0] = add_color(
-				mult_color(cols[0], 1.0 - 0.9 * objs->obj[line->obj].reflect),
-				get_reflect(objs, lums, line, d - 1));
-	else if (objs->obj[line->obj].transp > 0.0)
-		cols[0] = add_color(
-				mult_color(cols[0], 1.0 - 0.9 * objs->obj[line->obj].transp),
-				get_refract(objs, lums, line, d - 1));
+	cols[0] = mult_color(cols[0], 0.7);
+	cols[0] = add_color(cols[0], next_rays(objs, lums, line, d - 1));
 	return (cols[0]);
 }
 
