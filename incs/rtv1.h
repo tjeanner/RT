@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 23:12:55 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 00:48:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 
+
+enum						e_typeobj
+{
+	SPHERE, PLANE, CYLINDRE, CONE
+}							t_typeobj;
 
 typedef union			u_color
 {

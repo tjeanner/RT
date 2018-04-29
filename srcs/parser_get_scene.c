@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/29 00:57:59 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 00:31:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 		}
 		if (j_is_valid_obj(obj))
 		{
+			if (obj->reflect > 0)
+				env->effects.depth = (env->effects.depth == 1) ? 2 : env->effects.depth; 
 			ft_lstadd(&par->lst_obj, ft_lstnew(obj, sizeof(t_obj)));
 			env->objs.nb++;
 		}
