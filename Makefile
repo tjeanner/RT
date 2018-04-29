@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
+#    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/28 21:57:48 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/04/29 18:32:46 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,12 @@ SDL =		sdl/SDL2.framework/Headers
 SDL_LNK =	sdl/SDL2.framework/SDL2
 SDL_INC =	-I $(SDL)
 
+ifeq "$(shell brew info imagemagick | grep -o 'Not installed')" "Not installed"
+MAGICK	= magick
+else
+MAGICK	=
+endif
+
 all: obj
 	@echo "Libft all rule :"
 	@make -C $(FT)
@@ -71,7 +77,7 @@ all: obj
 	@$(MAKE) $(NAME)
 	@echo ""
 
-obj:
+obj: $(MAGICK)
 	@mkdir -p $(OBJDIR)
 	@rm -rf $(SDLDIR)
 	@mkdir -p $(SDLDIR)
@@ -82,6 +88,21 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCFILE)
 
 $(NAME): $(OBJ) $(FT_LIB)
 	$(CC) $(LFLAGS) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME)
+
+magick:
+	@brew install imagemagick
+
+film:
+	@mkdir -p /tmp/Screenshots/videos
+	@brew install ffmpeg
+	@find /tmp/Screenshots/ -type f -name '*.bmp' -exec convert {} {}.jpg \;
+	@ffmpeg -r 25 -f image2 -s 960x720 -i /tmp/Screenshots/Screenshot%d.bmp.jpg \
+	-vcodec libx264 -crf 25  -pix_fmt yuv420p /tmp/Screenshots/videos/$(TIME).mp4
+	@rm /tmp/Screenshots/*.bmp
+	@echo "\033[32;3mA video have been created in /tmp/Screenshots/videos/ !\x1b[0m"
+
+cleanfilm:
+	@rm -rf /tmp/Screenshots
 
 norme:
 	@norminette $(addprefix $(SRCDIR)/,$(SRC))
