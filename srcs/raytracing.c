@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 00:45:03 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/29 23:00:46 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,9 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	tmp = -1.0;
 	while (++i < objs->nb)
 	{
-/*		if (i == 2)
-		{
-			objs->obj[i].reflect = 0.2;
-			objs->obj[i].refract = 0.0;
-		}
-		else if (i == 5)
-		{
-			objs->obj[i].reflect = 0.0;
-			objs->obj[i].refract = 1.33;
-		}
-		else
-		{
-			objs->obj[i].reflect = 0.0;
-			objs->obj[i].refract = 0.0;
-		}
-*/		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
-				(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
-							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
+		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
+			(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
+				(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
 				tmp = tutu;
 	}
 	if (tmp < 0.0 || objs->nb == 0)
@@ -123,7 +108,6 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	t_ray	refr;
 	double	k;
 //	double	modulo;
-	t_v		lol;
 
 	if (!d || which_obj_col(objs, line) == 0)
 		return (get_black());
@@ -141,17 +125,10 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 				cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
 		}
 		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == 'p')
+			ambi_col = mult_color(ambi_col, checkerboard(line));
+		if (objs->obj[line->obj].motion == 1)
 		{
-			lol.x = ((int)((line->to.pos.x) / 100) % 2) ? 0 : 1;
-			lol.y = ((int)((line->to.pos.y) / 100) % 2) ? 0 : 1;
-			lol.z = ((int)((line->to.pos.z) / 100) % 2) ? 0 : 1;
-			if ((int)lol.x ^ (int)lol.y ^ (int)lol.z)
-				ambi_col = get_black();
-/*
-			modulo = line->to.pos.x * 500 - floor(line->to.pos.x * 500);
-			if (modulo < 0.5)
-				ambi_col = get_black();
-*/
+			;
 		}
 		cols[0] = mult_color(cols[0], 1.000 - lums->amb_coef);
 		cols[0] = add_color(cols[0], ambi_col);

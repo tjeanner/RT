@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/23 21:57:57 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/04/29 23:00:09 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,12 +38,13 @@ SRC =		main.c \
 			filter.c \
 			filter2.c \
 			raytracing.c \
+			textures.c	\
 			error_mgt.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror
 CFLAGS +=	-Ofast -march=native -flto
-CFLAGS +=	-g3 -fsanitize=address 
+#CFLAGS +=	-g3 -fsanitize=address 
 
 SRCDIR =	srcs
 INCDIR =	incs

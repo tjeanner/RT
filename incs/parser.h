@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:13:01 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/26 18:37:55 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/29 22:02:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct s_obj        t_obj;
 typedef struct s_json       t_json;
 typedef struct s_json_arr   t_json_arr;
 
-enum
+enum	
 {
 	TYPE_STRING, TYPE_DOUBLE, TYPE_OBJ, TYPE_ARR
 };

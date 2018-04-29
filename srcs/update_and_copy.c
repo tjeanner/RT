@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 16:50:37 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/29 22:03:37 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type)
 		error_mgt(0);
 	while (++i < env->objs.nb)
 		ft_memcpy((void *)&new[i], (void *)&env->objs.obj[i], sizeof(t_obj));
+	ft_bzero((void *)&new[i], sizeof(t_obj));
 	new[i].type = FCTS[type - 49];
 	new[i].o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
 		vect_mult(env->cams.cam[env->cams.curr].vcam, 4000)),
