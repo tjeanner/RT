@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 01:10:02 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 01:17:24 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void				j_get_type(t_json *json, t_obj *obj)
 		obj->type = CONE;
 	else
 		obj->type = -1;
-	printf("%d\n", (int)obj->type);
 	p = p->next;
 }
 
