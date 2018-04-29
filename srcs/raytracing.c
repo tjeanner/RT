@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 14:30:43 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/29 21:52:57 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,21 @@ t_v			get_norm(t_obj obj, t_ray *line)
 	double	res;
 	t_v		vect;
 
-	if (obj.type == 's' || obj.type == 'p')
-		vect = (obj.type == 'p') ? obj.norm : vect_sous(line->to.pos, obj.o);
-	else if (obj.type == 'c')
-	{
-		vect = vect_sous(line->from.pos, obj.o);
-		res = vect_scal(line->from.dir, vect_mult(obj.norm, line->dist)) +
-			vect_scal(vect, obj.norm);
-		vect = vect_sous(vect_sous(line->to.pos, obj.o), vect_mult(obj.norm,
-					res * (1.0 + pow(tan(obj.radius * TORAD), 2.0))));
-	}
-	else if (obj.type == 't')
-	{
-		res = vect_scal(obj.norm, vect_sous(line->to.pos, obj.o)) /
-			vect_scal(obj.norm, obj.norm);
-		vect = vect_sous(line->to.pos, vect_add(obj.o, vect_mult(obj.norm, res)));
-	}
+	obj.norm = vect_norm(obj.norm);
+	if (obj.type == 'p')
+		vect = obj.norm;
 	else
+		vect = vect_sous(line->to.pos, obj.o);
+	if (obj.type == 'c' || obj.type == 't')
 	{
-		res = vect_scal(vect_sous(line->to.pos, obj.o), obj.norm);
+		res = vect_scal(vect, obj.norm);
+		if (obj.type == 'c')
+			res *= (1.0 + pow(tan(obj.radius * TORAD), 2.0));
+		vect = vect_sous(vect, vect_mult(obj.norm, res));
+	}
+	else if (obj.type == 'd')
+	{
+		res = vect_scal(vect, obj.norm);
 		vect = vect_sous(line->to.pos, vect_mult(obj.norm, res));
 		res = sqrt(obj.radius2 * obj.radius2 - res * res);
 		vect = vect_norm(vect_sous(
@@ -60,10 +56,9 @@ t_v			get_norm(t_obj obj, t_ray *line)
 					vect_mult(vect_sous(obj.o, vect), res / (obj.radius + res))
 					));
 	}
-//	return (vect_scal(vect, line->from.dir) > 0.000 ?
-//								vect_norm(vect_inv(vect)) : vect_norm(vect));
-	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
-			? vect_norm(vect_inv(vect)) : vect_norm(vect));
+	return (vect_norm(vect_scal(vect, line->from.dir) > 0.000 ? vect_inv(vect) : vect));
+//	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
+//			? vect_norm(vect_inv(vect)) : vect_norm(vect));
 }
 
 int			which_obj_col(t_objs *objs, t_ray *line)
