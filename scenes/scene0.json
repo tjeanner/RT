@@ -2,7 +2,9 @@
 	"name":"Basic",
 	"ambient":0.100000,
 	"scene":{  
-	   "cameras":[  
+		"effects":[
+			"depth":5
+		],
 		{
 			 "pos":{  
 				"x":50.0000000000,

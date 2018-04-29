@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 21:40:08 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/29 22:49:34 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,21 +153,26 @@ t_color		next_rays(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	//TO_DO chercher les objets les plus proches qui ont de la refraction
 	if (!d)
 		return (get_black());
-	k = line->n1 / line->n2;
-	c[0] = -vect_scal(vect_norm(line->from.dir), vect_norm(line->to.dir));
-	c[1] = k * k * (1.0 - c[0] * c[0]);
-	c[1] = sqrt(1.0 - c[1]);
-	r[0] = (line->n1 * c[0] - line->n2 * c[1]) / (line->n1 * c[0] + line->n2 * c[1]);
-	r[0] = r[0] * r[0];
-	r[1] = (line->n2 * c[0] - line->n1 * c[1]) / (line->n2 * c[0] + line->n1 * c[1]);
-	r[1] = r[1] * r[1];
-	r[2] = (r[0] + r[1]) / 2.0;
+	r[2] = 0.0;
 	if (objs->obj[line->obj].transp > 0.0)
-		col = get_refract(objs, lums, line, d);
+	{
+		k = line->n1 / line->n2;
+		c[0] = -vect_scal(vect_norm(line->from.dir), vect_norm(line->to.dir));
+		c[1] = k * k * (1.0 - c[0] * c[0]);
+		c[1] = sqrt(1.0 - c[1]);
+		r[0] = (line->n1 * c[0] - line->n2 * c[1]) / (line->n1 * c[0] + line->n2 * c[1]);
+		r[0] = r[0] * r[0];
+		r[1] = (line->n2 * c[0] - line->n1 * c[1]) / (line->n2 * c[0] + line->n1 * c[1]);
+		r[1] = r[1] * r[1];
+		r[2] = (r[0] + r[1]) / 2.0;
+		col = mult_color(get_refract(objs, lums, line, d), r[2]);
+		if (r[2] < 1.0 && objs->obj[line->obj].reflect == 0.0)
+			objs->obj[line->obj].reflect = 1.0 - r[2];
+	}
 	if (objs->obj[line->obj].reflect > 0.0)
-		col = add_color(
-				mult_color(col, 1.0 - 0.9 * objs->obj[line->obj].reflect),
-				get_reflect(objs, lums, line, d));
+		col = add_color(col, mult_color(
+											get_reflect(objs, lums, line, d),
+											objs->obj[line->obj].reflect));
 	return (col);
 }
 
@@ -199,7 +204,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	}
 	else
 		cols[0] = objs->obj[line->obj].col;
-	cols[0] = mult_color(cols[0], 0.7);
+	cols[0] = mult_color(cols[0], 0.3);
 	cols[0] = add_color(cols[0], next_rays(objs, lums, line, d - 1));
 	return (cols[0]);
 }
