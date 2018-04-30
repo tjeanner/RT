@@ -47,7 +47,28 @@
 				"y":0.0000000000,
 				"z":0.0000000000
 			 },
+			 "roughness":12,
+			 "plasticity":1,
 			 "transparency":0.5,
+			 "motion":{
+				"action":"translation",
+				"axe":{
+					"x":1,
+					"y":0,
+					"z":1
+				},
+				"min":{
+					"x":1,
+					"y":0,
+					"z":1
+				},
+				"max":{
+					"x":1,
+					"y":0,
+					"z":1
+				},
+				"speed":15
+			 },
 			 "radius":100.0000000000,
 			 "color":"3e9d04"
 		  },
@@ -153,7 +174,7 @@
 			 },
 			 "radius":0.0000000000,
 			 "color":"ff8022",
-			 "texture":"STRIPES"
+			 "texture":"CHESS"
 		  }
 	   ]
 	}
