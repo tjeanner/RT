@@ -1,8 +1,8 @@
 {  
 	"name":"Basic",
 	"filter":"3D",
-	"ambient":0.7,
-	"depth":3,
+	"ambient":0.4,
+	"depth":2,
 	"scene":{  
 	   "cameras":[  
 		  {  
