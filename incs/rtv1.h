@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 04:25:54 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 23:43:57 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 
 typedef enum				e_typeobj
 {
-	SPHERE, PLANE, CYLINDRE, CONE
+	SPHERE, PLANE, CYLINDRE, CONE, TORUS, NONE
 }							t_typeobj;
 
 typedef union			u_color
@@ -89,7 +89,7 @@ typedef struct			s_ray
 
 typedef struct			s_obj
 {
-	char				type;
+	t_typeobj			type;
 	float				radius;
 	float				radius2;
 	t_v					o;
