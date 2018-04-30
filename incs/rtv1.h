@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 00:12:25 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 23:43:57 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,13 @@
 # define ABS(x) (x < 0 ? -x : x)
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
+# define IN_OBJ 1
+# define OUT_OBJ 2
 
-enum						e_typeobj
+
+typedef enum				e_typeobj
 {
-	SPHERE, PLANE, CYLINDRE, CONE
+	SPHERE, PLANE, CYLINDRE, CONE, TORUS, NONE
 }							t_typeobj;
 
 enum						e_typeact
@@ -78,11 +81,15 @@ typedef struct			s_line
 typedef struct			s_ray
 {
 	int					obj;
-	int					prev_obj;
 	double				dist;
 	double				total_dist;
+	double				n1;
+	double				n2;
 	t_line				from;
 	t_line				to;
+	struct s_ray		*incident;
+	char				*objs;
+	int					nb_objs;
 }						t_ray;
 
 typedef struct			s_act
@@ -108,7 +115,7 @@ typedef struct			s_mat
 
 typedef struct			s_obj
 {
-	char				type;
+	t_typeobj			type;
 	float				radius;
 	float				radius2;
 	t_v					o;
