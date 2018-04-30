@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 23:19:20 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/01 00:12:49 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		obj->mat.rough = fmin(20, fmax(j_obj->val.data.nb, 1));
 	else if (!ft_strcmp(key, "plasticity") && type == TYPE_DOUBLE)
 		obj->mat.plastic = fmin(1, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "specular") && type == TYPE_DOUBLE)
+		obj->k_spec = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
 		j_get_tex(j_obj, obj);
 	else if (!ft_strcmp(key, "motion") && type == TYPE_OBJ)
