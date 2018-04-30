@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 19:07:59 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/29 23:59:03 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 
+int	*tab_objs[100];
+
 typedef union			u_color
 {
 	unsigned int		color;
@@ -68,11 +70,9 @@ typedef struct			s_line
 typedef struct			s_ray
 {
 	int					obj;
-	int					prev_obj;
+	int					*objs;
 	double				dist;
 	double				total_dist;
-	double				n1;
-	double				n2;
 	t_line				from;
 	t_line				to;
 }						t_ray;

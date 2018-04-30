@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 22:49:34 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/30 00:16:29 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ t_ray			init_line(double x, double y, t_cam cam)
 	ray.dist = 0.0;
 	ray.total_dist = 0.0;
 	ray.obj = -1;
-	ray.prev_obj = -1;
-	ray.n1 = 1.0;
-	ray.n2 = 1.0;
+	ray.objs = tab_objs;
+	ray.objs[0] = 0;
 	return (ray);
 }
 
@@ -72,7 +71,6 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 
 	line->prev_obj = line->obj;
 	line->total_dist += line->dist;
-	line->n1 = line->n2;
 	i = -1;
 	tmp = -1.0;
 	while (++i < objs->nb)
@@ -88,7 +86,13 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	line->to.pos = vect_add(line->from.pos, vect_mult(line->from.dir, tmp));
 	line->to.dir = get_norm(objs->obj[ob], line);
 	line->dist += tmp;
-	line->n2 = objs->obj[ob].refract < 1.0 ? 1.0 : objs->obj[ob].refract;
+	if (line->objs[0] > 0)
+		i = -1;
+		while (++i < line->objs[0])
+		line->objs[0]--;
+	else
+	line->objs[0]++;
+	line->objs[line->objs[0]] = line->obj;
 	return (1);
 }
 
@@ -151,15 +155,19 @@ t_color		next_rays(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	double	c[2];
 
 	//TO_DO chercher les objets les plus proches qui ont de la refraction
-	if (!d)
-		return (get_black());
+	col = get_black();
+	if (!d || !objs || !lums || !line)
+		return (col);
 	r[2] = 0.0;
+	c[0] = 0.0;
+	k = 0.;
 	if (objs->obj[line->obj].transp > 0.0)
 	{
+		if (line->prev_obj == line->obj)
+			line->n2 = 1.0;
 		k = line->n1 / line->n2;
 		c[0] = -vect_scal(vect_norm(line->from.dir), vect_norm(line->to.dir));
-		c[1] = k * k * (1.0 - c[0] * c[0]);
-		c[1] = sqrt(1.0 - c[1]);
+		c[1] = sqrt(1.0 - k * k * (1.0 - c[0] * c[0]));
 		r[0] = (line->n1 * c[0] - line->n2 * c[1]) / (line->n1 * c[0] + line->n2 * c[1]);
 		r[0] = r[0] * r[0];
 		r[1] = (line->n2 * c[0] - line->n1 * c[1]) / (line->n2 * c[0] + line->n1 * c[1]);
@@ -184,8 +192,6 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 
 	if (!d || which_obj_col(objs, line) == 0)
 		return (get_black());
-	if (objs->obj[line->obj].refract > 0.0)
-		objs->obj[line->obj].transp = 1.0;
 	if (lums->amb_coef < 1.000)
 	{
 		ambi_col = mult_color(objs->obj[line->obj].col, lums->amb_coef);
@@ -204,8 +210,12 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	}
 	else
 		cols[0] = objs->obj[line->obj].col;
-	cols[0] = mult_color(cols[0], 0.3);
-	cols[0] = add_color(cols[0], next_rays(objs, lums, line, d - 1));
+	if (objs->obj[line->obj].refract > 0.0 || objs->obj[line->obj].reflect > 0.0)
+	{
+		objs->obj[line->obj].transp = 1.0;
+		cols[0] = next_rays(objs, lums, line, d - 1);
+	}
+	cols[0] = mult_color(cols[0], 0.7);
 	return (cols[0]);
 }
 
@@ -227,7 +237,7 @@ void		*rays(void *tmp)
 		while (++x < WIN_X)
 		{
 			tutu = init_line((double)(x + 0.5), (double)(y + 0.5), env->cams.cam[env->cams.curr]);
-			col = get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
+			col = get_col(&env->objs, &env->lums, &tutu, 3);//env->effects.depth);
 			if (env->display.sur == 1)
 				((int *)env->display.surf->pixels)[x + y * env->display.surf->w] = col.color;
 			else
