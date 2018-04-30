@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/28 21:57:48 by tjeanner         ###   ########.fr        #
+#    Updated: 2018/04/29 23:12:27 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRC =		main.c \
 			filter.c \
 			filter2.c \
 			raytracing.c \
+			textures.c	\
 			error_mgt.c \
 
 CC =		gcc

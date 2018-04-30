@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 23:59:03 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/30 00:48:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 
-int	*tab_objs[100];
+
+enum						e_typeobj
+{
+	SPHERE, PLANE, CYLINDRE, CONE
+}							t_typeobj;
 
 typedef union			u_color
 {
@@ -92,6 +96,7 @@ typedef struct			s_obj
 	float				k_phong;
 	float				reflect;
 	float				refract;
+	unsigned int		motion;
 	unsigned int		tex;
 }						t_obj;
 
@@ -286,6 +291,11 @@ void					stereo_filter(t_env *env);
 void					motionblur_filter(t_env *env);
 void					cartoon_filter(t_env *env);
 void					color_filter(t_env *env, SDL_Surface *surf, t_color color);
+
+/*
+**textures.c
+*/
+double					checkerboard(t_ray *line);
 
 /*
 **error_mgt.c

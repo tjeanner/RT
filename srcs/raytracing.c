@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 00:16:29 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/30 01:00:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ t_v			get_norm(t_obj obj, t_ray *line)
 	t_v		vect;
 
 	obj.norm = vect_norm(obj.norm);
-	if (obj.type == 'p')
+	if (obj.type == PLANE)
 		vect = obj.norm;
 	else
 		vect = vect_sous(line->to.pos, obj.o);
-	if (obj.type == 't' || obj.type == 'c')
+	if (obj.type == CONE || obj.type == CYLINDRE)
 	{
-		res = (vect_scal(vect, obj.norm));
-		if (obj.type == 'c')
+		res = vect_scal(vect, obj.norm);
+		if (obj.type == CONE)
 			res *= (1.0 + pow(tan(obj.radius * TORAD), 2.0));
 		vect = vect_sous(vect, vect_mult(obj.norm, res));
 	}
@@ -75,7 +75,7 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	tmp = -1.0;
 	while (++i < objs->nb)
 	{
-		if (objs->col_fcts[ft_strchr(FCTS, objs->obj[i].type) - FCTS]
+		if (objs->col_fcts[(int)objs->obj[i].type]
 				(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
 							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
 				tmp = tutu;
@@ -110,8 +110,7 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, 0.00000001));
 	i = -1;
 	while (++i < objs->nb && (res = -1.0) < 0)
-		if (objs->col_fcts[ft_strchr(FCTS,
-					objs->obj[i].type) - FCTS](tutu.from, objs->obj[i], &res) == 1 &&
+		if (objs->col_fcts[(int)objs->obj[i].type](tutu.from, objs->obj[i], &res) == 1 &&
 				(((res > 0.0 && res < tmp))))
 			return (get_black());
 	res = fmax(0.0, vect_scal(line->to.dir, tutu.from.dir));
@@ -205,17 +204,26 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 			cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
 			cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
 		}
+		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == PLANE)
+			ambi_col = mult_color(ambi_col, checkerboard(line));
+		if (objs->obj[line->obj].motion == 1)
+		{
+			;
+		}
 		cols[0] = mult_color(cols[0], 1.000 - lums->amb_coef);
 		cols[0] = add_color(cols[0], ambi_col);
 	}
 	else
 		cols[0] = objs->obj[line->obj].col;
-	if (objs->obj[line->obj].refract > 0.0 || objs->obj[line->obj].reflect > 0.0)
-	{
-		objs->obj[line->obj].transp = 1.0;
-		cols[0] = next_rays(objs, lums, line, d - 1);
-	}
-	cols[0] = mult_color(cols[0], 0.7);
+	cols[0] = mult_color(cols[0], 1.0);
+	if (objs->obj[line->obj].reflect > 0.0)
+		cols[0] = add_color(
+				mult_color(cols[0], 1.0 - 0.9 * objs->obj[line->obj].reflect),
+				get_reflect(objs, lums, line, d - 1));
+	else if (objs->obj[line->obj].transp > 0.0)
+		cols[0] = add_color(
+				mult_color(cols[0], 1.0 - 0.9 * objs->obj[line->obj].transp),
+				get_refract(objs, lums, line, d - 1));
 	return (cols[0]);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/28 05:03:22 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 00:31:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 1));
 	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
 		j_get_tex(j_obj, obj);
+	else if (!ft_strcmp(key, "motion") && type == TYPE_DOUBLE)
+		obj->motion = (int)fmin(1, fmax(j_obj->val.data.nb, 0));
 	else
 		error_mgt(5);
 }
@@ -55,6 +57,8 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 		}
 		if (j_is_valid_obj(obj))
 		{
+			if (obj->reflect > 0)
+				env->effects.depth = (env->effects.depth == 1) ? 2 : env->effects.depth; 
 			ft_lstadd(&par->lst_obj, ft_lstnew(obj, sizeof(t_obj)));
 			env->objs.nb++;
 		}
