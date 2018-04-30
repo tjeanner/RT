@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 01:00:19 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 19:44:00 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,10 +160,10 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 		i = -1;
 		while (++i < lums->nb)
 		{
-				cols[1] = get_lum(objs, line->obj, lums->lum[i], line);
-				cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * lums->lum[i].coef / lums->coefs_sum);
-				cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
-				cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
+			cols[1] = get_lum(objs, line->obj, lums->lum[i], line);
+			cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * lums->lum[i].coef / lums->coefs_sum);
+			cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
+			cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
 		}
 		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == PLANE)
 			ambi_col = mult_color(ambi_col, checkerboard(line));

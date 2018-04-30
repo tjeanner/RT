@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/29 01:03:07 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 02:29:09 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ void	set_filter(t_env *env)
 		bw_filter(env);
 	else if (!ft_strcmp(env->effects.filter, "SEPIA"))
 		sepia_filter(env);
-//	else if (!ft_strcmp(env->effects.filter, "MOTIONBLUR"))
-//		motionblur_filter(env);
+	else if (!ft_strcmp(env->effects.filter, "MOTIONBLUR"))
+		motionblur_filter(env);
 	else if (!ft_strcmp(env->effects.filter, "3D"))
 		stereo_filter(env);
 	else if (!ft_strncmp(env->effects.filter, "CARTOON", 7))

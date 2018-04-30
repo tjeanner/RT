@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 00:31:57 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 02:53:53 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		j_get_rot(j_obj, obj);
 	else if (!ft_strcmp(key, "reflect") && type == TYPE_DOUBLE)
 		obj->reflect = fmin(1, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "transparency") && type == TYPE_DOUBLE)
+		obj->transp = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "refract") && type == TYPE_DOUBLE)
-		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 1));
+		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
 		j_get_tex(j_obj, obj);
 	else if (!ft_strcmp(key, "motion") && type == TYPE_DOUBLE)
