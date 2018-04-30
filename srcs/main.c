@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 02:39:19 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/30 20:40:27 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ t_env		*init(char *filename)
 		if (ft_strstr(env->file, ".json"))
 			j_init(env);
 		else if (ft_strstr(env->file, ".obj"))
-			parse_main(env, filename);
+		{
+			env->objs.tri = parse_main(filename);
+			exit(0);
+		}
 		if (!(env->display.win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 			error_mgt(8);

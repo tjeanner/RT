@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:35:12 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/30 05:57:53 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/30 20:11:37 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	init_pobj(t_pobj *pobj, char *av)
 							printf("init_pobj()\n");
 	int i;
 
+	pobj->tri = NULL;
 	pobj->nb = get_nblines(av);
 	if (pobj->nb.x && pobj->nb.y && pobj->nb.z &&
 		(!(pobj->v = (t_v *)malloc(sizeof(t_v) * pobj->nb.x + 1)) ||
@@ -133,7 +134,7 @@ void	init_pobj(t_pobj *pobj, char *av)
 ** Start the parsing
 */
 
-void	parse_main(t_env *env, char *av)
+t_tri	*parse_main(char *av)
 {
 							printf("parse_main()\n");
 	int		fd;
@@ -152,7 +153,7 @@ void	parse_main(t_env *env, char *av)
 		free(s);
 	}
 	close(fd);
-	ft_memcpy(env->objs.tri, pobj.tri, sizeof(t_tri *));
+	return (pobj.tri);
 }
 
 /*
@@ -161,7 +162,7 @@ void	parse_main(t_env *env, char *av)
 
 void	parse_redirect(t_pobj *pobj, char *s)
 {
-							printf("parse_redirect()\n");
+							// printf("parse_redirect()\n");
 	char **tab;
 
 	if (s[ft_strlen(s) - 1] == 13)
@@ -169,7 +170,7 @@ void	parse_redirect(t_pobj *pobj, char *s)
 	tab = ft_strsplit(s, ' ');
 			int i = -1;
 			while (tab[++i])
-				printf("tab = %d\n", tab[i][0]);
+				// printf("tab = %d\n", tab[i][0]);
 	if (tab_len(tab) > 4)
 		parse_error(4, s);
 	if (ft_strstr(tab[0], "mtl") || ft_strstr(tab[0], "g"))
@@ -184,7 +185,6 @@ void	parse_redirect(t_pobj *pobj, char *s)
 		add_tri(pobj, parse_f(pobj, &tab[1]));
 	else
 		parse_error(0, s);
-						printf("END REDIRECT\n");
 }
 
 /*
@@ -193,39 +193,39 @@ void	parse_redirect(t_pobj *pobj, char *s)
 
 void	check_f(char **tab)
 {
-							printf("check_f()\n");
+							// printf("check_f()\n");
 	char	**ntab;
 	int		i;
 	int		j;
 
-			printf("tab[0] = %s\ntab[1] = %s\ntab[2] = %s\n",tab[0], tab[1], tab[2]);
+			// printf("tab[0] = %s\ntab[1] = %s\ntab[2] = %s\n",tab[0], tab[1], tab[2]);
 	if (tab_len(tab) != 3)
 		parse_error(5, tab[0]);
 	j = -1;
 	while (++j < 3)
 	{
 		ntab = ft_strsplit(tab[j], '/');
-			printf("ntab[0] = %s\nntab[1] = %s\nntab[2] = %s\n",ntab[0], ntab[1], ntab[2]);
+			// printf("ntab[0] = %s\nntab[1] = %s\nntab[2] = %s\n",ntab[0], ntab[1], ntab[2]);
 		if (tab_len(ntab) < 3)
 		{
 			free_tab((void **)ntab);
 			parse_error(5, tab[0]);
 		}
-							printf("check_f2()\n");
+							// printf("check_f2()\n");
 		i = -1;
 		while (ntab[++i])
 		{
 			if (!ft_isnum(ntab[i]) && ntab[i][0] != '-')
 			{
-							printf("check_f3()\n");
+							// printf("check_f3()\n");
 				free_tab((void **)ntab);
 				parse_error(4, tab[j]);
 			}
 		}
 	}
-							printf("END OF CHECK_F\n");
+							// printf("END OF CHECK_F\n");
 	free_tab((void **)ntab);
-							printf("END OF CHECK_F2\n");
+							// printf("END OF CHECK_F2\n");
 }
 
 /*
@@ -234,7 +234,7 @@ void	check_f(char **tab)
 
 t_tri	parse_f(t_pobj *pobj, char **tab)
 {
-							printf("parse_f()\n");
+							// printf("parse_f()\n");
 	t_tri	tri;
 	char	**tab2;
 	int		j;
@@ -311,34 +311,25 @@ char	*ft_implode(char **tab, char c)
 
 t_tri	*add_tri(t_pobj *pobj, t_tri tri)
 {
-							printf("add_tri()\n");
+							// printf("add_tri()\n");
 	t_tri	*l;
 
 	if (!pobj)
 		return (NULL);
-							ft_putendl("YOLO0");
 	if (!(l = pobj->tri))
 	{
-							ft_putendl("YOLO1");
 		if (!(pobj->tri = (t_tri *)malloc(sizeof(t_tri))))
 			parse_error(6, NULL);
-							ft_putendl("YOLO2");
 		ft_memcpy(pobj->tri, &tri, sizeof(t_tri));
 		pobj->tri->next = NULL;
-							ft_putendl("YOLO3");
 		return (pobj->tri);
 	}
-							ft_putendl("YOLO4");
 	while (l->next)
 		l = l->next;
-							ft_putendl("YOLO5");
 	if (!(l->next = (t_tri *)malloc(sizeof(t_tri))))
 			parse_error(6, NULL);
-							ft_putendl("YOLO6");
 	l = l->next;
-							ft_putendl("YOLO7");
 	ft_memcpy(l, &tri, sizeof(t_tri));
-							ft_putendl("YOLO8");
 	l->next = NULL;
 	return (l);
 }
@@ -414,7 +405,7 @@ char		**decoupe(char *s)
 
 t_v			parse_vect(char *s)
 {
-							printf("parse_vect()\n");
+							// printf("parse_vect()\n");
 	t_v		v;
 	int		i[2];
 	int		p;

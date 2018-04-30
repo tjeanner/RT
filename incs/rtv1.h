@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 02:31:56 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/30 18:56:07 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,7 @@ void					ft_freeenv(t_env *env);
 ** Parse_obj
 */
 
-void						parse_main(t_env *env, char *av);
+t_tri						*parse_main(char *av);
 void						parse_error(int e, char *s);
 // void						parse_mtl(char *s);
 void						init_pobj(t_pobj *pobj, char *av);
