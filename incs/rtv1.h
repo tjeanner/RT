@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 20:41:48 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/04/30 02:31:56 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <stdbool.h>
 # include <pthread.h>
 # include "parser.h"
+# include "parse.h"
 
 # define WIN_X 1357
 # define WIN_Y 867
@@ -58,6 +59,24 @@ typedef struct			s_v
 	double				y;
 	double				z;
 }						t_v;
+
+typedef struct			s_tri
+{
+	t_v					v[3];
+	t_v					vt[3];
+	t_v					vn[3];
+	struct s_tri		*next;
+}						t_tri;
+
+typedef struct			s_pobj
+{
+	t_v					*v;
+	t_v					*vt;
+	t_v					*vn;
+	t_v					nb;
+	t_v					i;
+	t_tri				*tri;
+}						t_pobj;
 
 typedef struct			s_line
 {
@@ -114,6 +133,7 @@ typedef struct			s_objs
 	int					nb;
 	int					curr;
 	t_obj				*obj;
+	t_tri				*tri;
 	int					(*col_fcts[4])(t_line line, t_obj obj, double *res);
 }						t_objs;
 
@@ -289,5 +309,29 @@ void					color_filter(t_env *env, SDL_Surface *surf, t_color color);
 */
 void					*error_mgt(int status);
 void					ft_freeenv(t_env *env);
+
+
+/*
+** Parse_obj
+*/
+
+void						parse_main(t_env *env, char *av);
+void						parse_error(int e, char *s);
+// void						parse_mtl(char *s);
+void						init_pobj(t_pobj *pobj, char *av);
+void						parse_redirect(t_pobj *pobj, char *s);
+void						check_f(char **tab);
+char						*ft_implode(char **tab, char c);
+char						*ft_implode(char **tab, char c);
+int							ft_isnum(char *str);
+t_v							get_nblines(char *av);
+t_tri						parse_f(t_pobj *pobj, char **tab);
+t_tri						*add_tri(t_pobj *pobj, t_tri tri);
+char						**decoupe(char *s);
+t_v							parse_vect(char *s);
+double						parse_double(char *s);
+t_v							init_vect(double x, double y, double z);
+void						parse_err(int e, char *s);
+
 
 #endif

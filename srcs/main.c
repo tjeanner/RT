@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/28 02:39:25 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 02:39:19 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ t_env		*init(char *filename)
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
 		env->file = ft_strdup(filename);
-		j_init(env);
+		if (ft_strstr(env->file, ".json"))
+			j_init(env);
+		else if (ft_strstr(env->file, ".obj"))
+			parse_main(env, filename);
 		if (!(env->display.win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 			error_mgt(8);
@@ -115,8 +118,8 @@ int			main(int ac, char **av)
 {
 	t_env		*env;
 
-	if (ac != 2 || !ft_strstr(av[1], ".json"))
-		error_mgt(6);
+	if (ac != 2 || (!ft_strstr(av[1], ".json") && !ft_strstr(av[1], ".obj")))
+			error_mgt(6);
 	if (!(env = init(av[1])))
 		error_mgt(6);
 //	env->objs.obj[0].reflect = 0.;

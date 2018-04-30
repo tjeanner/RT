@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/29 18:32:46 by vmercadi         ###   ########.fr        #
+#    Updated: 2018/04/30 01:17:01 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRC =		main.c \
 			filter2.c \
 			raytracing.c \
 			error_mgt.c \
+			parseur_obj.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror #-Igsl/include
