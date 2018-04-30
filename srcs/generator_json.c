@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 01:05:11 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 01:32:14 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ void	j_print_lum(t_env *env, int i, int fd)
 	if (env->lums.lum[i].col.c.b < 16)
 		ft_putchar_fd('0', fd);
 	ft_putnbrbase_fd(env->lums.lum[i].col.c.b, 16, fd);
-	ft_putstr_fd("\",\"pos\":{\"x\":", fd);
+	ft_putstr_fd("\",\"intensity\":", fd);
+	ft_putfloat_fd(env->lums.lum[i].coef, fd);
+	ft_putstr_fd(",\"pos\":{\"x\":", fd);
 	ft_putfloat_fd(env->lums.lum[i].pos.x, fd);
 	ft_putstr_fd(",\"y\":", fd);
 	ft_putfloat_fd(env->lums.lum[i].pos.y, fd);
@@ -83,7 +85,7 @@ void	j_print_d_obj(t_env *env, int i, int fd)
 	ft_putfloat_fd(env->objs.obj[i].o.y, fd);
 	ft_putstr_fd(",\"z\":", fd);
 	ft_putfloat_fd(env->objs.obj[i].o.z, fd);
-	if (env->objs.obj[i].type != 's')
+	if (env->objs.obj[i].type != SPHERE)
 	{
 		ft_putstr_fd("},\"norm\":{\"x\":", fd);
 		ft_putfloat_fd(env->objs.obj[i].norm.x, fd);
@@ -99,6 +101,10 @@ void	j_print_obj(t_env *env, int i, int fd)
 	j_print_d_obj(env, i, fd);
 	ft_putstr_fd("},\"radius\":", fd);
 	ft_putfloat_fd(env->objs.obj[i].radius, fd);
+	ft_putstr_fd(",\"reflect\":", fd);
+	ft_putfloat_fd(env->objs.obj[i].reflect, fd);
+	ft_putstr_fd(",\"refract\":", fd);
+	ft_putfloat_fd(env->objs.obj[i].refract, fd);
 	ft_putstr_fd(",\"color\":\"", fd);
 	if (env->objs.obj[i].col.c.r < 16)
 		ft_putchar_fd('0', fd);
