@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 00:18:09 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 00:32:25 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ t_color		get_specular(t_obj obj, t_ray ray)
 	double	res;
 	t_v		half;
 	t_v		to_eye;
-	double	rug;
 
 	if (obj.k_spec == 0.0)
 		return (get_black());
@@ -103,8 +102,7 @@ t_color		get_specular(t_obj obj, t_ray ray)
 	half = vect_norm(vect_sous(ray.from.dir, ray.incident->from.dir));
 	if ((res = vect_scal(ray.to.dir, half)) < 0.0)
 		return (get_black());
-	rug = 20.0;
-	return (mult_color(obj.col, pow(res, rug) * obj.k_spec / (obj.k_diff + obj.k_spec)));
+	return (mult_color(obj.col, pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));
 }
 
 t_color		get_diffuse(t_obj obj, t_ray ray)
@@ -138,13 +136,6 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
 				(tutu.from, objs->obj[i], &res) == 1 && (res > 0.0 && res < tmp))
 			return (get_black());
-		objs->obj[obj].k_diff = 1.0;
-	if (objs->obj[obj].type == SPHERE)
-	{
-		objs->obj[obj].k_spec = 1.0;
-		objs->obj[obj].k_diff = 0.0;
-		col = get_specular(objs->obj[obj], tutu);
-	}
 	col = get_diffuse(objs->obj[obj], tutu);
 	col = add_color(col, get_specular(objs->obj[obj], tutu));
 	return (col);
