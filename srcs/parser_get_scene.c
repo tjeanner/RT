@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 02:53:53 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 23:19:20 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 {
+	obj->mat.rough = 1;
 	if (!ft_strcmp(key, "type") && type == TYPE_STRING)
 		j_get_type(j_obj, obj);
 	else if (!ft_strcmp(key, "radius") && type == TYPE_DOUBLE)
@@ -34,10 +35,14 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		obj->transp = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "refract") && type == TYPE_DOUBLE)
 		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "roughness") && type == TYPE_DOUBLE)
+		obj->mat.rough = fmin(20, fmax(j_obj->val.data.nb, 1));
+	else if (!ft_strcmp(key, "plasticity") && type == TYPE_DOUBLE)
+		obj->mat.plastic = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
 		j_get_tex(j_obj, obj);
-	else if (!ft_strcmp(key, "motion") && type == TYPE_DOUBLE)
-		obj->motion = (int)fmin(1, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "motion") && type == TYPE_OBJ)
+		j_get_motion(j_obj, obj);
 	else
 		error_mgt(5);
 }

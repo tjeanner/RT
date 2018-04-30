@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 09:58:18 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 01:09:49 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 22:51:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int			j_is_valid_obj(t_obj *obj)
 	if (obj->type != SPHERE && !get_vect_norm(obj->norm))
 		return (0);
 	if (obj->type != PLANE && obj->radius <= 0)
+		return (0);
+	if (obj->motion.action == -1)
 		return (0);
 	return (1);
 }
