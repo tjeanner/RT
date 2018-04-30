@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 04:25:54 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 23:15:30 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,15 @@
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 
-
 enum						e_typeobj
 {
 	SPHERE, PLANE, CYLINDRE, CONE
 }							t_typeobj;
+
+enum						e_typeact
+{
+	TRANSLATION, ROTATION, ELLIPSE, COLOR
+}							t_typeact;
 
 typedef union			u_color
 {
@@ -81,6 +85,27 @@ typedef struct			s_ray
 	t_line				to;
 }						t_ray;
 
+typedef struct			s_act
+{
+	int					action;
+	int					p;
+	double				speed;
+	double				dist;
+	t_v					max;
+	t_v					min;
+	double				angle;
+	t_v					axis;
+	double				start;
+//	t_obj				*obj1;
+}						t_act;
+
+typedef struct			s_mat
+{
+	unsigned int		tex;
+	double				rough;
+	double				plastic;
+}						t_mat;
+
 typedef struct			s_obj
 {
 	char				type;
@@ -96,8 +121,8 @@ typedef struct			s_obj
 	float				k_phong;
 	float				reflect;
 	float				refract;
-	unsigned int		motion;
-	unsigned int		tex;
+	t_act				motion;
+	t_mat				mat;
 }						t_obj;
 
 typedef struct			s_cam

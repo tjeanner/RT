@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 19:44:00 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/04/30 23:17:13 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,12 +165,9 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 			cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
 			cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
 		}
-		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == PLANE)
+		if (objs->obj[line->obj].mat.tex == 1 && objs->obj[line->obj].type == PLANE)
 			ambi_col = mult_color(ambi_col, checkerboard(line));
-		if (objs->obj[line->obj].motion == 1)
-		{
-			;
-		}
+
 		cols[0] = mult_color(cols[0], 1.000 - lums->amb_coef);
 		cols[0] = add_color(cols[0], ambi_col);
 	}
