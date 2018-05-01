@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color_math.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 04:51:14 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 20:36:22 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 02:41:59 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@ t_color	get_rand(void)
 	c.c.g = rand() % 255;
 	c.c.b = rand() % 255;
 	c.c.a = 0;
-	c.u.r = (double)(rand() % 255) / 255.;
-	c.u.g = (double)(rand() % 255) / 255.;
-	c.u.b = (double)(rand() % 255) / 255.;
-	c.u.a = 0;
 	return (c);
 }
 
@@ -43,10 +39,6 @@ t_color	get_black(void)
 	c.c.g = 0;
 	c.c.b = 0;
 	c.c.a = 0;
-	c.u.r = 0;
-	c.u.g = 0;
-	c.u.b = 0;
-	c.u.a = 0;
 	return (c);
 }
 
@@ -58,10 +50,6 @@ t_color	get_white(void)
 	c.c.g = 255;
 	c.c.b = 255;
 	c.c.a = 0;
-	c.u.r = 1.0;
-	c.u.g = 1.0;
-	c.u.b = 1.0;
-	c.u.a = 0;
 	return (c);
 }
 
@@ -71,10 +59,6 @@ int		set_white(t_color *c)
 	c->c.g = 255;
 	c->c.b = 255;
 	c->c.a = 0;
-	c->u.r = 1.0;
-	c->u.g = 1.0;
-	c->u.b = 1.0;
-	c->u.a = 0;
 	return (1);
 }
 

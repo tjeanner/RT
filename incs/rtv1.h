@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 20:42:23 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 02:40:47 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,27 @@
 
 # define WIN_X 1357
 # define WIN_Y 867
-//# define WIN_X 640
-//# define WIN_Y 480
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
 # define FCTS "sptc"
 # define S "0123456789ABCDEF"
-# define ABS(x) (x < 0 ? -x : x)
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 # define IN_OBJ 1
 # define OUT_OBJ 2
 
+typedef struct s_env	t_env;
 
-typedef enum				e_typeobj
+typedef enum			e_typeobj
 {
 	SPHERE, PLANE, CYLINDRE, CONE, TORUS, NONE
-}							t_typeobj;
+}						t_typeobj;
 
-typedef enum				e_typeact
+typedef enum			e_typeact
 {
 	TRANSLATION, ROTATION, ELLIPSE, COLOR
-}							t_typeact;
+}						t_typeact;
 
 typedef union			u_color
 {
@@ -63,14 +61,6 @@ typedef union			u_color
 		unsigned char	r;
 		unsigned char	a;
 	}					c;
-	struct
-	{
-		unsigned int	color;
-		double			b;
-		double			g;
-		double			r;
-		double			a;
-	}					u;
 }						t_color;
 
 typedef struct			s_v
@@ -111,7 +101,6 @@ typedef struct			s_act
 	double				angle;
 	t_v					axis;
 	double				start;
-//	t_obj				*obj1;
 }						t_act;
 
 typedef struct			s_mat
@@ -194,7 +183,6 @@ typedef struct			s_effects
 	char				*filter;
 	int					seuil;
 	unsigned int		depth;
-	unsigned int		saturation;
 }						t_effects;
 
 typedef struct			s_threads
@@ -213,7 +201,7 @@ typedef struct			s_display
 	SDL_Surface			*surf2;
 }						t_display;
 
-typedef struct			s_env
+struct					s_env
 {
 	int					state;
 	t_objs				objs;
@@ -224,7 +212,7 @@ typedef struct			s_env
 	t_threads			*threads;
 	char				*file;
 	char				*name;
-}						t_env;
+};
 
 /*
 **main.c
@@ -232,7 +220,6 @@ typedef struct			s_env
 void					tutu(t_env *env);
 void					*rays(void *tmp);
 t_ray					init_line(double x, double y, t_cam cam);
-
 
 /*
 **vector_math.c
@@ -257,6 +244,10 @@ t_color					get_rand(void);
 t_color					get_white(void);
 t_color					get_black(void);
 int						set_white(t_color *c);
+
+/*
+**color_math2.c
+*/
 int						set_black(t_color *c);
 t_color					add_color(t_color a, t_color b);
 t_color					mult_color(t_color a, float n);
@@ -278,7 +269,7 @@ void					ft_putfloat_fd(double nbr, int fd);
 int						which_obj_col(t_objs *objs, t_ray *line);
 t_v						get_norm(t_obj obj, t_ray *line);
 t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line,
-																unsigned int d);
+								unsigned int d);
 t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
 
 /*
@@ -290,18 +281,22 @@ int						events(t_env *env);
 **events_sel.c
 */
 int						event_cam_switch(t_env *env, unsigned int sym);
-int						events_sel(t_env *env, SDL_Event event, unsigned int sym);
+int						events_sel(t_env *env, SDL_Event event,
+							unsigned int sym);
 
 /*
 **events_rotation.c
 */
-int						events_rotation(t_env *env, unsigned int sym, t_v *norm);
+int						events_rotation(t_env *env, unsigned int sym,
+							t_v *norm);
 
 /*
 **events_move.c
 */
-int						events_move(t_env *env, unsigned int sym, t_cam *cam, t_obj *obj);
-void					mouse_move(t_env *env, SDL_Event event, t_cam *cam, t_obj *obj);
+int						events_move(t_env *env, unsigned int sym,
+									t_cam *cam, t_obj *obj);
+void					mouse_move(t_env *env, SDL_Event event,
+									t_cam *cam, t_obj *obj);
 
 /*
 **norm_manip.c
@@ -328,11 +323,12 @@ int						get_dist_torus(t_line line, t_obj obj, t_v *res);
 /*
 **filter.c
 */
-void 					set_filter(t_env *env);
+void					set_filter(t_env *env);
 void					stereo_filter(t_env *env);
 void					motionblur_filter(t_env *env);
 void					cartoon_filter(t_env *env);
-void					color_filter(t_env *env, SDL_Surface *surf, t_color color);
+void					color_filter(t_env *env, SDL_Surface *surf,
+									t_color color);
 
 /*
 **textures.c
