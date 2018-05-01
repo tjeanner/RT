@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 00:50:32 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/01 20:42:23 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef enum				e_typeobj
 	SPHERE, PLANE, CYLINDRE, CONE, TORUS, NONE
 }							t_typeobj;
 
-enum						e_typeact
+typedef enum				e_typeact
 {
 	TRANSLATION, ROTATION, ELLIPSE, COLOR
 }							t_typeact;
@@ -63,6 +63,14 @@ typedef union			u_color
 		unsigned char	r;
 		unsigned char	a;
 	}					c;
+	struct
+	{
+		unsigned int	color;
+		double			b;
+		double			g;
+		double			r;
+		double			a;
+	}					u;
 }						t_color;
 
 typedef struct			s_v
@@ -186,6 +194,7 @@ typedef struct			s_effects
 	char				*filter;
 	int					seuil;
 	unsigned int		depth;
+	unsigned int		saturation;
 }						t_effects;
 
 typedef struct			s_threads
@@ -253,6 +262,8 @@ t_color					add_color(t_color a, t_color b);
 t_color					mult_color(t_color a, float n);
 t_color					div_color(t_color a, float n);
 int						average_color(t_color *col, float flou);
+void					sature_color(t_color *col, unsigned int max);
+t_color					prod_color(t_color a, t_color b);
 
 /*
 **useless_functions.c
