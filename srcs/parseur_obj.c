@@ -6,25 +6,11 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:35:12 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/04/30 20:11:37 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/01 18:18:06 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-//Peut etre que mettre 0 quand il y a que 2/3 des vt risque de foutre la merde
-
-/*
-- Lire tout le fichier une fois.
-	+ Recuperer le nombre de v
-	+ Recuperer le nombre de vt
-	+ Recuperer le nombre de vn
-- Malloc un tableau de la taille de chaque nb + 1 ([0] = vide pour commencer a 1)
-- Relire le fichier
-- Remplir les tableaux
-- Remplir la liste de triangles
-
-*/
 
 /*
 ** Free a tab
@@ -77,7 +63,7 @@ int		tab_len(char **tab)
 ** return the 3 values needed for malloc
 */
 
-t_v		get_nblines(char *av)
+t_v		get_nblines(t_pobj *pobj, char *av)
 {
 							printf("get_nblines()\n");
 	t_v		v;
@@ -98,7 +84,10 @@ t_v		get_nblines(char *av)
 			v.y++;
 		else if (ft_strstr(s, "vn "))
 			v.z++;
+		else if (ft_strstr(s, "f "))
+			pobj->nbtri++;
 		free(s);
+
 	}
 	close(fd);
 	return (v);
@@ -110,10 +99,14 @@ void	init_pobj(t_pobj *pobj, char *av)
 	int i;
 
 	pobj->tri = NULL;
-	pobj->nb = get_nblines(av);
+	pobj->nbtri = 0;
+	pobj->index = 0;
+	pobj->nb = get_nblines(pobj, av);
+			printf("1111nbtri = %d\n", pobj->nbtri);
 	if (pobj->nb.x && pobj->nb.y && pobj->nb.z &&
 		(!(pobj->v = (t_v *)malloc(sizeof(t_v) * pobj->nb.x + 1)) ||
 		 !(pobj->vt = (t_v *)malloc(sizeof(t_v) * pobj->nb.y + 1)) ||
+		 !(pobj->tri = (t_tri *)malloc(sizeof(t_tri) * pobj->nbtri + 1)) ||
 		 !(pobj->vn = (t_v *)malloc(sizeof(t_v) * pobj->nb.z + 1))))
 		parse_error(6, NULL);
 	i = -1;
@@ -134,7 +127,7 @@ void	init_pobj(t_pobj *pobj, char *av)
 ** Start the parsing
 */
 
-t_tri	*parse_main(char *av)
+t_tri	*parse_main(t_env *env, char *av)
 {
 							printf("parse_main()\n");
 	int		fd;
@@ -153,6 +146,7 @@ t_tri	*parse_main(char *av)
 		free(s);
 	}
 	close(fd);
+	env->objs.nbtri = pobj.nbtri;
 	return (pobj.tri);
 }
 
@@ -168,9 +162,6 @@ void	parse_redirect(t_pobj *pobj, char *s)
 	if (s[ft_strlen(s) - 1] == 13)
 		s[ft_strlen(s) - 1] = '\0';
 	tab = ft_strsplit(s, ' ');
-			int i = -1;
-			while (tab[++i])
-				// printf("tab = %d\n", tab[i][0]);
 	if (tab_len(tab) > 4)
 		parse_error(4, s);
 	if (ft_strstr(tab[0], "mtl") || ft_strstr(tab[0], "g"))
@@ -178,11 +169,11 @@ void	parse_redirect(t_pobj *pobj, char *s)
 	else if (!(ft_strcmp(tab[0], "v")))
 		pobj->v[(int)pobj->i.x++] = parse_vect(s+1);
 	else if (!(ft_strcmp(tab[0], "vt")))
-		pobj->v[(int)pobj->i.y++] = parse_vect(s+3);
+		pobj->vt[(int)pobj->i.y++] = parse_vect(s+3);
 	else if (!(ft_strcmp(tab[0], "vn")))
-		pobj->v[(int)pobj->i.z++] = parse_vect(s+3);
+		pobj->vn[(int)pobj->i.z++] = parse_vect(s+3);
 	else if (!(ft_strcmp(tab[0], "f")))
-		add_tri(pobj, parse_f(pobj, &tab[1]));
+		pobj->tri[pobj->index++] = parse_f(pobj, &tab[1]);
 	else
 		parse_error(0, s);
 }
@@ -198,34 +189,40 @@ void	check_f(char **tab)
 	int		i;
 	int		j;
 
-			// printf("tab[0] = %s\ntab[1] = %s\ntab[2] = %s\n",tab[0], tab[1], tab[2]);
 	if (tab_len(tab) != 3)
 		parse_error(5, tab[0]);
 	j = -1;
 	while (++j < 3)
 	{
 		ntab = ft_strsplit(tab[j], '/');
-			// printf("ntab[0] = %s\nntab[1] = %s\nntab[2] = %s\n",ntab[0], ntab[1], ntab[2]);
 		if (tab_len(ntab) < 3)
 		{
 			free_tab((void **)ntab);
 			parse_error(5, tab[0]);
 		}
-							// printf("check_f2()\n");
 		i = -1;
 		while (ntab[++i])
 		{
 			if (!ft_isnum(ntab[i]) && ntab[i][0] != '-')
 			{
-							// printf("check_f3()\n");
 				free_tab((void **)ntab);
 				parse_error(4, tab[j]);
 			}
 		}
 	}
-							// printf("END OF CHECK_F\n");
 	free_tab((void **)ntab);
-							// printf("END OF CHECK_F2\n");
+}
+
+/*
+** Make a negative int postive
+*/
+
+int		bepos(int nb)
+{
+	if (nb >= 0)
+		return (nb);
+	else
+		return (nb * -1);
 }
 
 /*
@@ -242,19 +239,19 @@ t_tri	parse_f(t_pobj *pobj, char **tab)
 	check_f(tab);
 	j = 0;
 	tab2 = ft_strsplit(tab[0], '/');
-	tri.v[1] = pobj->v[ft_atoi(tab2[0])];
-	tri.v[1] = pobj->v[ft_atoi(tab2[1])];
-	tri.v[1] = pobj->v[ft_atoi(tab2[2])];
+	tri.v[0] = pobj->v[bepos(ft_atoi(tab2[0]))];
+	tri.v[1] = pobj->v[bepos(ft_atoi(tab2[1]))];
+	tri.v[2] = pobj->v[bepos(ft_atoi(tab2[2]))];
 	free_tab((void**)tab2);
 	tab2 = ft_strsplit(tab[1], '/');
-	tri.vt[1] = pobj->vt[ft_atoi(tab2[0])];
-	tri.vt[1] = pobj->vt[ft_atoi(tab2[1])];
-	tri.vt[1] = pobj->vt[ft_atoi(tab2[2])];
+	tri.vt[0] = pobj->vt[bepos(ft_atoi(tab2[0]))];
+	tri.vt[1] = pobj->vt[bepos(ft_atoi(tab2[1]))];
+	tri.vt[2] = pobj->vt[bepos(ft_atoi(tab2[2]))];
 	free_tab((void**)tab2);
 	tab2 = ft_strsplit(tab[2], '/');
-	tri.vn[1] = pobj->vn[ft_atoi(tab2[0])];
-	tri.vn[1] = pobj->vn[ft_atoi(tab2[1])];
-	tri.vn[1] = pobj->vn[ft_atoi(tab2[2])];
+	tri.vn[0] = pobj->vn[bepos(ft_atoi(tab2[0]))];
+	tri.vn[1] = pobj->vn[bepos(ft_atoi(tab2[1]))];
+	tri.vn[2] = pobj->vn[bepos(ft_atoi(tab2[2]))];
 	free_tab((void**)tab2);
 	return (tri);
 }
@@ -303,35 +300,6 @@ char	*ft_implode(char **tab, char c)
 	str[++k] = '\0';
 	free_tab((void**)tab);
 	return (str);
-}
-
-/*
-**	Add an obj to the list
-*/
-
-t_tri	*add_tri(t_pobj *pobj, t_tri tri)
-{
-							// printf("add_tri()\n");
-	t_tri	*l;
-
-	if (!pobj)
-		return (NULL);
-	if (!(l = pobj->tri))
-	{
-		if (!(pobj->tri = (t_tri *)malloc(sizeof(t_tri))))
-			parse_error(6, NULL);
-		ft_memcpy(pobj->tri, &tri, sizeof(t_tri));
-		pobj->tri->next = NULL;
-		return (pobj->tri);
-	}
-	while (l->next)
-		l = l->next;
-	if (!(l->next = (t_tri *)malloc(sizeof(t_tri))))
-			parse_error(6, NULL);
-	l = l->next;
-	ft_memcpy(l, &tri, sizeof(t_tri));
-	l->next = NULL;
-	return (l);
 }
 
 /*

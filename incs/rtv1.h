@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 18:56:07 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/04/30 23:54:11 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,12 @@ typedef struct			s_tri
 	t_v					v[3];
 	t_v					vt[3];
 	t_v					vn[3];
-	struct s_tri		*next;
 }						t_tri;
 
 typedef struct			s_pobj
 {
+	int					nbtri;
+	int					index;
 	t_v					*v;
 	t_v					*vt;
 	t_v					*vn;
@@ -132,6 +133,7 @@ typedef struct			s_objs
 {
 	int					nb;
 	int					curr;
+	int					nbtri;
 	t_obj				*obj;
 	t_tri				*tri;
 	int					(*col_fcts[4])(t_line line, t_obj obj, double *res);
@@ -315,7 +317,7 @@ void					ft_freeenv(t_env *env);
 ** Parse_obj
 */
 
-t_tri						*parse_main(char *av);
+t_tri						*parse_main(t_env *env, char *av);
 void						parse_error(int e, char *s);
 // void						parse_mtl(char *s);
 void						init_pobj(t_pobj *pobj, char *av);
@@ -324,9 +326,8 @@ void						check_f(char **tab);
 char						*ft_implode(char **tab, char c);
 char						*ft_implode(char **tab, char c);
 int							ft_isnum(char *str);
-t_v							get_nblines(char *av);
+t_v							get_nblines(t_pobj *pobj, char *av);
 t_tri						parse_f(t_pobj *pobj, char **tab);
-t_tri						*add_tri(t_pobj *pobj, t_tri tri);
 char						**decoupe(char *s);
 t_v							parse_vect(char *s);
 double						parse_double(char *s);
