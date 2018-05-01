@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 23:43:57 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 00:50:32 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ typedef struct			s_objs
 	int					nb;
 	int					curr;
 	t_obj				*obj;
-	int					(*col_fcts[4])(t_line line, t_obj obj, double *res);
+	int					(*col_fcts[4])(t_line line, t_obj obj, t_v *res);
 }						t_objs;
 
 typedef struct			s_cams
@@ -308,11 +308,11 @@ void					update_and_copy_a(t_env *env, SDL_Keycode type);
 /*
 **distances_functions.c
 */
-int						get_dist_cone(t_line line, t_obj obj, double *res);
-int						get_dist_tube(t_line line, t_obj obj, double *res);
-int						get_dist_plan(t_line line, t_obj obj, double *res);
-int						get_dist_sphere(t_line line, t_obj obj, double *res);
-int						get_dist_torus(t_line line, t_obj obj, double *res);
+int						get_dist_cone(t_line line, t_obj obj, t_v *res);
+int						get_dist_tube(t_line line, t_obj obj, t_v *res);
+int						get_dist_plan(t_line line, t_obj obj, t_v *res);
+int						get_dist_sphere(t_line line, t_obj obj, t_v *res);
+int						get_dist_torus(t_line line, t_obj obj, t_v *res);
 
 /*
 **filter.c

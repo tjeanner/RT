@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 00:32:25 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/01 05:43:01 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_v			get_norm(t_obj obj, t_ray *line)
 int			which_obj_col(t_objs *objs, t_ray *line)
 {
 	double	tmp;
-	double	tutu;
+	t_v		tutu;
 	int		i;
 	int		ob;
 
@@ -76,9 +76,8 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	while (++i < objs->nb)
 	{
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(line->from, objs->obj[i], &tutu) == 1 && (i == 0 || (tutu > 0.0 &&
-							(tmp == -1.0 || tmp > tutu))) && (ob = i) == i)
-				tmp = tutu;
+				(line->from, objs->obj[i], &tutu) == 1 && (tmp > tutu.z || tmp < 0.0) && (ob = i) == i)
+				tmp = tutu.z;
 	}
 	if (tmp < 0.0 || objs->nb == 0)
 		return (0);
@@ -119,7 +118,7 @@ t_color		get_diffuse(t_obj obj, t_ray ray)
 t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 {
 	int		i;
-	double	res;
+	t_v		res;
 	t_ray	tutu;
 	t_color	col;
 	double	tmp;
@@ -132,9 +131,9 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, 0.00000001));
 	tutu.incident = line;
 	i = -1;
-	while (++i < objs->nb && (res = -1.0) < 0)
+	while (++i < objs->nb)
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(tutu.from, objs->obj[i], &res) == 1 && (res > 0.0 && res < tmp))
+				(tutu.from, objs->obj[i], &res) == 1 && ((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))
 			return (get_black());
 	col = get_diffuse(objs->obj[obj], tutu);
 	col = add_color(col, get_specular(objs->obj[obj], tutu));

@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/29 14:32:19 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 05:41:46 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,20 @@
 //#include "gsl/gsl_poly.h"
 //#include "gsl/gsl_errno.h"
 
-int			resolve(t_v math, double *res)
+int			resolve(t_v math, t_v *res)
 {
-	t_v math2;
-
 	math.z = math.y * math.y - 4.0 * math.x * math.z;
 	if (math.z < 0.0)
 		return (0);
-	math2.y = (-math.y + sqrt(math.z)) / (2.0 * math.x);
-	math2.x = (-math.y - sqrt(math.z)) / (2.0 * math.x);
-	if (math2.y < 0.0)
+	res->y = (-math.y + sqrt(math.z)) / (2.0 * math.x);
+	res->x = (-math.y - sqrt(math.z)) / (2.0 * math.x);
+	if (res->y < 0.0)
 		return (0);
-	*res = (math2.x > 0.0) ? math2.x : math2.y;
+	res->z = (res->x > 0.0) ? res->x : res->y;
 	return (1);
 }
 
-int			get_dist_cone(t_line line, t_obj obj, double *res)
+int			get_dist_cone(t_line line, t_obj obj, t_v *res)
 {
 	t_v		obj_o2cam;
 	t_v		math;
@@ -52,7 +50,7 @@ int			get_dist_cone(t_line line, t_obj obj, double *res)
 	return (resolve(math, res));
 }
 
-int			get_dist_tube(t_line line, t_obj obj, double *res)
+int			get_dist_tube(t_line line, t_obj obj, t_v *res)
 {
 	t_v		math;
 	t_v		aa;
@@ -72,7 +70,7 @@ int			get_dist_tube(t_line line, t_obj obj, double *res)
 	return (resolve(math, res));
 }
 
-int			get_dist_plan(t_line line, t_obj obj, double *res)
+int			get_dist_plan(t_line line, t_obj obj, t_v *res)
 {
 	t_v		tmp;
 	double	opti_a;
@@ -84,11 +82,13 @@ int			get_dist_plan(t_line line, t_obj obj, double *res)
 	opti_b = vect_scal(line.dir, tmp);
 	if (opti_b == 0.000 || opti_a > 0.000 ^ opti_b < 0.000)
 		return (0);
-	*res = -1.000 * opti_a / opti_b;
-	return ((int)(opti_a = (*res > 0.0) ? 1 : 0));
+	res->z = -1.000 * opti_a / opti_b;
+	res->y = res->z;
+	res->x = res->z;
+	return ((int)(opti_a = (res->z > 0.0) ? 1 : 0));
 }
 
-int			get_dist_sphere(t_line line, t_obj obj, double *res)
+int			get_dist_sphere(t_line line, t_obj obj, t_v *res)
 {
 	t_v		obj_o2cam;
 	t_v		math;
@@ -109,7 +109,7 @@ int			get_dist_sphere(t_line line, t_obj obj, double *res)
 	return (resolve(math, res));
 }
 /*
-int			get_dist_torus(t_line line, t_obj obj, double *res)
+int			get_dist_torus(t_line line, t_obj obj, t_v *res)
 {
 	int							i;
 	double						a[5];
