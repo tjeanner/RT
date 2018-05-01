@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 21:27:54 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 21:30:04 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,8 +277,6 @@ void		*rays(void *tmp)
 	env = ((t_threads *)tmp)->env;
 	y = ((t_threads *)tmp)->start;
 	i = ((t_threads *)tmp)->incr;
-//	env->effects.saturation = env->effects.depth;
-	env->effects.saturation = 2;
 	while (y < WIN_Y)
 	{
 		x = -1;
@@ -286,19 +284,6 @@ void		*rays(void *tmp)
 		{
 			tutu = init_line((double)(x + 0.5), (double)(y + 0.5), env->cams.cam[env->cams.curr]);
 			col = get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
-/*			if (x)
-			{
-//				printf("col %u %p vs u.col r %u %p\n", col.color, &col.color, col.u.color, &col.u.r);
-				printf("AV sat col u r=%f g=%f b=%f\n", col.u.r, col.u.g, col.u.b);
-				printf("AV sat col c r=%d g=%d b=%d\n", col.c.r, col.c.g, col.c.b);
-			}*/
-//			sature_color(&col, env->effects.saturation);
-/*			if (x)
-			{
-//				printf("col %u %p vs u.col r %u %p\n", col.color, &col.color, col.u.color, &col.u.r);
-				printf("AP sat col u r=%f g=%f b=%f\n", col.u.r, col.u.g, col.u.b);
-				printf("AP sat col d r=%d g=%d b=%d\n", col.c.r, col.c.g, col.c.b);
-			}*/
 			if (env->display.sur == 1)
 				((unsigned int *)env->display.surf->pixels)[x + y * env->display.surf->w] = col.color;
 			else
