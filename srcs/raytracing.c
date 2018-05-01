@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 21:08:05 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 21:27:54 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 				transp *= objs->obj[i].transp;
 			if (res.y > 0.0 && res.y < tmp)
 				transp *= objs->obj[i].transp;
+			col = prod_color(col, div_color(objs->obj[i].col, 255));
 		}
 	tutu.to.dir = line->to.dir;
 	col = add_color(get_diffuse(objs->obj[obj], tutu),
@@ -291,7 +292,7 @@ void		*rays(void *tmp)
 				printf("AV sat col u r=%f g=%f b=%f\n", col.u.r, col.u.g, col.u.b);
 				printf("AV sat col c r=%d g=%d b=%d\n", col.c.r, col.c.g, col.c.b);
 			}*/
-			sature_color(&col, env->effects.saturation);
+//			sature_color(&col, env->effects.saturation);
 /*			if (x)
 			{
 //				printf("col %u %p vs u.col r %u %p\n", col.color, &col.color, col.u.color, &col.u.r);

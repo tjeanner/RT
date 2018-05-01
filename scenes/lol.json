@@ -98,7 +98,9 @@
 			 },
 			 "radius":500,
 			 "plasticity":1.0,
-			 "color":"ffffff"
+			 "specular":1.0,
+			 "transparency":0.9,
+			 "color":"0000ff"
 		  },
 		  {  
 			 "type":"plane",
