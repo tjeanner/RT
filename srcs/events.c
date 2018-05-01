@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 23:11:44 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 03:11:31 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,9 +165,8 @@ int				events(t_env *env)
 			|| events_rotation(env, sym, &obj->norm)
 			|| events_move(env, sym, cam, obj)))
 			;
-		else if (event.type == SDL_KEYDOWN && sym >= SDLK_KP_1
-			&& sym <= SDLK_KP_0)
-			event_cam_switch(env, sym);
+//		else if (event.type == SDL_KEYDOWN && sym == SDLK_z)
+//			event_cam_switch(env, sym);
 		else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != 0)
 			mouse_move(env, event, &env->cams.cam[env->cams.curr],
 						&env->objs.obj[env->objs.curr]);
