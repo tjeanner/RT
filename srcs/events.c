@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/27 14:44:05 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/01 19:29:10 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int				events(t_env *env)
 			mouse_move(env, event, &env->cams.cam[env->cams.curr],
 						&env->objs.obj[env->objs.curr]);
 		else if (!move_events(env, event))
-			return (0);
+			ev_screenshot();
 		tutu(env);
 	}
 	return (1);

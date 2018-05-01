@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 18:18:48 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/01 20:24:58 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ t_env		*init(char *filename)
 			env->objs.tri = parse_main(env, filename);
 			exit(0);
 		}
-
+		env->display.time = 0;
+		env->display.rec = 0;
 		if (!(env->display.win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 			error_mgt(8);
@@ -116,6 +117,9 @@ void		tutu(t_env *env)
 		pthread_join(env->threads[i].id, NULL);
 	set_filter(env);
 	SDL_UpdateWindowSurface(env->display.win);
+	if (env->display.rec)
+		ev_screenshot(env);
+
 }
 
 int			main(int ac, char **av)

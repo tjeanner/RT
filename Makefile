@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/01 18:17:22 by vmercadi         ###   ########.fr        #
+#    Updated: 2018/05/01 20:03:40 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,8 +40,9 @@ SRC =		main.c \
 			raytracing.c \
 			error_mgt.c \
 			parseur_obj.c \
-
-			# action.c	\
+			action.c	\
+			to_fdf.c	\
+			event_screen.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror #-Igsl/include
@@ -66,6 +67,8 @@ FT_LIB =	$(addprefix $(FT)/,libft.a)
 SDL =		sdl/SDL2.framework/Headers
 SDL_LNK =	sdl/SDL2.framework/SDL2
 SDL_INC =	-I $(SDL)
+
+TIME := $(shell date | cut -c5- | rev | cut -c11- | rev | tr ' ' '_')
 
 ifeq "$(shell brew info imagemagick | grep -o 'Not installed')" "Not installed"
 MAGICK	= magick

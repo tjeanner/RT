@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/04/30 23:54:11 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/01 21:04:27 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,12 @@ typedef struct			s_pobj
 	t_v					i;
 	t_tri				*tri;
 }						t_pobj;
+
+typedef struct			s_screen
+{
+	int					time;
+	int					rec;
+}						t_screen;
 
 typedef struct			s_line
 {
