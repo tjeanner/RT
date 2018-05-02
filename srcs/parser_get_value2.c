@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:19:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 23:20:13 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 16:15:10 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void		j_get_radius(t_json *json, t_obj *obj)
 	p = p->next;
 }
 
-static int			j_get_action(char *str)
+static int	j_get_action(char *str)
 {
 	if (!ft_strcmp(str, "translation"))
 		return (TRANSLATION);
@@ -83,5 +83,4 @@ void		j_get_motion(t_json *json, t_obj *obj)
 	p = p->next;
 	if (!ft_strcmp(p->key, "max") && p->val.type == TYPE_OBJ)
 		obj->motion.max = j_get_vec(p);
-
 }

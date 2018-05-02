@@ -6,14 +6,14 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 02:37:14 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/28 19:26:47 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 16:21:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
 static void		ft_free_arr(t_json_arr *tab)
-{	
+{
 	if (tab->next)
 		ft_free_arr(tab->next);
 	ft_parser_free(tab->val.data.obj);
