@@ -66,9 +66,7 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 		if (env->objs.obj[env->objs.curr].type == CONE && env->objs.obj[env->objs.curr].radius > 0.0)
 			env->objs.obj[env->objs.curr].radius -= 0.5;
 		else if (env->objs.obj[env->objs.curr].type != CONE)
-			env->objs.obj[env->objs.curr].radius -= (env->objs.obj[env->objs.curr].radius >= 0 || env->objs.obj[env->objs.curr].type == SPHERE || env->objs.obj[env->objs.curr].type == PLANE) ? 10 : 0;
-		ft_putnbr(env->objs.obj[env->objs.curr].radius);
-		ft_putstr(", ");
+			env->objs.obj[env->objs.curr].radius -= (env->objs.obj[env->objs.curr].radius >= 0);
 	}
 	else if (sym == SDLK_MINUS && env->objs.curr == -2)
 		env->lums.lum[env->lums.curr].coef /= (env->lums.lum[env->lums.curr].coef > 0) ? 1.1000000 : 10;

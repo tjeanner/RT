@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/01 02:25:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/01 02:26:46 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 19:17:21 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,9 @@ void			j_print_d_obj(t_env *env, int i, int fd);
 */
 int				j_print_env(t_env *env, int i);
 void			j_scene_generator(t_env *env);
+
+void			j_print_color(t_color color, int fd);
+void			j_print_vec(t_v v, int fd);
 
 /*
 **parser_free.c
