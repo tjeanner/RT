@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/01 00:37:57 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 23:06:14 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void		update_and_copy_r(t_env *env, int obj)
 	{
 		if (i != obj)
 		{
-			ft_memcpy((void *)&new[j], (void *)&env->objs.obj[i], sizeof(t_obj));
+			ft_memcpy((void *)&new[j],
+				(void *)&env->objs.obj[i], sizeof(t_obj));
 			j++;
 		}
 		i++;
@@ -57,7 +58,7 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type)
 	new[i].radius = (new[i].type == CONE) ? 30 : 150;
 	new[i].mat.rough = 1;
 	new[i].k_diff = 0.7;
-	set_white(&new[i].col);
+	new[i].col = get_white();
 	env->objs.nb++;
 	env->objs.curr = i;
 	ft_memdel((void *)&env->objs.obj);
