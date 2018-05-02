@@ -6,13 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 00:22:11 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 22:57:18 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-void			destrucainitialiserquonveutaussiapresreload(t_env *env);
 
 static void		j_init_env_var(t_env *env)
 {
