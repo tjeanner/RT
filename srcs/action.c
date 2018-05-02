@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 13:16:46 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/02 19:08:02 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:26:26 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 void	main_action(t_objs *objs)
 {
+				// printf("MAIN_ACTION\n");
 	int		i;
 
 	i = 0;
@@ -42,9 +43,9 @@ t_act	init_act(int action, t_v axis, int speed, t_v maxmin[2])
 	act.axis = axis;
 	act.angle = 1.0;
 	act.p = 0;
-	movedist.x = maxmin[1].x - maxmin[0].x / speed;
-	movedist.y = maxmin[1].y - maxmin[0].y / speed;
-	movedist.z = maxmin[1].z - maxmin[0].z / speed;
+	movedist.x = (maxmin[1].x - maxmin[0].x) / speed;
+	movedist.y = (maxmin[1].y - maxmin[0].y) / speed;
+	movedist.z = (maxmin[1].z - maxmin[0].z) / speed;
 	act.movedist = movedist;
 	return (act);
 }

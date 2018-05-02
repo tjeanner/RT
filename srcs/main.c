@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 17:56:03 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:28:36 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,9 @@ void		tutu(t_env *env)
 	while (++i < NB_THREADS)
 		pthread_join(env->threads[i].id, NULL);
 	set_filter(env);
-	SDL_UpdateWindowSurface(env->display.win);
 	if (env->screen.rec)
 		ev_screenshot(env);
+	SDL_UpdateWindowSurface(env->display.win);
 
 }
 
@@ -131,9 +131,13 @@ int			main(int ac, char **av)
 	if (!(env = init(av[1])))
 		error_mgt(6);
 //	env->objs.obj[0].reflect = 0.;
+			printf("action = %d\n", env->objs.obj[4].act.action);
+			printf("speed = %f\n", env->objs.obj[4].act.speed);
+			exit (0);
 	tutu(env);
 	while (!env->state)
 	{
+		main_action(&env->objs);
 		events(env);
 	}
 	ft_freeenv(env);
