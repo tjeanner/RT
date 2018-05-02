@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 05:08:12 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/01 21:30:04 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ t_color		get_specular(t_obj obj, t_ray ray)
 	double	res;
 	t_v		half;
 	t_v		to_eye;
+	t_color	plastic;
 
 	if (obj.k_spec == 0.0)
 		return (get_black());
@@ -132,6 +133,8 @@ t_color		get_specular(t_obj obj, t_ray ray)
 	half = vect_norm(vect_sous(ray.from.dir, ray.incident->from.dir));
 	if ((res = vect_scal(ray.to.dir, half)) < 0.0)
 		return (get_black());
+	plastic = mult_color(get_white(), obj.mat.plastic);
+	plastic = add_color(plastic, mult_color(obj.col, 1.0 - obj.mat.plastic));
 	return (mult_color(obj.col, pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));
 }
 
@@ -154,22 +157,34 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 //	t_ray	tutur;
 	t_color	col;
 	double	tmp;
+	double	transp;
 
 	tutu.to.pos = lum.pos;
-	tutu.to.dir = line->to.dir;
 	tutu.from.dir = vect_sous(lum.pos, line->to.pos);
 	tmp = get_vect_norm(tutu.from.dir);
 	tutu.from.dir = vect_norm(tutu.from.dir);
 	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, 0.00000001));
 	tutu.incident = line;
+	transp = 1.0;
 	i = -1;
-/*	while (++i < objs->nb)
-		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(tutu.from, objs->obj[i], &res) == 1 && ((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))// && objs->obj[i].radius > 0.0)*/
-	if (which_obj_col(objs, &tutu) == 1 && tutu.dist < tmp)
-			return (get_black());
-	col = get_diffuse(objs->obj[obj], tutu);
-	col = add_color(col, get_specular(objs->obj[obj], tutu));
+	col = get_white();
+	while (++i < objs->nb)
+		if (objs->obj[i].type != NONE && (objs->col_fcts[(int)objs->obj[i].type]
+				(tutu.from, objs->obj[i], &res) == 1) &&
+			((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))
+		{
+			if (objs->obj[i].transp == 0.0)
+				return (get_black());
+			if (res.x > 0.0 && res.x < tmp)
+				transp *= objs->obj[i].transp;
+			if (res.y > 0.0 && res.y < tmp)
+				transp *= objs->obj[i].transp;
+			col = prod_color(col, div_color(objs->obj[i].col, 255));
+		}
+	tutu.to.dir = line->to.dir;
+	col = add_color(get_diffuse(objs->obj[obj], tutu),
+										get_specular(objs->obj[obj], tutu));
+	col = mult_color(col, transp);
 	return (col);
 }
 
@@ -270,15 +285,15 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	else
 		cols[0] = objs->obj[line->obj].col;
 //	cols[0] = mult_color(cols[0], 1.0);
-	cols[0] = mult_color(cols[0], 1.0 * (1.0 - objs->obj[line->obj].reflect) * (1.0 - objs->obj[line->obj].transp));
+	cols[0] = mult_color(cols[0], (1.0 - objs->obj[line->obj].reflect) * (1.0 - objs->obj[line->obj].transp));
 	if (objs->obj[line->obj].transp > 0.0)
 		cols[0] = add_color(cols[0],
 				mult_color(get_refract(objs, lums, line, d - 1),
-				0.5 * objs->obj[line->obj].transp));
+				objs->obj[line->obj].transp));
 	if (objs->obj[line->obj].reflect > 0.0)
 		cols[0] = add_color(cols[0],
 				mult_color(get_reflect(objs, lums, line, d - 1),
-				1.0 * objs->obj[line->obj].reflect));
+				objs->obj[line->obj].reflect));
 	return (cols[0]);
 }
 
@@ -302,9 +317,9 @@ void		*rays(void *tmp)
 			tutu = init_line((double)(x + 0.5), (double)(y + 0.5), env->cams.cam[env->cams.curr]);
 			col = get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
 			if (env->display.sur == 1)
-				((int *)env->display.surf->pixels)[x + y * env->display.surf->w] = col.color;
+				((unsigned int *)env->display.surf->pixels)[x + y * env->display.surf->w] = col.color;
 			else
-				((int *)env->display.surf2->pixels)[x + y * env->display.surf->w] = col.color;
+				((unsigned int *)env->display.surf2->pixels)[x + y * env->display.surf->w] = col.color;
 		}
 		y += i;
 	}

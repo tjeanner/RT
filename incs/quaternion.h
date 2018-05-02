@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternion.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cquillet <cquillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/28 16:32:18 by cquillet          #+#    #+#             */
-/*   Updated: 2017/10/23 17:11:28 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/01 02:10:07 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # ifndef TYPEDEF_CPLX
 #  define TYPEDEF_CPLX
 
-typedef long double t_re;
-typedef long double t_im;
+typedef long double		t_re;
+typedef long double		t_im;
 
 # endif
 

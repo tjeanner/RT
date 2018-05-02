@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/04/29 23:12:27 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/01 02:41:25 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC =		main.c \
 			events_rotation.c \
 			events_move.c \
 			color_math.c \
+			color_math2.c \
 			distances_functions.c \
 			norm_manip.c \
 			update_and_copy.c \

@@ -1,7 +1,7 @@
 {  
 	"name":"Basic",
 	"ambient":0.5,
-	"depth":3,
+	"depth":4,
 	"scene":{  
 	   "cameras":[  
 		{
@@ -48,8 +48,7 @@
 				"z":0.0000000000
 			 },
 			 "roughness":12,
-			 "plasticity":1,
-			 "transparency":0.5,
+			 "specular":1.0,
 			 "motion":{
 				"action":"translation",
 				"axe":{
@@ -84,8 +83,10 @@
 				"y":1.0000000000,
 				"z":0.0000000000
 			 },
-			 "reflect":0,
 			 "radius":30.0000000000,
+			 "specular":1.0,
+			 "plasticity":0.0,
+			 "roughness":20,
 			 "color":"3e9d04"
 		  },
 		  {  
@@ -95,9 +96,11 @@
 				"y":0.0000000000,
 				"z":0.0000000000
 			 },
-			 "refract":2,
 			 "radius":500,
-			 "color":"ffffff"
+			 "plasticity":1.0,
+			 "specular":1.0,
+			 "transparency":0.9,
+			 "color":"0000ff"
 		  },
 		  {  
 			 "type":"plane",
