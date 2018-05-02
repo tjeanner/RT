@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 21:29:49 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/02 08:22:41 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct			s_obj
 	float				radius2;
 	t_v					o;
 	t_v					norm;
+	t_v					norm2;
 	t_color				col;
 //	double				dist;
 	float				k_diff;

@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 05:41:46 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/02 12:19:00 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,10 @@ int			get_dist_tube(t_line line, t_obj obj, t_v *res)
 int			get_dist_plan(t_line line, t_obj obj, t_v *res)
 {
 	t_v		tmp;
+	t_v		a;
 	double	opti_a;
 	double	opti_b;
+	double	c;
 
 	tmp = (vect_scal(line.dir, obj.norm)) > 0.000 ?
 		obj.norm : vect_inv(obj.norm);
@@ -85,7 +87,17 @@ int			get_dist_plan(t_line line, t_obj obj, t_v *res)
 	res->z = -1.000 * opti_a / opti_b;
 	res->y = res->z;
 	res->x = res->z;
-	return ((int)(opti_a = (res->z > 0.0) ? 1 : 0));
+	if (obj.radius >= 0.0)
+		return ((int)(opti_a = (res->z > 0.0) ? 1 : 0));
+	tmp = vect_sous(vect_add(line.pos, vect_mult(line.dir, res->z)), obj.o);
+	a = vect_norm(obj.norm2);
+	c = get_vect_norm(tmp);
+	opti_a = c * (vect_scal(a, vect_norm(tmp)));
+	opti_b = c * (vect_scal(vect_norm(tmp), vect_norm(vect_prod(a, obj.norm))));
+	c = -obj.radius;
+	if (((int)fabs(opti_b) % (int)c < (int)c / 2) ^ (opti_b < 0.0) ^ ((int)fabs(opti_a) % (int)c < (int)c / 2) ^ (opti_a < 0.0))
+		return (0);
+	return (1);
 }
 
 int			get_dist_sphere(t_line line, t_obj obj, t_v *res)
