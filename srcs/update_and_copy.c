@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 00:26:36 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 00:27:32 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type)
 	new[i].radius = (new[i].type == CONE) ? 30 : 150;
 	new[i].mat.rough = 1;
 	new[i].k_diff = 0.7;
-	set_white(&new[i].col);
+	new[i].col = get_white();
 	env->objs.nb++;
 	env->objs.curr = i;
 	ft_memdel((void *)&env->objs.obj);
