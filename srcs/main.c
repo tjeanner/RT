@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 20:41:00 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:49:36 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,9 @@ int			main(int ac, char **av)
 	if (!(env = init(av[1])))
 		error_mgt(6);
 //	env->objs.obj[0].reflect = 0.;
-			printf("action = %d\n", env->objs.obj[5].act.action);
+			printf("\naction = %d\n", env->objs.obj[5].act.action);
 			printf("speed = %f\n", env->objs.obj[5].act.speed);
-			exit (0);
+			// exit (0);
 	tutu(env);
 	while (!env->state)
 	{
