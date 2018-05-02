@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_get_scene.c                                 :+:      :+:    :+:   */
+/*   parser_get_obj.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/01 21:15:19 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 16:20:16 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
+static int	j_set_obj_d(char *key, int type, t_json *j_obj, t_obj *obj)
 {
 	obj->mat.rough = 1;
 	obj->k_diff = 0.7;
@@ -34,6 +34,15 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		obj->reflect = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "transparency") && type == TYPE_DOUBLE)
 		obj->transp = fmin(1, fmax(j_obj->val.data.nb, 0));
+	else
+		return (0);
+	return (1);
+}
+
+static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
+{
+	if (j_set_obj_d(key, type, j_obj, obj))
+		return ;
 	else if (!ft_strcmp(key, "refract") && type == TYPE_DOUBLE)
 		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "roughness") && type == TYPE_DOUBLE)
@@ -70,77 +79,11 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 		if (j_is_valid_obj(obj))
 		{
 			if (obj->reflect > 0)
-				env->effects.depth = (env->effects.depth == 1) ? 2 : env->effects.depth; 
+				env->effects.depth = (env->effects.depth == 1) ?
+					2 : env->effects.depth;
 			ft_lstadd(&par->lst_obj, ft_lstnew(obj, sizeof(t_obj)));
 			env->objs.nb++;
 		}
-		p = p->next;
-	}
-}
-
-void		j_get_lights(t_json_arr *tab, t_lum *lum, t_par *par, t_env *env)
-{
-	t_json_arr	*p;
-	t_json		*po;
-
-	p = tab;
-	while (p)
-	{
-		po = p->val.data.obj;
-		ft_bzero(lum, sizeof(t_lum));
-		lum->coef = 0.4;
-		while (po)
-		{
-			if (!ft_strcmp(po->key, "color") && po->val.type == TYPE_STRING)
-				lum->col = j_get_color(po);
-			else if (!ft_strcmp(po->key, "pos") && po->val.type == TYPE_OBJ)
-				lum->pos = j_get_vec(po);
-			else if (!ft_strcmp(po->key, "intensity") && po->val.type == TYPE_DOUBLE)
-			{
-				if (po->val.data.nb >= 0 && po->val.data.nb <= 1)
-					lum->coef = po->val.data.nb;
-				else
-					lum->coef = (po->val.data.nb < 0) ? 0 : 1;
-			}
-			else
-				error_mgt(2);
-			po = po->next;
-		}
-		if (j_is_valid_lum(lum))
-		{
-			ft_lstadd(&par->lst_lum, ft_lstnew(lum, sizeof(t_lum)));
-			env->lums.nb++;
-		}
-		p = p->next;
-	}
-}
-
-void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
-{
-	t_json_arr	*p;
-	t_json		*po;
-
-	p = tab;
-	while (p)
-	{
-		po = p->val.data.obj;
-		ft_bzero(cam, sizeof(t_cam));
-		while (po)
-		{
-			if (!ft_strcmp(po->key, "pos") && po->val.type == TYPE_OBJ)
-				cam->pos = j_get_vec(po);
-			else if (!ft_strcmp(po->key, "v") && po->val.type == TYPE_OBJ)
-				cam->vcam = j_get_vec(po);
-			else if (!ft_strcmp(po->key, "v2") && po->val.type == TYPE_OBJ)
-				cam->v2cam = j_get_vec(po);
-			else if (!ft_strcmp(po->key, "color") && po->val.type == TYPE_STRING)
-				cam->col = j_get_color(po);
-			else
-				error_mgt(3);
-			po = po->next;
-		}
-		if (j_is_valid_cam(cam) && ++env->cams.nb)
-			ft_lstadd(&par->lst_cam, ft_lstnew(cam, sizeof(t_cam)));
 		p = p->next;
 	}
 }

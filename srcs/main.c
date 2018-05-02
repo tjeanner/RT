@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 20:28:36 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:41:00 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ t_env		*init(char *filename)
 void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 {
 	int		i;
+	double	tmp;
+	t_obj	obj;
 
 	env->objs.col_fcts[0] = get_dist_sphere;
 	env->objs.col_fcts[1] = get_dist_plan;
@@ -68,9 +70,42 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 		env->cams.cam[env->cams.curr].v3cam = vect_prod(
 		env->cams.cam[env->cams.curr].vcam, env->cams.cam[env->cams.curr].v2cam);
 //	env->lums.coefs_sum = 1.0;
-//	i = -1;
-//	while (++i < env->objs.nb)// && (env->lums.coefs_sum += env->lums.lum[i].coef))
-//		env->objs.obj[i].k_diff = 1.0;
+	i = -1;
+	while (++i < env->objs.nb)
+	{
+		if (env->objs.obj[i].type == PLANE)
+		{
+			obj = env->objs.obj[i];
+			tmp = -1.0 * vect_scal(obj.norm, obj.o);
+			if (obj.norm.z != 0)
+			{
+				obj.norm2.y = 1;
+				obj.norm2.x = 1;
+				obj.norm2.z = -1.0 * (obj.norm.y + obj.norm.x + tmp) / obj.norm.z;
+			}
+			else if (obj.norm.x != 0)
+			{
+				obj.norm2.y = 1;
+				obj.norm2.z = 1;
+				obj.norm2.x = -1.0 * (obj.norm.y + obj.norm.z + tmp) / obj.norm.x;
+			}
+			else if (obj.norm.y != 0)
+			{
+				obj.norm2.z = 1;
+				obj.norm2.x = 1;
+				obj.norm2.y = -1.0 * (obj.norm.z + obj.norm.x + tmp) / obj.norm.y;
+			}
+			obj.norm2 = vect_norm(vect_sous(obj.norm2, obj.o));
+			ft_putfloat_fd(obj.norm2.x, 1);
+			ft_putstr(", ");
+			ft_putfloat_fd(obj.norm2.y, 1);
+			ft_putstr(", ");
+			ft_putfloat_fd(obj.norm2.z, 1);
+			ft_putstr(", ");
+			ft_putfloat_fd(vect_scal(obj.norm, obj.norm2), 1);
+			env->objs.obj[i] = obj;
+		}
+	}
 	i = -1;
 	while (++i < env->lums.nb)
 		env->lums.coefs_sum += env->lums.lum[i].coef;
@@ -131,8 +166,8 @@ int			main(int ac, char **av)
 	if (!(env = init(av[1])))
 		error_mgt(6);
 //	env->objs.obj[0].reflect = 0.;
-			printf("action = %d\n", env->objs.obj[4].act.action);
-			printf("speed = %f\n", env->objs.obj[4].act.speed);
+			printf("action = %d\n", env->objs.obj[5].act.action);
+			printf("speed = %f\n", env->objs.obj[5].act.speed);
 			exit (0);
 	tutu(env);
 	while (!env->state)

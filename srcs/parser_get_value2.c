@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:19:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/02 18:42:38 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:37:24 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,15 @@ void		j_get_radius(t_json *json, t_obj *obj)
 	p = p->next;
 }
 
-static int			j_get_action(char *str)
+static int	j_get_action(char *str)
 {
 	if (!ft_strcmp(str, "translation"))
 		return (TRANSLATION);
 	else if (!ft_strcmp(str, "rotation"))
 		return (ROTATION);
-	else if (!ft_strcmp(str, "ellipse"))
-		return (ELLIPSE);
-	else if (!ft_strcmp(str, "COLOR"))
+	// else if (!ft_strcmp(str, "ellipse"))
+	// 	return (ELLIPSE);
+	else if (!ft_strcmp(str, "color"))
 		return (COLOR);
 	else
 		return (-1);
@@ -73,15 +73,14 @@ void		j_get_motion(t_json *json, t_obj *obj)
 		obj->act.action = j_get_action(p->val.data.str);
 	p = p->next;
 	if (!ft_strcmp(p->key, "axe") && p->val.type == TYPE_OBJ)
-		obj->act.axis = j_get_vec(p);
+		obj->act.axis = vect_norm(j_get_vec(p));
 	p = p->next;
 	if (!ft_strcmp(p->key, "speed") && p->val.type == TYPE_DOUBLE)
-		obj->act.speed = fmin(100, fmax(p->val.data.nb, 0));
+		obj->act.speed = fmin(500, fmax(p->val.data.nb, 1));
 	p = p->next;
 	if (!ft_strcmp(p->key, "min") && p->val.type == TYPE_OBJ)
 		obj->act.min = j_get_vec(p);
 	p = p->next;
 	if (!ft_strcmp(p->key, "max") && p->val.type == TYPE_OBJ)
 		obj->act.max = j_get_vec(p);
-
 }

@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 21:56:59 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 12:09:07 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 		if (env->objs.obj[env->objs.curr].type == CONE && env->objs.obj[env->objs.curr].radius > 0.0)
 			env->objs.obj[env->objs.curr].radius -= 0.5;
 		else if (env->objs.obj[env->objs.curr].type != CONE)
-			env->objs.obj[env->objs.curr].radius -= (env->objs.obj[env->objs.curr].radius >= 0 || env->objs.obj[env->objs.curr].type == SPHERE) ? 10 : 0;
+			env->objs.obj[env->objs.curr].radius -= (env->objs.obj[env->objs.curr].radius >= 0 || env->objs.obj[env->objs.curr].type == SPHERE || env->objs.obj[env->objs.curr].type == PLANE) ? 10 : 0;
 		ft_putnbr(env->objs.obj[env->objs.curr].radius);
 		ft_putstr(", ");
 	}

@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 20:31:50 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:38:16 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef enum			e_typeobj
 
 typedef enum			e_typeact
 {
-	TRANSLATION, ROTATION, ELLIPSE, COLOR
+	NOPE, ROTATION, TRANSLATION, COLOR
 }						t_typeact;
 
 typedef union			u_color
@@ -144,6 +144,7 @@ typedef struct			s_obj
 	float				radius2;
 	t_v					o;
 	t_v					norm;
+	t_v					norm2;
 	t_color				col;
 //	double				dist;
 	float				k_diff;
@@ -168,6 +169,7 @@ typedef struct			s_cam
 typedef struct			s_lum
 {
 	t_v					pos;
+	t_v					dir;
 	float				coef;
 	t_color				col;
 }						t_lum;
@@ -406,6 +408,9 @@ t_tri					parse_f(t_pobj *pobj, char **tab);
 t_v						parse_vect(char *s);
 t_v						get_nblines(t_pobj *pobj, char *av);
 t_v						init_vect(double x, double y, double z);
+
+void					j_print_cam(t_env *env, int i, int fd);
+void					j_print_lum(t_env *env, int i, int fd);
 
 
 #endif

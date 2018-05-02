@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 01:49:37 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 00:29:01 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 16:21:00 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,12 @@ void		j_fill_scn(t_json *json, t_env *env)
 	}
 	if (!ft_strcmp(json->key, "ambient") && json->val.type == TYPE_DOUBLE)
 	{
-		if (json->val.data.nb >= 0 && json->val.data.nb <= 1)
-			env->lums.amb_coef = json->val.data.nb;
-		else
-			env->lums.amb_coef = (json->val.data.nb < 0) ? 0 : 1;
+		env->lums.amb_coef = fmin(1, fmax(json->val.data.nb, 0));
 		json = json->next;
 	}
 	if (!ft_strcmp(json->key, "depth") && json->val.type == TYPE_DOUBLE)
 	{
-		if (json->val.data.nb >= 1 && json->val.data.nb <= 10)
-			env->effects.depth = (int)json->val.data.nb;
-		else
-			env->effects.depth = (json->val.data.nb < 1) ? 1 : 10;
+		env->effects.depth = fmin(10, fmax(json->val.data.nb, 1));
 		json = json->next;
 	}
 }
