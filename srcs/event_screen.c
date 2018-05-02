@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/02 18:44:31 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/01 20:16:41 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/02 19:09:32 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** Ou make film
 */
 
-void	ev_screen(t_b *b, SDL_Event event)
+void	ev_screen(t_env *env, SDL_Event event)
 {
 	int		ev;
 
@@ -25,7 +25,7 @@ void	ev_screen(t_b *b, SDL_Event event)
 	if (ev == SDLK_x)
 		ev_screenshot(env);
 	else if (ev == SDLK_z)
-		b->rec = !b->rec;
+		env->screen.rec = !env->screen.rec;
 }
 
 /*
@@ -40,7 +40,7 @@ void	ev_screenshot(t_env *env)
 	char			*name;
 
 	name = ft_strdup("/tmp/Screenshots/Screenshot");
-	name = ft_strjoin(name, ft_itoa(env->display.time++));
+	name = ft_strjoin(name, ft_itoa(env->screen.time++));
 	name = ft_strjoin(name, ".bmp");
 	renderer = SDL_GetRenderer(env->display.win);
 	screen = SDL_CreateRGBSurface(0, WIN_X, WIN_Y,

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_valid_json.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 09:58:18 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/23 19:36:20 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 18:42:51 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 int			j_is_valid_obj(t_obj *obj)
 {
-	if (!obj->type || obj->col.color > 16777215)
+	if (obj->type == NONE || obj->col.color > 16777215)
 		return (0);
-	if (obj->type != 's' && !get_vect_norm(obj->norm))
+	if (obj->type != SPHERE && !get_vect_norm(obj->norm))
 		return (0);
-	if (obj->type != 'p' && obj->radius <= 0)
+	if (obj->type != PLANE && obj->radius <= 0)
+		return (0);
+	if (obj->act.action == -1)
 		return (0);
 	return (1);
 }

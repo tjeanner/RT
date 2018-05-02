@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/01 20:03:40 by vmercadi         ###   ########.fr        #
+#    Updated: 2018/05/02 19:08:27 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC =		main.c \
 			events_rotation.c \
 			events_move.c \
 			color_math.c \
+			color_math2.c \
 			distances_functions.c \
 			norm_manip.c \
 			update_and_copy.c \
@@ -38,11 +39,13 @@ SRC =		main.c \
 			filter.c \
 			filter2.c \
 			raytracing.c \
+			textures.c	\
 			error_mgt.c \
 			parseur_obj.c \
 			action.c	\
-			to_fdf.c	\
 			event_screen.c \
+
+			# to_fdf.c	\
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror #-Igsl/include

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/28 05:03:22 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/01 21:15:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 {
+	obj->mat.rough = 1;
+	obj->k_diff = 0.7;
 	if (!ft_strcmp(key, "type") && type == TYPE_STRING)
 		j_get_type(j_obj, obj);
 	else if (!ft_strcmp(key, "radius") && type == TYPE_DOUBLE)
@@ -30,10 +32,22 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		j_get_rot(j_obj, obj);
 	else if (!ft_strcmp(key, "reflect") && type == TYPE_DOUBLE)
 		obj->reflect = fmin(1, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "transparency") && type == TYPE_DOUBLE)
+		obj->transp = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "refract") && type == TYPE_DOUBLE)
-		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 1));
+		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "roughness") && type == TYPE_DOUBLE)
+		obj->mat.rough = fmin(20, fmax(j_obj->val.data.nb, 1));
+	else if (!ft_strcmp(key, "plasticity") && type == TYPE_DOUBLE)
+		obj->mat.plastic = fmin(1, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "specular") && type == TYPE_DOUBLE)
+		obj->k_spec = fmin(1, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "diffuse") && type == TYPE_DOUBLE)
+		obj->k_spec = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
 		j_get_tex(j_obj, obj);
+	else if (!ft_strcmp(key, "motion") && type == TYPE_OBJ)
+		j_get_motion(j_obj, obj);
 	else
 		error_mgt(5);
 }
@@ -55,6 +69,8 @@ void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
 		}
 		if (j_is_valid_obj(obj))
 		{
+			if (obj->reflect > 0)
+				env->effects.depth = (env->effects.depth == 1) ? 2 : env->effects.depth; 
 			ft_lstadd(&par->lst_obj, ft_lstnew(obj, sizeof(t_obj)));
 			env->objs.nb++;
 		}

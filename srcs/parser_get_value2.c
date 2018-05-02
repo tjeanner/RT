@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_get_value2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:19:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/28 05:03:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 18:42:38 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ void		j_get_tex(t_json *json, t_obj *obj)
 	t_json	*p;
 
 	p = json;
-	if (!ft_strcmp(p->val.data.str, "STRIPES"))
-		obj->tex = 1;
+	if (!ft_strcmp(p->val.data.str, "CHESS"))
+		obj->mat.tex = 1;
+	else if (!ft_strcmp(p->val.data.str, "STRIPES"))
+		obj->mat.tex = 2;
 	else
-		obj->tex = 0;
+		obj->mat.tex = 0;
 	p = p->next;
 }
 
@@ -46,4 +48,40 @@ void		j_get_radius(t_json *json, t_obj *obj)
 	p = json;
 	obj->radius = json->val.data.nb;
 	p = p->next;
+}
+
+static int			j_get_action(char *str)
+{
+	if (!ft_strcmp(str, "translation"))
+		return (TRANSLATION);
+	else if (!ft_strcmp(str, "rotation"))
+		return (ROTATION);
+	else if (!ft_strcmp(str, "ellipse"))
+		return (ELLIPSE);
+	else if (!ft_strcmp(str, "COLOR"))
+		return (COLOR);
+	else
+		return (-1);
+}
+
+void		j_get_motion(t_json *json, t_obj *obj)
+{
+	t_json	*p;
+
+	p = json->val.data.obj;
+	if (!ft_strcmp(p->key, "action") && p->val.type == TYPE_STRING)
+		obj->act.action = j_get_action(p->val.data.str);
+	p = p->next;
+	if (!ft_strcmp(p->key, "axe") && p->val.type == TYPE_OBJ)
+		obj->act.axis = j_get_vec(p);
+	p = p->next;
+	if (!ft_strcmp(p->key, "speed") && p->val.type == TYPE_DOUBLE)
+		obj->act.speed = fmin(100, fmax(p->val.data.nb, 0));
+	p = p->next;
+	if (!ft_strcmp(p->key, "min") && p->val.type == TYPE_OBJ)
+		obj->act.min = j_get_vec(p);
+	p = p->next;
+	if (!ft_strcmp(p->key, "max") && p->val.type == TYPE_OBJ)
+		obj->act.max = j_get_vec(p);
+
 }

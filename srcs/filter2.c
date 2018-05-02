@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:17:30 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 18:20:37 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/04/29 01:02:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,38 @@ void	stereo_filter(t_env *env)
 
 void	motionblur_filter(t_env *env)
 {
-	(void)env;
+	int				x;
+	int				moyenne;
+	int				i, tmp;
+	unsigned char 	*data;
+	int				y;
+
+	i = 0;
+	data = (unsigned char *)env->display.surf->pixels;
+	while (i < (WIN_Y * WIN_X) * 4)
+	{
+		x = 0;
+		moyenne = 0;
+		while (x < 20)
+		{
+			y = 0;
+			while (y < 20)
+			{
+				tmp = i + x + (y * WIN_X);
+				if (tmp > 0 && tmp < WIN_X * WIN_Y * 4)
+				{
+					moyenne += (data[tmp]);
+					if (data[tmp] < 0)
+						moyenne += 256;
+				}
+				y += 4;
+			}
+			x += 4;
+		}
+		moyenne /= 25;
+		data[i] = moyenne;
+		i++;
+	}
 }
 
 void	cartoon_filter(t_env *env)

@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 19:29:10 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/01 21:56:59 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 	}
 	else if (sym == SDLK_MINUS && env->objs.curr >= 0)
 	{
-		if (env->objs.obj[env->objs.curr].type == 'c' && env->objs.obj[env->objs.curr].radius > 0.0)
+		if (env->objs.obj[env->objs.curr].type == CONE && env->objs.obj[env->objs.curr].radius > 0.0)
 			env->objs.obj[env->objs.curr].radius -= 0.5;
-		else if (env->objs.obj[env->objs.curr].type != 'c')
-			env->objs.obj[env->objs.curr].radius -= (env->objs.obj[env->objs.curr].radius >= 0 || env->objs.obj[env->objs.curr].type == 's') ? 10 : 0;
+		else if (env->objs.obj[env->objs.curr].type != CONE)
+			env->objs.obj[env->objs.curr].radius -= (env->objs.obj[env->objs.curr].radius >= 0 || env->objs.obj[env->objs.curr].type == SPHERE) ? 10 : 0;
 		ft_putnbr(env->objs.obj[env->objs.curr].radius);
 		ft_putstr(", ");
 	}
@@ -74,9 +74,9 @@ static int		events_obj_mod(t_env *env, unsigned int sym)
 		env->lums.lum[env->lums.curr].coef /= (env->lums.lum[env->lums.curr].coef > 0) ? 1.1000000 : 10;
 	else if (sym == SDLK_EQUALS && env->objs.curr >= 0)
 	{
-		if (env->objs.obj[env->objs.curr].type == 'c' && env->objs.obj[env->objs.curr].radius < 89.5)
+		if (env->objs.obj[env->objs.curr].type == CONE && env->objs.obj[env->objs.curr].radius < 89.5)
 			env->objs.obj[env->objs.curr].radius += 0.5;
-		else if (env->objs.obj[env->objs.curr].type != 'c')
+		else if (env->objs.obj[env->objs.curr].type != CONE)
 			env->objs.obj[env->objs.curr].radius += 10;
 		ft_putnbr(env->objs.obj[env->objs.curr].radius);
 		ft_putstr(", ");
@@ -165,14 +165,13 @@ int				events(t_env *env)
 			|| events_rotation(env, sym, &obj->norm)
 			|| events_move(env, sym, cam, obj)))
 			;
-		else if (event.type == SDL_KEYDOWN && sym >= SDLK_KP_1
-			&& sym <= SDLK_KP_0)
-			event_cam_switch(env, sym);
+//		else if (event.type == SDL_KEYDOWN && sym == SDLK_z)
+//			event_cam_switch(env, sym);
 		else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != 0)
 			mouse_move(env, event, &env->cams.cam[env->cams.curr],
 						&env->objs.obj[env->objs.curr]);
 		else if (!move_events(env, event))
-			ev_screenshot();
+			ev_screenshot(env);
 		tutu(env);
 	}
 	return (1);
