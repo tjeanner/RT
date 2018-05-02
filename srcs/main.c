@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 00:58:58 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 00:14:44 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_env		*init(char *filename)
 	return (NULL);
 }
 
-void		destrucainitialiserquonveutaussiapresreload(t_env *env)
+void		data_init_and_reload(t_env *env)
 {
 	int		i;
 	double	tmp;
@@ -97,13 +97,6 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 				obj.norm2.y = -1.0 * (obj.norm.z + obj.norm.x + tmp) / obj.norm.y;
 			}
 			obj.norm2 = vect_norm(vect_sous(obj.norm2, obj.o));
-			ft_putfloat_fd(obj.norm2.x, 1);
-			ft_putstr(", ");
-			ft_putfloat_fd(obj.norm2.y, 1);
-			ft_putstr(", ");
-			ft_putfloat_fd(obj.norm2.z, 1);
-			ft_putstr(", ");
-			ft_putfloat_fd(vect_scal(obj.norm, obj.norm2), 1);
 			env->objs.obj[i] = obj;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:19:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/02 20:57:30 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 22:54:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@ void		j_get_tex(t_json *json, t_obj *obj)
 
 	p = json;
 	if (!ft_strncmp(p->val.data.str, "CHESS", 5))
-	// {
-	// 	if (!ft_strncmp(p->val.data.str, "CHESS:", 6) && ft_strlen(p->val.data.str) > 10)
-	// 		obj->mat.scale = ft_atoi(p->val.data.str + 6);
-	// }
+	{
+		if (!ft_strncmp(p->val.data.str, "CHESS:", 6)
+			&& ft_strlen(p->val.data.str) < 12)
+			obj->mat.scale = ft_atoi(p->val.data.str + 6);
+		else
+			obj->mat.scale = 200;
 		obj->mat.tex = 1;
+	}
 	else if (!ft_strcmp(p->val.data.str, "STRIPES"))
 		obj->mat.tex = 2;
 	else
@@ -60,8 +63,6 @@ static int	j_get_action(char *str)
 		return (TRANSLATION);
 	else if (!ft_strcmp(str, "rotation"))
 		return (ROTATION);
-	// else if (!ft_strcmp(str, "ellipse"))
-	// 	return (ELLIPSE);
 	else if (!ft_strcmp(str, "color"))
 		return (COLOR);
 	else

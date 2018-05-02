@@ -6,13 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 00:22:11 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 22:59:20 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
-
-void			destrucainitialiserquonveutaussiapresreload(t_env *env);
 
 static void		j_init_env_var(t_env *env)
 {
@@ -38,7 +36,7 @@ void			j_init_env_struc(t_env *env, t_json *json)
 	set_struct(env, &par);
 	ft_parser_free(json);
 	env->effects.stereo = (!ft_strcmp(env->effects.filter, "3D")) ? 1 : 0;
-	destrucainitialiserquonveutaussiapresreload(env);
+	data_init_and_reload(env);
 }
 
 void			j_init(t_env *env)

@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 01:37:07 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 00:36:30 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct			s_mat
 	unsigned int		tex;
 	double				rough;
 	double				plastic;
+	double				scale;
 }						t_mat;
 
 typedef struct			s_obj
@@ -277,7 +278,7 @@ t_color					satur_col(t_color a, float n);
 t_color					get_rand(void);
 t_color					get_white(void);
 t_color					get_black(void);
-int						set_white(t_color *c);
+t_color					prod_color(t_color a, t_color b);
 
 /*
 **color_math2.c
@@ -287,8 +288,6 @@ t_color					add_color(t_color a, t_color b);
 t_color					mult_color(t_color a, float n);
 t_color					div_color(t_color a, float n);
 int						average_color(t_color *col, float flou);
-void					sature_color(t_color *col, unsigned int max);
-t_color					prod_color(t_color a, t_color b);
 
 /*
 **useless_functions.c
@@ -413,5 +412,8 @@ t_v						init_vect(double x, double y, double z);
 void					j_print_cam(t_env *env, int i, int fd);
 void					j_print_lum(t_env *env, int i, int fd);
 
+
+
+void					data_init_and_reload(t_env *env);
 
 #endif
