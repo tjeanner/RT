@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:04:19 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/02 18:11:48 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:20:05 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int		j_print_env(t_env *env, int i)
 {
 	int		fd;
 
-	while ((fd = open(ft_strjoin("./scenes/scene", ft_strjoin(ft_itoa(i),
+	while ((fd = open(ft_strjoin("./scenes/scene_", ft_strjoin(ft_itoa(i),
 		".json")), O_CREAT | O_EXCL | O_RDONLY, 0666)) == -1 && i < 20)
 		i++;
-	fd = open(ft_strjoin("./scenes/scene", ft_strjoin(ft_itoa(i), ".json")),
+	fd = open(ft_strjoin("./scenes/scene_", ft_strjoin(ft_itoa(i), ".json")),
 		O_CREAT | O_WRONLY | O_APPEND, 0666);
 	ft_putstr_fd("{\n\t\"name\":\"", fd);
 	ft_putstr_fd(env->name, fd);
@@ -29,14 +29,10 @@ int		j_print_env(t_env *env, int i)
 	ft_putfloat_fd(env->effects.depth, fd);
 	ft_putstr_fd(",\n\t\"ambient\":", fd);
 	ft_putfloat_fd(env->lums.amb_coef, fd);
-	ft_putstr_fd(",\n\t\"scene\":{", fd);
-	ft_putstr_fd("\n\t\t\"cameras\":[", fd);
+	ft_putstr_fd(",\n\t\"scene\":{\n\t\t\"cameras\":[", fd);
 	i = env->cams.nb;
 	while (--i >= 0)
 	{
-		env->cams.cam[i].vcam = vect_norm(env->cams.cam[i].vcam);
-		env->cams.cam[i].v2cam = vect_norm(env->cams.cam[i].v2cam);
-		env->cams.cam[i].v3cam = vect_norm(env->cams.cam[i].v3cam);
 		j_print_cam(env, i, fd);
 		if (i != 0)
 			ft_putstr_fd(",", fd);
