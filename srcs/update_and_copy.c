@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 00:27:32 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 23:06:14 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void		update_and_copy_r(t_env *env, int obj)
 	{
 		if (i != obj)
 		{
-			ft_memcpy((void *)&new[j], (void *)&env->objs.obj[i], sizeof(t_obj));
+			ft_memcpy((void *)&new[j],
+				(void *)&env->objs.obj[i], sizeof(t_obj));
 			j++;
 		}
 		i++;
