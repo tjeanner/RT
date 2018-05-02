@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/02 16:10:21 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/02 18:46:01 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRC =		main.c \
 			update_and_copy.c \
 			generator_json.c \
 			generator_json2.c \
+			generator_print_obj.c  \
 			parser_json.c \
 			parser_init.c \
 			parser.c \
