@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:19:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/02 16:15:10 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/02 20:03:49 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static int	j_get_action(char *str)
 		return (TRANSLATION);
 	else if (!ft_strcmp(str, "rotation"))
 		return (ROTATION);
-	else if (!ft_strcmp(str, "ellipse"))
-		return (ELLIPSE);
-	else if (!ft_strcmp(str, "COLOR"))
+	// else if (!ft_strcmp(str, "ellipse"))
+	// 	return (ELLIPSE);
+	else if (!ft_strcmp(str, "color"))
 		return (COLOR);
 	else
 		return (-1);
@@ -73,10 +73,10 @@ void		j_get_motion(t_json *json, t_obj *obj)
 		obj->motion.action = j_get_action(p->val.data.str);
 	p = p->next;
 	if (!ft_strcmp(p->key, "axe") && p->val.type == TYPE_OBJ)
-		obj->motion.axis = j_get_vec(p);
+		obj->motion.axis = vect_norm(j_get_vec(p));
 	p = p->next;
 	if (!ft_strcmp(p->key, "speed") && p->val.type == TYPE_DOUBLE)
-		obj->motion.speed = fmin(100, fmax(p->val.data.nb, 0));
+		obj->motion.speed = fmin(500, fmax(p->val.data.nb, 1));
 	p = p->next;
 	if (!ft_strcmp(p->key, "min") && p->val.type == TYPE_OBJ)
 		obj->motion.min = j_get_vec(p);
