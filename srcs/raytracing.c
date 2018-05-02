@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 05:43:01 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/02 05:08:12 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,23 @@ t_v			get_norm(t_obj obj, t_ray *line)
 //			? vect_norm(vect_inv(vect)) : vect_norm(vect));
 }
 
+int			is_in_obj(t_obj obj, t_v pos)
+{
+	if (obj.type == SPHERE)
+	{
+		if (get_vect_norm(vect_sous(pos, obj.o)) <= fabs(obj.radius))
+			return (1);
+	}
+	return (0);
+}
+
 int			which_obj_col(t_objs *objs, t_ray *line)
 {
 	double	tmp;
 	t_v		tutu;
+	t_v		ttmp;
 	int		i;
+	int		t;
 	int		ob;
 
 	i = -1;
@@ -76,13 +88,32 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	while (++i < objs->nb)
 	{
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(line->from, objs->obj[i], &tutu) == 1 && (tmp > tutu.z || tmp < 0.0) && (ob = i) == i)
-				tmp = tutu.z;
+				(line->from, objs->obj[i], &tutu) == 1)
+		{
+			if (tutu.x > 0.0 && (tutu.x < tmp || tmp < 0.0))
+			{
+				ttmp = vect_add(line->from.pos, vect_mult(line->from.dir, tutu.x));
+				if (objs->obj[i].radius > 0.0 && is_in_obj(objs->obj[i - 1], ttmp) == 0 && (ob = i) == i)
+					tmp = tutu.x;
+				if (objs->obj[i].radius < 0.0 && is_in_obj(objs->obj[i - 1], ttmp) == 1 && (ob = i) == i)
+					tmp = tutu.x;
+			}
+			if (tutu.y > 0.0 && (tutu.y < tmp || tmp < 0.0))
+			{
+				ttmp = vect_add(line->from.pos, vect_mult(line->from.dir, tutu.y));
+				if (objs->obj[i].radius > 0.0 && is_in_obj(objs->obj[i - 1], ttmp) == 0 && (ob = i) == i)
+					tmp = tutu.y;
+				if (objs->obj[i].radius < 0.0 && is_in_obj(objs->obj[i - 1], ttmp) == 1 && (ob = i) == i)
+					tmp = tutu.y;
+			}
+		}
 	}
 	if (tmp < 0.0 || objs->nb == 0)
 		return (0);
 	line->obj = ob;
+	(void)t;
 	line->to.pos = vect_add(line->from.pos, vect_mult(line->from.dir, tmp));
+	line->to.dir = get_norm(objs->obj[ob], line);
 	line->to.dir = get_norm(objs->obj[ob], line);
 	line->dist = tmp;
 	line->total_dist += line->dist;
@@ -118,8 +149,9 @@ t_color		get_diffuse(t_obj obj, t_ray ray)
 t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 {
 	int		i;
-	t_v		res;
+//	t_v		res;
 	t_ray	tutu;
+//	t_ray	tutur;
 	t_color	col;
 	double	tmp;
 
@@ -131,9 +163,10 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, 0.00000001));
 	tutu.incident = line;
 	i = -1;
-	while (++i < objs->nb)
+/*	while (++i < objs->nb)
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(tutu.from, objs->obj[i], &res) == 1 && ((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))
+				(tutu.from, objs->obj[i], &res) == 1 && ((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))// && objs->obj[i].radius > 0.0)*/
+	if (which_obj_col(objs, &tutu) == 1 && tutu.dist < tmp)
 			return (get_black());
 	col = get_diffuse(objs->obj[obj], tutu);
 	col = add_color(col, get_specular(objs->obj[obj], tutu));
