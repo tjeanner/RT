@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/01 02:41:25 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/02 16:10:21 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,9 @@ SRC =		main.c \
 			parser.c \
 			parser_fill_json.c \
 			parser_function.c \
-			parser_get_scene.c \
+			parser_get_obj.c \
+			parser_get_light.c \
+			parser_get_cam.c \
 			parser_get_value.c \
 			parser_get_value2.c \
 			parser_valid_json.c \
@@ -45,7 +47,7 @@ SRC =		main.c \
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror #-Igsl/include
 CFLAGS +=	-Ofast -march=native -flto
-#CFLAGS +=	-g3 #-fsanitize=address
+#CFLAGS +=	-g3 -fsanitize=address
 #LFLAGS =	-Lgsl/lib -lgsl #-lgslcblas
 
 SRCDIR =	srcs
@@ -83,7 +85,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCFILE)
 	$(CC) $(CFLAGS) $(FT_INC) -I $(INCDIR) $(SDL_INC) -o $@ -c $<
 
 $(NAME): $(OBJ) $(FT_LIB)
-	$(CC) $(LFLAGS) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME)
+	$(CC) $(CFLAGS) $(LFLAGS) $(OBJ) $(SDL_LNK) $(FT_LNK) -lm -o $(NAME)
 
 norme:
 	@norminette $(addprefix $(SRCDIR)/,$(SRC))
