@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 08:22:41 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/02 19:00:40 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef enum			e_typeobj
 
 typedef enum			e_typeact
 {
-	TRANSLATION, ROTATION, ELLIPSE, COLOR
+	NOPE, ROTATION, TRANSLATION, COLOR
 }						t_typeact;
 
 typedef union			u_color
@@ -142,6 +142,7 @@ typedef struct			s_cam
 typedef struct			s_lum
 {
 	t_v					pos;
+	t_v					dir;
 	float				coef;
 	t_color				col;
 }						t_lum;
