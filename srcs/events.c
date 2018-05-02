@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 12:09:07 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/03 01:12:59 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int				events(t_env *env)
 
 	cam = &env->cams.cam[env->cams.curr];
 	obj = &env->objs.obj[env->objs.curr];
-	if (SDL_PollEvent(&event) != 0)
+	if (SDL_PollEvent(&event) != 0 || env->screen.play)
 	{
 		sym = event.key.keysym.sym;
 		cam->vcam = vect_norm(cam->vcam);
@@ -161,6 +161,8 @@ int				events(t_env *env)
 			;
 		else if (events_special_move_cam(env, sym, event))
 			;
+		else if (sym == SDLK_SPACE && event.key.state == SDL_RELEASED)
+			env->screen.play = !env->screen.play;
 		else if (event.type == SDL_KEYDOWN && (events_obj_mod(env, sym)
 			|| events_rotation(env, sym, &obj->norm)
 			|| events_move(env, sym, cam, obj)))
@@ -171,7 +173,8 @@ int				events(t_env *env)
 			mouse_move(env, event, &env->cams.cam[env->cams.curr],
 						&env->objs.obj[env->objs.curr]);
 		else if (!move_events(env, event))
-			ev_screenshot(env);
+			;
+		// ev_screenshot(env);
 		tutu(env);
 	}
 	return (1);

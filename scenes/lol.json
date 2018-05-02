@@ -35,6 +35,43 @@
 		  }
 	   ],
 	   "objects":[  
+			{  
+			 "type":"cylindre",
+			 "pos":{  
+				"x":0.0000000000,
+				"y":0.0000000000,
+				"z":0.0000000000
+			 },
+			 "norm":{  
+				"x":1.0000000000,
+				"y":0.0000000000,
+				"z":0.0000000000
+			 },
+			 "roughness":12,
+			 "specular":1.0,
+			 "reflect": 1,
+			 "motion":{
+				"action":"translation",
+				"axe":{
+					"x":1,
+					"y":0,
+					"z":1
+				},
+				"min":{
+					"x":-200,
+					"y":-200,
+					"z":-200
+				},
+				"max":{
+					"x":600,
+					"y":600,
+					"z":600
+				},
+				"speed":100
+			 },
+			 "radius":100.0000000000,
+			 "color":"3e9d04"
+		  },
 		  {  
 			 "type":"sphere",
 			 "pos":{  
@@ -47,6 +84,7 @@
 			 "specular":1.0,
 			 "transparency":0.1,
 			 "color":"0000ff",
+			 "reflect": 1,
 			 "motion":{
 				"action":"translation",
 				"axe":{
@@ -55,16 +93,115 @@
 					"z":1
 				},
 				"min":{
+					"x":200,
+					"y":-100,
+					"z":-200
+				},
+				"max":{
+					"x":-800,
+					"y":400,
+					"z":800
+				},
+				"speed":100
+			 }
+		},
+		{  
+			 "type":"sphere",
+			 "pos":{  
+				"x":400.0000000000,
+				"y":-200.0000000000,
+				"z":-800.0000000000
+			 },
+			 "radius":50,
+			 "plasticity":1.0,
+			 "specular":1.0,
+			 "transparency":0.1,
+			 "color":"0000ff",
+			 "refract": 0.5,
+			 "motion":{
+				"action":"color",
+				"axe":{
 					"x":1,
 					"y":0,
 					"z":1
 				},
-				"max":{
-					"x":100000,
-					"y":0,
-					"z":100000
+				"min":{
+					"x":200,
+					"y":-100,
+					"z":-200
 				},
-				"speed":400
+				"max":{
+					"x":-800,
+					"y":400,
+					"z":800
+				},
+				"speed":100
+			 }
+		  },
+		{  
+			 "type":"sphere",
+			 "pos":{  
+				"x":-400.0000000000,
+				"y":200.0000000000,
+				"z":-800.0000000000
+			 },
+			 "radius":50,
+			 "plasticity":1.0,
+			 "specular":1.0,
+			 "transparency":0.1,
+			 "color":"0000ff",
+			 "refract": 0.5,
+			 "motion":{
+				"action":"color",
+				"axe":{
+					"x":1,
+					"y":0,
+					"z":1
+				},
+				"min":{
+					"x":200,
+					"y":-100,
+					"z":-200
+				},
+				"max":{
+					"x":-800,
+					"y":400,
+					"z":800
+				},
+				"speed":100
+			 }
+		  },
+		{  
+			 "type":"sphere",
+			 "pos":{  
+				"x":-800.0000000000,
+				"y":-400.0000000000,
+				"z":-700.0000000000
+			 },
+			 "radius":50,
+			 "plasticity":1.0,
+			 "specular":1.0,
+			 "transparency":0.1,
+			 "color":"0000ff",
+			 "refract": 0.5,
+			 "motion":{
+				"action":"color",
+				"axe":{
+					"x":1,
+					"y":0,
+					"z":1
+				},
+				"min":{
+					"x":200,
+					"y":-100,
+					"z":-200
+				},
+				"max":{
+					"x":-800,
+					"y":400,
+					"z":800
+				},
+				"speed":100
 			 }
 		  },
 		  {

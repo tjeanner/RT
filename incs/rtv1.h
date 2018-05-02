@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 20:38:16 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 01:37:07 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define TODEG 180.000 / M_PI
 # define IN_OBJ 1
 # define OUT_OBJ 2
+
 
 typedef struct s_env	t_env;
 
@@ -94,6 +95,7 @@ typedef struct			s_screen
 {
 	int					time;
 	int					rec;
+	int					play;
 }						t_screen;
 
 typedef struct			s_line
@@ -382,11 +384,10 @@ void					ev_screenshot(t_env *env);
 /*
 **action.c
 */
-void					main_action(t_objs *objs);
+void					main_action(t_objs *objs, int play);
 t_act					init_act(int action, t_v axis, int speed, t_v maxmin[2]);
 void					action(t_obj *obj);
 void					act_movaxis(t_obj *obj);
-void					act_color(t_obj *obj);
 int						vect_equal(t_v v1, t_v v2);
 
 

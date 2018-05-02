@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 13:16:46 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/02 20:26:26 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 01:37:08 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,38 +16,14 @@
 ** Start the actions for all the objects
 */
 
-void	main_action(t_objs *objs)
+void	main_action(t_objs *objs, int play)
 {
-				// printf("MAIN_ACTION\n");
 	int		i;
 
 	i = 0;
-	while (i < objs->nb)
-		action(&objs->obj[i++]);
-}
-
-/*
-** Init the action struct
-** Action : 1 = Ellipse | 2 = axe	| 3 = color
-*/
-
-t_act	init_act(int action, t_v axis, int speed, t_v maxmin[2])
-{
-	t_act	act;
-	t_v		movedist;
-
-	act.action = action;
-	act.speed = speed;
-	act.min = maxmin[0];
-	act.max = maxmin[1];
-	act.axis = axis;
-	act.angle = 1.0;
-	act.p = 0;
-	movedist.x = (maxmin[1].x - maxmin[0].x) / speed;
-	movedist.y = (maxmin[1].y - maxmin[0].y) / speed;
-	movedist.z = (maxmin[1].z - maxmin[0].z) / speed;
-	act.movedist = movedist;
-	return (act);
+	if (play)
+		while (i < objs->nb)
+			action(&objs->obj[i++]);
 }
 
 /*
@@ -58,6 +34,14 @@ t_act	init_act(int action, t_v axis, int speed, t_v maxmin[2])
 
 void		action(t_obj *obj)
 {
+	if (!obj->act.movedist.x && !obj->act.movedist.x && !obj->act.movedist.x)
+	{
+		obj->act.movedist.x = (obj->act.max.x - obj->act.min.x) / obj->act.speed;
+		obj->act.movedist.y = (obj->act.max.y - obj->act.min.y) / obj->act.speed;
+		obj->act.movedist.z = (obj->act.max.z - obj->act.min.z) / obj->act.speed;
+		obj->act.angle = 1.0;
+		obj->act.p = 0;
+	}
 	if (obj->act.action <= 0)
 		return ;
 	if (obj->act.action == 1)
@@ -65,7 +49,8 @@ void		action(t_obj *obj)
 	else if (obj->act.action == 2)
 		act_movaxis(obj);
 	else if (obj->act.action == 3)
-		act_color(obj);
+		obj->col = get_rand();
+
 }
 
 /*
@@ -74,49 +59,25 @@ void		action(t_obj *obj)
 
 void		act_movaxis(t_obj *obj)
 {
-	t_v tmp;
-
-	if (vect_equal(obj->act.min, obj->act.max))
-	{
-		tmp = obj->act.min;
-		obj->act.min = obj->act.max;
-		obj->act.max = tmp;
+	t_v		v;
+	t_v		axis;
+	double	dist;
+	double	nb;
+	axis = vect_sous(obj->act.max, obj->act.min);
+	dist = get_vect_norm(axis);
+	axis = vect_norm(axis);
+	v = vect_sous(obj->o, obj->act.min);
+	nb = get_vect_norm(v);
+	if (nb >= dist)
 		obj->act.p = 0;
-	}
-	else
+	else if (vect_scal(axis, v) <= 0)
 		obj->act.p = 1;
 	if (obj->act.p == 1)
-		vect_add(obj->o, obj->act.movedist);
+		obj->o = vect_add(obj->o, obj->act.movedist);
 	else
-		vect_sous(obj->o, obj->act.movedist);
+		obj->o = vect_sous(obj->o, obj->act.movedist);
+
 }
-
-/*
-** To change the color
-*/
-
-void		act_color(t_obj *obj)
-{
-	obj->col.c.r = (double)rand() / (double)RAND_MAX;
-	obj->col.c.g = (double)rand() / (double)RAND_MAX;
-	obj->col.c.b = (double)rand() / (double)RAND_MAX;
-}
-
-/*
-** Compare 2 vect, return 1 if they are equals
-*/
-
-int		vect_equal(t_v v1, t_v v2)
-{
-	if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z)
-		return (1);
-	return (0);
-}
-
-
-
-
-
 
 
 

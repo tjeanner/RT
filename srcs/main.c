@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 20:49:36 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 00:58:58 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_env		*init(char *filename)
 		}
 		env->screen.time = 0;
 		env->screen.rec = 0;
+		env->screen.play = 1;
 		if (!(env->display.win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 			error_mgt(8);
@@ -166,13 +167,10 @@ int			main(int ac, char **av)
 	if (!(env = init(av[1])))
 		error_mgt(6);
 //	env->objs.obj[0].reflect = 0.;
-			printf("\naction = %d\n", env->objs.obj[5].act.action);
-			printf("speed = %f\n", env->objs.obj[5].act.speed);
-			// exit (0);
 	tutu(env);
 	while (!env->state)
 	{
-		main_action(&env->objs);
+		main_action(&env->objs, env->screen.play);
 		events(env);
 	}
 	ft_freeenv(env);
