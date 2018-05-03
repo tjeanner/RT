@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:18:32 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	j_set_obj_d(char *key, int type, t_json *j_obj, t_obj *obj)
 {
 	obj->mat.rough = 1;
 	obj->k_diff = 0.7;
+	obj->mat.scale = 200;
 	if (!ft_strcmp(key, "type") && type == TYPE_STRING)
 		j_get_type(j_obj, obj);
 	else if (!ft_strcmp(key, "radius") && type == TYPE_DOUBLE)

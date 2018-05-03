@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 18:44:52 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:52:15 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	j_print_d_obj(t_env *env, int i, int fd)
 		ft_putstr_fd(",\n\t\t\t\"norm\":", fd);
 		j_print_vec(env->objs.obj[i].norm, fd);
 	}
+	if (env->objs.obj[i].mat.tex == 1)
+		ft_putstr_fd(",\n\t\t\t\"textures\":\"CHESS\"", fd);
 }
 
 void	j_print_obj(t_env *env, int i, int fd)

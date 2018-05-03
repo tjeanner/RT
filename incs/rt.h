@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt.h                                             :+:      :+:    :+:   */
+/*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 20:57:54 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:07:02 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # include "parser.h"
 # include "parse.h"
 
-# define WIN_X 1357
-# define WIN_Y 867
+# define WIN_X 1920
+# define WIN_Y 1080
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
@@ -158,6 +158,7 @@ typedef struct			s_obj
 	float				refract;
 	t_act				act;
 	t_mat				mat;
+	int					link;
 }						t_obj;
 
 typedef struct			s_cam
@@ -374,7 +375,7 @@ t_v						rotation(t_v n, t_v r, float t);
 **update_and_copy.c
 */
 void					update_and_copy_r(t_env *env, int obj);
-void					update_and_copy_a(t_env *env, SDL_Keycode type);
+void					update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj);
 
 /*
 **distances_functions.c
@@ -436,10 +437,13 @@ char					**decoupe(char *s);
 double					parse_double(char *s);
 t_tri					parse_f(t_pobj *pobj, char **tab);
 t_v						parse_vect(char *s);
-t_v						get_nblines(t_pobj *pobj, char *av);
+t_v						get_nblines(char *av);
 t_v						init_vect(double x, double y, double z);
 
 void					j_print_cam(t_env *env, int i, int fd);
 void					j_print_lum(t_env *env, int i, int fd);
+
+
+void					j_init_torus(t_env *env);
 
 #endif

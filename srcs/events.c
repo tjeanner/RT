@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 22:56:16 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 20:03:44 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	move_events(t_env *env, unsigned int sym)
 {
 	if ((sym == SDLK_1 || sym == SDLK_2 || sym == SDLK_3 || sym == SDLK_4))
-		update_and_copy_a(env, sym);
+		update_and_copy_a(env, sym, NULL);
 	else if (sym == SDLK_BACKSPACE && env->objs.curr >= 0)
 		update_and_copy_r(env, env->objs.curr);
 	else if (sym == SDLK_BACKSLASH)
@@ -122,7 +122,6 @@ int			events(t_env *env)
 		else if (event.type == SDL_KEYDOWN && !move_events(env, sym))
 			;
 		ev_screen(env, event);
-		// ev_screenshot(env);
 		thread_create(env);
 	}
 	return (1);
