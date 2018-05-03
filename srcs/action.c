@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 13:16:46 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/03 01:37:08 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 01:54:48 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void		act_movaxis(t_obj *obj)
 		obj->o = vect_add(obj->o, obj->act.movedist);
 	else
 		obj->o = vect_sous(obj->o, obj->act.movedist);
-
 }
 
 
