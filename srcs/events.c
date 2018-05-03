@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:03:06 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 20:03:44 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int			events(t_env *env)
 						&env->objs.obj[env->objs.curr]);
 		else if (event.type == SDL_KEYDOWN && !move_events(env, sym))
 			;
-		// ev_screenshot(env);
+		ev_screen(env, event);
 		thread_create(env);
 	}
 	return (1);
