@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 03:28:17 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:35:59 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,11 +297,11 @@ t_color					div_color(t_color a, float n);
 int						average_color(t_color *col, float flou);
 
 /*
-**useless_functions.c
+**useful_functions.c
 */
 double					which_pow(double num, double pow);
-t_color					get_black(void);
 void					ft_putfloat_fd(double nbr, int fd);
+void					ft_freeenv(t_env *env);
 
 /*
 **raytracing.c
@@ -379,7 +379,6 @@ double					checkerboard(t_ray *line);
 **error_mgt.c
 */
 void					*error_mgt(int status);
-void					ft_freeenv(t_env *env);
 
 /*
 ** event_screen.c
