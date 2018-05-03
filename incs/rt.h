@@ -249,11 +249,15 @@ struct					s_env
 };
 
 /*
+**init.c
+*/
+void					data_init_and_reload(t_env *env);
+t_env					*init(char *filename);
+
+/*
 **main.c
 */
-void					tutu(t_env *env);
-void					*rays(void *tmp);
-t_ray					init_line(double x, double y, t_cam cam);
+void					thread_create(t_env *env);
 
 /*
 **vector_math.c
@@ -306,11 +310,13 @@ void					ft_freeenv(t_env *env);
 /*
 **raytracing.c
 */
+t_ray					init_line(double x, double y, t_cam cam);
 int						which_obj_col(t_objs *objs, t_ray *line);
 t_v						get_norm(t_obj obj, t_ray *line);
 t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line,
 								unsigned int d);
 t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
+void					*rays(void *tmp);
 
 /*
 **events.c
@@ -417,9 +423,5 @@ t_v						init_vect(double x, double y, double z);
 
 void					j_print_cam(t_env *env, int i, int fd);
 void					j_print_lum(t_env *env, int i, int fd);
-
-
-
-void					data_init_and_reload(t_env *env);
 
 #endif

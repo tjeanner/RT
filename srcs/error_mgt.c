@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/17 12:02:56 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:01:56 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 06:00:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void		*error_mgt(int status)
 		ft_put_err("failed to init sdl");
 	else if (status == 9)
 		ft_put_err("invalid scene");
+	else if (status == 10)
+		ft_put_err("pthread error");
 	else
 		ft_put_err("error");
 	return (NULL);
