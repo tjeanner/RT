@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:46:03 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:08:28 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void			j_init(t_env *env)
 
 	nb_line = 0;
 	j_init_env_var(env);
-	if (!(fd = open(env->file, O_RDONLY)))
-		error_mgt(6);
+	if ((fd = open(env->file, O_RDONLY)) <= 0)
+		error_mgt(11);
 	tmp = ft_strnew(0);
 	if ((ret = get_next_line(fd, &line)) > 0)
 		tmp = (line[0] != '{') ? error_mgt(1) : ft_strjoinfree(tmp, line, 'B');
