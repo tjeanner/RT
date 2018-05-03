@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt.h                                             :+:      :+:    :+:   */
+/*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:13:24 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:07:02 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#ifndef RT_H
-# define RT_H
+#ifndef __RT_H
+# define __RT_H
 
 # include "libft.h"
 # include <fcntl.h>//open
@@ -28,8 +27,8 @@
 # include "parser.h"
 # include "parse.h"
 
-# define WIN_X 1357
-# define WIN_Y 867
+# define WIN_X 1920
+# define WIN_Y 1080
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
@@ -437,7 +436,7 @@ char					**decoupe(char *s);
 double					parse_double(char *s);
 t_tri					parse_f(t_pobj *pobj, char **tab);
 t_v						parse_vect(char *s);
-t_v						get_nblines(t_pobj *pobj, char *av);
+t_v						get_nblines(char *av);
 t_v						init_vect(double x, double y, double z);
 
 void					j_print_cam(t_env *env, int i, int fd);
