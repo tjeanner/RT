@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 02:03:21 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 11:26:50 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 int			putlineerr(char *str, int i)
 {
@@ -30,7 +30,7 @@ void		malloc_env(t_env *env)
 		exit(0);
 }
 
-void		set_struct(t_env *env, t_par *par)
+static void	set_objs(t_env *env, t_par *par)
 {
 	int		i;
 	void	*p;
@@ -38,16 +38,26 @@ void		set_struct(t_env *env, t_par *par)
 	i = -1;
 	while (++i < env->objs.nb)
 	{
-		ft_memcpy((void *)&env->objs.obj[i], par->lst_obj->content, sizeof(t_obj));
+		ft_memcpy((void *)&env->objs.obj[i], par->lst_obj->content,
+				sizeof(t_obj));
 		free(par->lst_obj->content);
 		p = par->lst_obj;
 		par->lst_obj = par->lst_obj->next;
 		free(p);
 	}
+}
+
+void		set_struct(t_env *env, t_par *par)
+{
+	int		i;
+	void	*p;
+
+	set_objs(env, par);
 	i = -1;
 	while (++i < env->cams.nb)
 	{
-		ft_memcpy((void *)&env->cams.cam[i], par->lst_cam->content, sizeof(t_cam));
+		ft_memcpy((void *)&env->cams.cam[i], par->lst_cam->content,
+				sizeof(t_cam));
 		free(par->lst_cam->content);
 		p = par->lst_cam;
 		par->lst_cam = par->lst_cam->next;
@@ -56,7 +66,8 @@ void		set_struct(t_env *env, t_par *par)
 	i = -1;
 	while (++i < env->lums.nb)
 	{
-		ft_memcpy((void *)&env->lums.lum[i], par->lst_lum->content, sizeof(t_lum));
+		ft_memcpy((void *)&env->lums.lum[i], par->lst_lum->content,
+				sizeof(t_lum));
 		p = par->lst_lum;
 		free(par->lst_lum->content);
 		par->lst_lum = par->lst_lum->next;

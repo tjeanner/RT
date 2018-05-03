@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/17 12:02:56 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/01 02:00:18 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:01:56 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 void		*error_mgt(int status)
 {
@@ -27,7 +27,7 @@ void		*error_mgt(int status)
 	else if (status == 5)
 		ft_put_err("invalid object");
 	else if (status == 6)
-		ft_put_err("usage : ./rtv1 <scene.json>");
+		ft_put_err("usage : ./rt <scene.json>");
 	else if (status == 7)
 		ft_put_err("error in init");
 	else if (status == 8)

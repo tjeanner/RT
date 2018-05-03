@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 04:51:14 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 04:24:45 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:01:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 t_color	satur_col(t_color a, float n)
 {
@@ -72,20 +72,3 @@ t_color		prod_color(t_color a, t_color b)
 	c.c.a = (unsigned char)(sqrt((double)a.c.a * (double)b.c.a));
 	return (c);
 }
-
-/*
-void		sature_color(t_color *col, unsigned int saturation)
-{
-	double max;
-
-	max = (double)saturation;
-	col->u.r = col->u.r > max ? max : col->u.r;
-	col->u.g = col->u.g > max ? max : col->u.g;
-	col->u.b = col->u.b > max ? max : col->u.b;
-//	col->u.a = col->u.a > max ? max : col->u.a;
-	col->c.r = (unsigned char)(col->u.r * 255.);
-	col->c.g = (unsigned char)(col->u.g * 255.);
-	col->c.b = (unsigned char)(col->u.b * 255.);
-//	col->c.a = (unsigned char)col->u.a;
-	col->c.a = 0;
-}*/

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   norm_manip.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/08 00:27:48 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/02 00:13:37 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 t_v			rotation(t_v n, t_v r, float t)
 {

@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 09:58:18 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 23:12:21 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 int			j_is_valid_obj(t_obj *obj)
 {
@@ -20,7 +20,7 @@ int			j_is_valid_obj(t_obj *obj)
 		return (0);
 	if (obj->type != PLANE && obj->radius <= 0)
 		return (0);
-	if (obj->motion.action == -1)
+	if (obj->act.action == -1)
 		return (0);
 	return (1);
 }

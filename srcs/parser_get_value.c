@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/01 21:21:30 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 static double		j_set_vec(t_json **obj)
 {
@@ -80,15 +80,12 @@ t_color				get_color(char *hexa)
 	tmp = (int)(ft_strchr(S, ft_toupper(hexa[0])) - S) * 16
 		+ (int)(ft_strchr(S, ft_toupper(hexa[1])) - S);
 	col.c.r = tmp;
-//	col.u.r = (double)tmp / 255.;
 	tmp = (int)(ft_strchr(S, ft_toupper(hexa[2])) - S) * 16
 		+ (int)(ft_strchr(S, ft_toupper(hexa[3])) - S);
 	col.c.g = tmp;
-//	col.u.g = (double)tmp / 255.;
 	tmp = (int)(ft_strchr(S, ft_toupper(hexa[4])) - S) * 16
 		+ (int)(ft_strchr(S, ft_toupper(hexa[5])) - S);
 	col.c.b = tmp;
-//	col.u.b = (double)tmp / 255.;
 	return (col);
 }
 

@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 04:38:09 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:36:22 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 t_ray			init_line(double x, double y, t_cam cam)
 {
@@ -64,8 +64,13 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	while (++i < objs->nb)
 	{
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(line->from, objs->obj[i], &tutu) == 1 && (tmp > tutu.z || tmp < 0.0) && (ob = i) == i)
-				tmp = tutu.z;
+				(line->from, objs->obj[i], &tutu) == 1)//&& ((tmp > tutu.x || tmp > tutu.y) || tmp < 0.0))
+		{
+			if(tutu.y > 0.0 && (tutu.y < tmp || tmp < 0.0) && (ob = i) == i)
+				tmp = tutu.y;
+			if(tutu.x > 0.0 && (tutu.x < tmp || tmp < 0.0) && (ob = i) == i)
+				tmp = tutu.x;
+		}
 	}
 	if (tmp < 0.0 || objs->nb == 0)
 		return (0);

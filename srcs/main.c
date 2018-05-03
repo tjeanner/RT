@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:03 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 12:07:42 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 /*
 **init: initialise sdl, malloc and fill the data struct (here: env)
@@ -25,7 +25,16 @@ t_env		*init(char *filename)
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			return (0);
 		env->file = ft_strdup(filename);
-		j_init(env);
+		if (ft_strstr(env->file, ".json"))
+			j_init(env);
+		else if (ft_strstr(env->file, ".obj"))
+		{
+			env->objs.tri = parse_main(env, filename);
+			exit(0);
+		}
+		env->screen.time = 0;
+		env->screen.rec = 0;
+		env->screen.play = 1;
 		if (!(env->display.win = SDL_CreateWindow(env->name, SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED, WIN_X, WIN_Y, SDL_WINDOW_SHOWN)))// | SDL_WINDOW_FULLSCREEN_DESKTOP)))
 			error_mgt(8);
@@ -40,7 +49,7 @@ t_env		*init(char *filename)
 	return (NULL);
 }
 
-void		destrucainitialiserquonveutaussiapresreload(t_env *env)
+void		data_init_and_reload(t_env *env)
 {
 	int		i;
 	double	tmp;
@@ -88,13 +97,6 @@ void		destrucainitialiserquonveutaussiapresreload(t_env *env)
 				obj.norm2.y = -1.0 * (obj.norm.z + obj.norm.x + tmp) / obj.norm.y;
 			}
 			obj.norm2 = vect_norm(vect_sous(obj.norm2, obj.o));
-			ft_putfloat_fd(obj.norm2.x, 1);
-			ft_putstr(", ");
-			ft_putfloat_fd(obj.norm2.y, 1);
-			ft_putstr(", ");
-			ft_putfloat_fd(obj.norm2.z, 1);
-			ft_putstr(", ");
-			ft_putfloat_fd(vect_scal(obj.norm, obj.norm2), 1);
 			env->objs.obj[i] = obj;
 		}
 	}
@@ -143,21 +145,25 @@ void		tutu(t_env *env)
 	while (++i < NB_THREADS)
 		pthread_join(env->threads[i].id, NULL);
 	set_filter(env);
+	if (env->screen.rec)
+		ev_screenshot(env);
 	SDL_UpdateWindowSurface(env->display.win);
+
 }
 
 int			main(int ac, char **av)
 {
 	t_env		*env;
 
-	if (ac != 2 || !ft_strstr(av[1], ".json"))
-		error_mgt(6);
+	if (ac != 2 || (!ft_strstr(av[1], ".json") && !ft_strstr(av[1], ".obj")))
+			error_mgt(6);
 	if (!(env = init(av[1])))
 		error_mgt(6);
 //	env->objs.obj[0].reflect = 0.;
 	tutu(env);
 	while (!env->state)
 	{
+		main_action(&env->objs, env->screen.play);
 		events(env);
 	}
 	ft_freeenv(env);

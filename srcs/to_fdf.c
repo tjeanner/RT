@@ -1,61 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector_math.c                                      :+:      :+:    :+:   */
+/*   to_fdf.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/17 18:20:50 by tjeanner          #+#    #+#             */
+/*   Created: 2018/01/30 22:14:22 by vmercadi          #+#    #+#             */
 /*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-t_v			vect_inv(t_v a)
+/*
+** To create a FDF map of the actual scene of RT
+*/
+
+void	to_fdf(t_b *b, char *name)
 {
-	t_v		b;
+	int	fd;
+	int i;
+	int j;
 
-	b.x = -a.x;
-	b.y = -a.y;
-	b.z = -a.z;
-	return (b);
-}
-
-t_v			vect_add(t_v a, t_v b)
-{
-	t_v		c;
-
-	c.x = a.x + b.x;
-	c.y = a.y + b.y;
-	c.z = a.z + b.z;
-	return (c);
-}
-
-t_v			vect_sous(t_v a, t_v b)
-{
-	t_v		c;
-
-	c.x = a.x - b.x;
-	c.y = a.y - b.y;
-	c.z = a.z - b.z;
-	return (c);
-}
-
-double		vect_scal(t_v a, t_v b)
-{
-	double	n;
-
-	n = a.x * b.x + a.y * b.y + a.z * b.z;
-	return (n);
-}
-
-t_v			vect_prod(t_v a, t_v b)
-{
-	t_v		c;
-
-	c.x = a.y * b.z - a.z * b.y;
-	c.y = -(a.x * b.z - a.z * b.x);
-	c.z = a.x * b.y - a.y * b.x;
-	return (c);
+	if ((fd = open(name, O_RDONLY | O_WRONLY | O_CREAT)) < 0)
+		error_quit(2);
+	i = 0;
+	while (i < b->winy)
+	{
+		j = 0;
+		while (j < b->winx)
+		{
+			ft_putnbr_fd((int)b->tab_px[i][j].dist, fd);
+			ft_putchar_fd(',', fd);
+			ft_putnbr_fd(col2int(b->tab_px[i][j].col), fd);
+			ft_putchar_fd(' ', fd);
+			j += b->aliasing;
+		}
+		i += b->aliasing;
+		ft_putchar_fd('\n', fd);
+	}
+	close(fd);
 }

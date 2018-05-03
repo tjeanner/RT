@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/27 16:21:32 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/30 02:29:09 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 void	bw_filter(t_env *env)
 {
@@ -47,7 +47,7 @@ void	sepia_filter(t_env *env)
 		moy = (data[i] + data[i + 1] + data[i + 2]) / 3;
 		data[i] = 0.635 * moy;
 		data[i + 1] = 0.887 * moy;
-		data[i + 2] =  moy;
+		data[i + 2] = moy;
 		i += 4;
 	}
 }
@@ -103,12 +103,15 @@ void	set_filter(t_env *env)
 		stereo_filter(env);
 	else if (!ft_strncmp(env->effects.filter, "CARTOON", 7))
 	{
-		if (!ft_strncmp(env->effects.filter, "CARTOON:", 8) && ft_strlen(env->effects.filter) > 8)
+		if (!ft_strncmp(env->effects.filter, "CARTOON:", 8)
+			&& ft_strlen(env->effects.filter) > 8)
 			env->effects.seuil = ft_atoi(env->effects.filter + 8);
 		else
 			env->effects.seuil = 8;
 		cartoon_filter(env);
 	}
-	if (ft_strcmp(env->effects.filter, "3D") && env->cams.cam[env->cams.curr].col.color && env->cams.cam[env->cams.curr].col.color != 16777216)
+	if (ft_strcmp(env->effects.filter, "3D")
+		&& env->cams.cam[env->cams.curr].col.color
+		&& env->cams.cam[env->cams.curr].col.color != 16777216)
 		color_filter(env, env->display.surf, env->cams.cam[env->cams.curr].col);
 }

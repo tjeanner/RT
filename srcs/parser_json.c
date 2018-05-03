@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:52:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/04/25 11:28:06 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 t_json_arr		*parse_arr(char **str)
 {
@@ -22,7 +22,7 @@ t_json_arr		*parse_arr(char **str)
 	{
 		*str += 1;
 		if (!(arr = malloc(sizeof(t_json_arr) * 1)))
-			error_mgt(0);			
+			error_mgt(0);
 		arr->val = parse_obj(str);
 		arr->next = parse_arr(str);
 	}

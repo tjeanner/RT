@@ -1,61 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector_math.c                                      :+:      :+:    :+:   */
+/*   vector_math2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/17 18:20:50 by tjeanner          #+#    #+#             */
+/*   Created: 2018/05/03 03:24:14 by hbouchet          #+#    #+#             */
 /*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-t_v			vect_inv(t_v a)
-{
-	t_v		b;
-
-	b.x = -a.x;
-	b.y = -a.y;
-	b.z = -a.z;
-	return (b);
-}
-
-t_v			vect_add(t_v a, t_v b)
-{
-	t_v		c;
-
-	c.x = a.x + b.x;
-	c.y = a.y + b.y;
-	c.z = a.z + b.z;
-	return (c);
-}
-
-t_v			vect_sous(t_v a, t_v b)
-{
-	t_v		c;
-
-	c.x = a.x - b.x;
-	c.y = a.y - b.y;
-	c.z = a.z - b.z;
-	return (c);
-}
-
-double		vect_scal(t_v a, t_v b)
+double		get_vect_norm(t_v a)
 {
 	double	n;
 
-	n = a.x * b.x + a.y * b.y + a.z * b.z;
+	n = sqrt(vect_scal(a, a));
 	return (n);
 }
 
-t_v			vect_prod(t_v a, t_v b)
+t_v			vect_norm(t_v a)
 {
-	t_v		c;
+	t_v		b;
 
-	c.x = a.y * b.z - a.z * b.y;
-	c.y = -(a.x * b.z - a.z * b.x);
-	c.z = a.x * b.y - a.y * b.x;
-	return (c);
+	b = vect_div(a, get_vect_norm(a));
+	return (b);
+}
+
+t_v			vect_mult(t_v a, double n)
+{
+	t_v		b;
+
+	b.x = a.x * n;
+	b.y = a.y * n;
+	b.z = a.z * n;
+	return (b);
+}
+
+t_v			vect_div(t_v a, double n)
+{
+	t_v		b;
+	double	o;
+
+	o = 1.000000 / n;
+	b.x = a.x * o;
+	b.y = a.y * o;
+	b.z = a.z * o;
+	return (b);
 }
