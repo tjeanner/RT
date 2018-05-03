@@ -6,7 +6,7 @@
 /*   By: cquillet <cquillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 06:10:04 by cquillet          #+#    #+#             */
-/*   Updated: 2018/05/03 06:10:40 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 17:36:34 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static double	get_refract_index(t_objs *objs, t_ray *refr, t_ray *line)
 	refr->objs = NULL;
 	if (!refr->nb_objs)
 		return ((refr->n2 = 1.0));
-	if ((refr->objs = (char *)malloc(objs->nb * sizeof(char))))
+	if (!(refr->objs = (char *)malloc(objs->nb * sizeof(char))))
 		error_mgt(0);
 	if (!line->objs)
 	{
