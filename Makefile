@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/03 06:12:44 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/03 21:33:50 by cquillet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,13 +53,10 @@ SRC =		main.c \
 			action.c	\
 			event_screen.c \
 
-			# to_fdf.c	\
-
 CC =		gcc
-CFLAGS =	-Wall -Wextra -Werror #-Igsl/include
-CFLAGS +=	-Ofast -march=native -flto
+CFLAGS =	-Wall -Wextra -Werror
+#CFLAGS +=	-Ofast -march=native -flto
 #CFLAGS +=	-g3 -fsanitize=address
-#LFLAGS =	-Lgsl/lib -lgsl #-lgslcblas
 
 SRCDIR =	srcs
 INCDIR =	incs

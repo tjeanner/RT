@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:13:24 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 20:57:54 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 # define IN_OBJ 1
-# define OUT_OBJ 2
+# define OUT_OBJ 0
 # define MARGIN 0.00000001
 
 typedef struct s_env	t_env;
