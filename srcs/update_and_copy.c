@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:03:33 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,12 @@ void		update_and_copy_r(t_env *env, int obj)
 	env->objs.obj = new;
 }
 
-void		update_and_copy_a(t_env *env, SDL_Keycode type)
+void		update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj)
 {
 	t_obj	*new;
 	int		i;
 
+	(void)obj;
 	i = -1;
 	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->objs.nb + 1))))
 		error_mgt(0);

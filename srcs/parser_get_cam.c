@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 15:43:40 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 22:18:22 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		j_get_cam(t_json_arr *tab, t_cam *cam, t_par *par, t_env *env)
 	while (p && (po = p->val.data.obj) != NULL)
 	{
 		ft_bzero(cam, sizeof(t_cam));
-		while (po)
+		while (po)// && po->val)
 		{
 			if (!ft_strcmp(po->key, "color") && po->val.type == TYPE_STRING)
 				cam->col = j_get_color(po);

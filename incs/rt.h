@@ -158,6 +158,7 @@ typedef struct			s_obj
 	float				refract;
 	t_act				act;
 	t_mat				mat;
+	int					link;
 }						t_obj;
 
 typedef struct			s_cam
@@ -374,7 +375,7 @@ t_v						rotation(t_v n, t_v r, float t);
 **update_and_copy.c
 */
 void					update_and_copy_r(t_env *env, int obj);
-void					update_and_copy_a(t_env *env, SDL_Keycode type);
+void					update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj);
 
 /*
 **distances_functions.c
@@ -441,5 +442,8 @@ t_v						init_vect(double x, double y, double z);
 
 void					j_print_cam(t_env *env, int i, int fd);
 void					j_print_lum(t_env *env, int i, int fd);
+
+
+void					j_init_torus(t_env *env);
 
 #endif
