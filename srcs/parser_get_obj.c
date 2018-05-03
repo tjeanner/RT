@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 20:03:28 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 20:58:08 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,25 +68,29 @@ void		j_init_torus(t_env *env)
 	static int nb;
 	double	angle;
 	t_obj	*new;
+	t_v		tmp;
 
 	nb = 0;
 	i = 0;
+	tmp = vect_mult(env->cams.cam[env->cams.curr].v2cam, 500);
 	angle = 20;
 	if (!(new = (t_obj *)malloc(sizeof(t_obj) * 1)))
 		error_mgt(0);
-	while (i < 2)
+	while (i < 360 / angle)
 	{
-		ft_bzero((void *)&new, sizeof(t_obj));
+		ft_bzero((void *)new, sizeof(t_obj));
 		new->type = SPHERE;
-		new->o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
-			vect_mult(env->cams.cam[env->cams.curr].vcam, 2000)),
-			vect_mult(env->cams.cam[env->cams.curr].v2cam, -500));
-		new->norm = env->cams.cam[env->cams.curr].v2cam;
-		new->radius = 20;
+		
+		// new->norm = env->cams.cam[env->cams.curr].v2cam;
+		new->radius = 200;
 		new->mat.rough = 1;
 		new->k_diff = 0.7;
 		new->col = get_white();
-		angle += 10;
+		// angle += 10;
+		rotation(tmp, env->cams.cam[env->cams.curr].vcam, angle);
+		new->o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
+			vect_mult(env->cams.cam[env->cams.curr].vcam, 8000)),
+			tmp);
 		update_and_copy_a(env, SDLK_1, new);
 		// env->objs.obj[env->objs.curr].col = get_rand();
 		// env->objs.obj[env->objs.curr].link = nb;
