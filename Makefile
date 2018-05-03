@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
+#    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/03 06:12:44 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/03 21:12:48 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,12 +53,10 @@ SRC =		main.c \
 			action.c	\
 			event_screen.c \
 
-			# to_fdf.c	\
-
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror #-Igsl/include
 CFLAGS +=	-Ofast -march=native -flto
-#CFLAGS +=	-g3 -fsanitize=address
+CFLAGS +=	-g3 -fsanitize=address
 #LFLAGS =	-Lgsl/lib -lgsl #-lgslcblas
 
 SRCDIR =	srcs
@@ -66,7 +64,7 @@ INCDIR =	incs
 OBJDIR =	objs
 SDLDIR =	~/Library/Frameworks
 
-INCFILE = $(addprefix $(INCDIR)/,$(NAME).h)
+INCFILE =	$(addprefix $(INCDIR)/,$(NAME).h)
 
 OBJ =		$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
@@ -79,7 +77,7 @@ SDL =		sdl/SDL2.framework/Headers
 SDL_LNK =	sdl/SDL2.framework/SDL2
 SDL_INC =	-I $(SDL)
 
-TIME := $(shell date | cut -c5- | rev | cut -c11- | rev | tr ' ' '_')
+TIME := 	$(shell date | cut -c5- | rev | cut -c11- | rev | tr ' ' '_')
 
 ifeq "$(shell brew info imagemagick | grep -o 'Not installed')" "Not installed"
 MAGICK	= magick
@@ -93,6 +91,7 @@ all: obj
 	@echo "\nRT all rule :"
 	@$(MAKE) $(NAME)
 	@echo ""
+	@mkdir -p /tmp/Screenshots
 
 obj: $(MAGICK)
 	@mkdir -p $(OBJDIR)
@@ -113,7 +112,7 @@ film:
 	@mkdir -p /tmp/Screenshots/videos
 	@brew install ffmpeg
 	@find /tmp/Screenshots/ -type f -name '*.bmp' -exec convert {} {}.jpg \;
-	@ffmpeg -r 25 -f image2 -s 960x720 -i /tmp/Screenshots/Screenshot%d.bmp.jpg \
+	@ffmpeg -r 25 -f image2 -s 1920x1080 -i /tmp/Screenshots/Screenshot%d.bmp.jpg \
 	-vcodec libx264 -crf 25  -pix_fmt yuv420p /tmp/Screenshots/videos/$(TIME).mp4
 	@rm /tmp/Screenshots/*.bmp
 	@echo "\033[32;3mA video have been created in /tmp/Screenshots/videos/ !\x1b[0m"

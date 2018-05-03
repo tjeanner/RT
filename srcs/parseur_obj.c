@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseur_obj.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:35:12 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:33:13 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Free a tab
 */
 
-void	free_tab(void **tab)
+void		free_tab(void **tab)
 {
 	char	**tmp;
 
@@ -49,7 +49,7 @@ t_v			init_vect(double x, double y, double z)
 ** donne le nombre de str dans un char**
 */
 
-int		tab_len(char **tab)
+int			tab_len(char **tab)
 {
 	int		i;
 
@@ -60,80 +60,61 @@ int		tab_len(char **tab)
 }
 
 /*
-** return the 3 values needed for malloc
+** Return the 3 values needed for malloc
+** (Now return only one value (for v ))
 */
 
-t_v		get_nblines(t_pobj *pobj, char *av)
+t_v			get_nblines(char *av)
 {
-							printf("get_nblines()\n");
 	t_v		v;
 	int		fd;
 	char	*s;
 
+	s = NULL;
 	v.x = 0;
-	v.y = 0;
-	v.z = 0;
 	if ((fd = open(av, O_RDONLY)) < 0)
 		parse_error(0, ": Open failed.");
-	s = NULL;
 	while (get_next_line(fd, &s) > 0)
 	{
 		if (ft_strstr(s, "v "))
 			v.x++;
-		else if (ft_strstr(s, "vt "))
-			v.y++;
-		else if (ft_strstr(s, "vn "))
-			v.z++;
-		else if (ft_strstr(s, "f "))
-			pobj->nbtri++;
 		free(s);
-
 	}
 	close(fd);
 	return (v);
 }
 
-void	init_pobj(t_pobj *pobj, char *av)
+void		init_pobj(t_pobj *pobj, char *av)
 {
-							printf("init_pobj()\n");
 	int i;
 
 	pobj->tri = NULL;
 	pobj->nbtri = 0;
 	pobj->index = 0;
-	pobj->nb = get_nblines(pobj, av);
-			printf("1111nbtri = %d\n", pobj->nbtri);
-	if (pobj->nb.x && pobj->nb.y && pobj->nb.z &&
+	pobj->nb = get_nblines(av);
+	if (pobj->nb.x &&
 		(!(pobj->v = (t_v *)malloc(sizeof(t_v) * pobj->nb.x + 1)) ||
-		 !(pobj->vt = (t_v *)malloc(sizeof(t_v) * pobj->nb.y + 1)) ||
-		 !(pobj->tri = (t_tri *)malloc(sizeof(t_tri) * pobj->nbtri + 1)) ||
-		 !(pobj->vn = (t_v *)malloc(sizeof(t_v) * pobj->nb.z + 1))))
+		!(pobj->tri = (t_tri *)malloc(sizeof(t_tri) * pobj->nbtri + 1))))
 		parse_error(6, NULL);
+	if (!pobj->nb.x)
+		parse_error(0, "Not enough vector faces (v -0.79 -0.42 0.23).");
 	i = -1;
 	while (++i <= pobj->nb.x)
 		pobj->v[i] = init_vect(0.0, 0.0, 0.0);
-	i = -1;
-	while (++i <= pobj->nb.y)
-		pobj->vt[i] = init_vect(0.0, 0.0, 0.0);
-	i = -1;
-	while (++i <= pobj->nb.z)
-		pobj->vn[i] = init_vect(0.0, 0.0, 0.0);
 	pobj->i.x = 1;
-	pobj->i.y = 1;
-	pobj->i.z = 1;
 }
 
 /*
 ** Start the parsing
 */
 
-t_tri	*parse_main(t_env *env, char *av)
+t_tri		*parse_main(t_env *env, char *av)
 {
-							printf("parse_main()\n");
 	int		fd;
 	char	*s;
 	t_pobj	pobj;
 
+	env->name = ft_strdup(av);
 	init_pobj(&pobj, av);
 	if ((fd = open(av, O_RDONLY)) < 0)
 		parse_error(0, ": Open failed.");
@@ -141,12 +122,13 @@ t_tri	*parse_main(t_env *env, char *av)
 	while (get_next_line(fd, &s) > 0)
 	{
 		s = ft_strtrim(s);
-		if (s[0] != '#' && (s[0] != '/' && s[1] != '/'))
+		if ((s[0] == 'v' && s[1] == ' ') || (s[0] == 'f' && s[1] == ' '))
 			parse_redirect(&pobj, s);
 		free(s);
 	}
 	close(fd);
 	env->objs.nbtri = pobj.nbtri;
+							exit(1);
 	return (pobj.tri);
 }
 
@@ -154,24 +136,19 @@ t_tri	*parse_main(t_env *env, char *av)
 ** Redirect to the parsor needed (v, vt, vn, f, mtl)
 */
 
-void	parse_redirect(t_pobj *pobj, char *s)
+void		parse_redirect(t_pobj *pobj, char *s)
 {
-							// printf("parse_redirect()\n");
 	char **tab;
 
+	if (!ft_strlen(s))
+		return ;
 	if (s[ft_strlen(s) - 1] == 13)
 		s[ft_strlen(s) - 1] = '\0';
 	tab = ft_strsplit(s, ' ');
-	if (tab_len(tab) > 4)
+	if (tab_len(tab) != 4)
 		parse_error(4, s);
-	if (ft_strstr(tab[0], "mtl") || ft_strstr(tab[0], "g"))
-		;//parse_mtl(s);
 	else if (!(ft_strcmp(tab[0], "v")))
-		pobj->v[(int)pobj->i.x++] = parse_vect(s+1);
-	else if (!(ft_strcmp(tab[0], "vt")))
-		pobj->vt[(int)pobj->i.y++] = parse_vect(s+3);
-	else if (!(ft_strcmp(tab[0], "vn")))
-		pobj->vn[(int)pobj->i.z++] = parse_vect(s+3);
+		pobj->v[(int)pobj->i.x++] = parse_vect(s + 1);
 	else if (!(ft_strcmp(tab[0], "f")))
 		pobj->tri[pobj->index++] = parse_f(pobj, &tab[1]);
 	else
@@ -179,12 +156,11 @@ void	parse_redirect(t_pobj *pobj, char *s)
 }
 
 /*
-** Check if the line got all we need to fill the s_face struct
+** Check if the line got all we need to fill the tri struct
 */
 
-void	check_f(char **tab)
+void		check_f(char **tab)
 {
-							// printf("check_f()\n");
 	char	**ntab;
 	int		i;
 	int		j;
@@ -195,7 +171,7 @@ void	check_f(char **tab)
 	while (++j < 3)
 	{
 		ntab = ft_strsplit(tab[j], '/');
-		if (tab_len(ntab) < 3)
+		if (tab_len(ntab) < 1)
 		{
 			free_tab((void **)ntab);
 			parse_error(5, tab[0]);
@@ -209,15 +185,15 @@ void	check_f(char **tab)
 				parse_error(4, tab[j]);
 			}
 		}
+		free_tab((void **)ntab);
 	}
-	free_tab((void **)ntab);
 }
 
 /*
 ** Make a negative int postive
 */
 
-int		bepos(int nb)
+int			bepos(int nb)
 {
 	if (nb >= 0)
 		return (nb);
@@ -229,29 +205,20 @@ int		bepos(int nb)
 ** Parsing for f lines
 */
 
-t_tri	parse_f(t_pobj *pobj, char **tab)
+t_tri		parse_f(t_pobj *pobj, char **tab)
 {
-							// printf("parse_f()\n");
 	t_tri	tri;
 	char	**tab2;
-	int		j;
 
 	check_f(tab);
-	j = 0;
 	tab2 = ft_strsplit(tab[0], '/');
 	tri.v[0] = pobj->v[bepos(ft_atoi(tab2[0]))];
-	tri.v[1] = pobj->v[bepos(ft_atoi(tab2[1]))];
-	tri.v[2] = pobj->v[bepos(ft_atoi(tab2[2]))];
 	free_tab((void**)tab2);
 	tab2 = ft_strsplit(tab[1], '/');
-	tri.vt[0] = pobj->vt[bepos(ft_atoi(tab2[0]))];
-	tri.vt[1] = pobj->vt[bepos(ft_atoi(tab2[1]))];
-	tri.vt[2] = pobj->vt[bepos(ft_atoi(tab2[2]))];
+	tri.v[1] = pobj->v[bepos(ft_atoi(tab2[0]))];
 	free_tab((void**)tab2);
 	tab2 = ft_strsplit(tab[2], '/');
-	tri.vn[0] = pobj->vn[bepos(ft_atoi(tab2[0]))];
-	tri.vn[1] = pobj->vn[bepos(ft_atoi(tab2[1]))];
-	tri.vn[2] = pobj->vn[bepos(ft_atoi(tab2[2]))];
+	tri.v[2] = pobj->v[bepos(ft_atoi(tab2[0]))];
 	free_tab((void**)tab2);
 	return (tri);
 }
@@ -260,7 +227,7 @@ t_tri	parse_f(t_pobj *pobj, char **tab)
 ** Return 1 if string only contain digit
 */
 
-int		ft_isnum(char *str)
+int			ft_isnum(char *str)
 {
 	int	i;
 
@@ -274,39 +241,10 @@ int		ft_isnum(char *str)
 }
 
 /*
-** Implode a tab in an str separating with the given char then free it
-*/
-
-char	*ft_implode(char **tab, char c)
-{
-							printf("ft_implode()\n");
-	int 	size;
-	int		i;
-	int		j;
-	int		k;
-	char	*str;
-
-	i = -1;
-	k = -1;
-	size = tab_len(tab);
-	str = ft_strnew(0);
-	while (tab[++i])
-	{
-		j = -1;
-		while (tab[i][++j])
-			str[++k] = tab[i][j];
-		str[++k] = c;
-	}
-	str[++k] = '\0';
-	free_tab((void**)tab);
-	return (str);
-}
-
-/*
 ** Errors for parsing
 */
 
-void	parse_error(int e, char *s)
+void		parse_error(int e, char *s)
 {
 	if (!s)
 		s = ft_strdup(" ");
@@ -315,11 +253,11 @@ void	parse_error(int e, char *s)
 	else if (e == 2)
 		ft_putendl("./RT exemple.obj");
 	else if (e == 3)
-		ft_putendl("Le fichier est vide ou n'existe pas.");
+		ft_putendl("File is empty or doesn't exist.");
 	else if (e == 4)
-		ft_putstr("Erreur formatage à : ");
+		ft_putstr("Format error at : ");
 	else if (e == 5)
-		ft_putstr("Mauvais nombre d'arguments pour la face : ");
+		ft_putstr("Wrong arg number for the face : ");
 	else if (e == 6)
 		ft_putstr("Malloc failed.");
 	if (s)
@@ -327,7 +265,7 @@ void	parse_error(int e, char *s)
 	exit(0);
 }
 
-void	parse_err(int e, char *s)
+void		parse_err(int e, char *s)
 {
 	if (e == 0)
 		ft_putstr("Error in obj name : ");
@@ -345,59 +283,26 @@ void	parse_err(int e, char *s)
 }
 
 /*
-** Parse for the mtl files
-*/
-
-// void	parse_mtl(char *s)
-// {
-
-// }
-
-
-char		**decoupe(char *s)
-{
-	char	**tab;
-
-	tab = ft_strsplit(s, '/');
-	if (tab_len(tab) != 3)
-	{
-		parse_err(2, s);
-		free_tab((void **)tab);
-	}
-	return (tab);
-}
-
-/*
 ** Check and convert a string to a vector
 */
 
 t_v			parse_vect(char *s)
 {
-							// printf("parse_vect()\n");
 	t_v		v;
-	int		i[2];
-	int		p;
+	int		i;
 	char	*c;
 	char	**tab;
 
 	tab = ft_strsplit(s, ' ');
-	i[0] = -1;
-	while (tab[++i[0]])
+	i = -1;
+	while (tab[++i])
 	{
-		i[1] = -1;
-		p = 0;
-		if ((c = ft_strchr(tab[i[0]], 'e')))
+		if ((c = ft_strchr(tab[i], 'e')))
 			*c = '\0';
-		while (tab[i[0]][++i[1]])
-		{
-			if (ft_isdigit(tab[i[0]][i[1]]) || (tab[i[0]][i[1]] == '.' && !p)
-											|| tab[i[0]][i[1]] == '-' || tab[i[0]][i[1]] == 13)
-				p = (tab[i[0]][i[1]] == '.') ? 1 : 0;
-			else
-				parse_err(2, s);
-		}
+		parse_double(tab[i]);
 	}
-	v = init_vect(ft_atof(tab[0]), ft_atof(tab[1]), (i[0] == 3 ? ft_atof(tab[2]) : 0));
+	v = init_vect(ft_atof(tab[0]), ft_atof(tab[1]),
+		(i == 3 ? ft_atof(tab[2]) : 0));
 	free_tab((void **)tab);
 	return (v);
 }
@@ -410,46 +315,23 @@ double		parse_double(char *s)
 {
 	int		i;
 	int		p;
+	int		p2;
 
 	p = 0;
+	p2 = 0;
 	i = -1;
 	while (s[++i])
 	{
-		if (ft_isdigit(s[i]) || (s[i] == '.' && p == 0) || s[i] == '-')
+		if (ft_isdigit(s[i]) || (s[i] == '.' && p == 0) ||
+			(s[i] == '-' && p2 == 0) || s[i] == 13)
 		{
 			if (s[i] == '.')
 				p = 1;
+			if (s[i] == '-')
+				p2 = 1;
 		}
 		else
 			parse_err(1, s);
 	}
 	return (ft_atof(s));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

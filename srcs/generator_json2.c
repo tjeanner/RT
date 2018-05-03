@@ -6,21 +6,14 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:04:19 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:48:48 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-int		j_print_env(t_env *env, int i)
+static void j_print_scn(t_env *env, int fd)
 {
-	int		fd;
-
-	while ((fd = open(ft_strjoin("./scenes/scene_", ft_strjoin(ft_itoa(i),
-		".json")), O_CREAT | O_EXCL | O_RDONLY, 0666)) == -1 && i < 20)
-		i++;
-	fd = open(ft_strjoin("./scenes/scene_", ft_strjoin(ft_itoa(i), ".json")),
-		O_CREAT | O_WRONLY | O_APPEND, 0666);
 	ft_putstr_fd("{\n\t\"name\":\"", fd);
 	ft_putstr_fd(env->name, fd);
 	ft_putstr_fd("\",\n\t\"filter\":\"", fd);
@@ -30,6 +23,27 @@ int		j_print_env(t_env *env, int i)
 	ft_putstr_fd(",\n\t\"ambient\":", fd);
 	ft_putfloat_fd(env->lums.amb_coef, fd);
 	ft_putstr_fd(",\n\t\"scene\":{\n\t\t\"cameras\":[", fd);
+}
+
+int		j_print_env(t_env *env, int i)
+{
+	int		fd;
+	char	*tmp;
+	char	*tmp2;
+
+	tmp2 = ft_strjoinfree(ft_itoa(i), ".json", 'L');
+	tmp = ft_strjoinfree("./scenes/scene_", tmp2, 'R');
+	while ((fd = open(tmp, O_CREAT | O_EXCL | O_RDONLY, 0666)) == -1 && i < 20)
+	{
+		i++;
+		free(tmp);
+		tmp2 = ft_strjoinfree(ft_itoa(i), ".json", 'L');
+		tmp = ft_strjoinfree("./scenes/scene_", tmp2, 'R');
+	}
+	if ((fd = open(tmp, O_CREAT | O_WRONLY | O_APPEND, 0666)) <= 0)
+		error_mgt(11);
+	free(tmp);
+	j_print_scn(env, fd);
 	i = env->cams.nb;
 	while (--i >= 0)
 	{
