@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/02 18:44:31 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/02 19:09:32 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:38:20 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,16 @@ void	ev_screen(t_env *env, SDL_Event event)
 	int		ev;
 
 	ev = event.key.keysym.sym;
-	if (ev == SDLK_x)
+	if (ev == SDLK_x && event.key.state == SDL_RELEASED)
+	{
+		printf("YO\n");
 		ev_screenshot(env);
-	else if (ev == SDLK_z)
+	}
+	else if (ev == SDLK_z && event.key.state == SDL_RELEASED)
+	{
+		printf("YO2\n");
 		env->screen.rec = !env->screen.rec;
+	}
 }
 
 /*

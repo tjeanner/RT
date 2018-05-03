@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/02 18:46:01 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/03 03:46:09 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,7 @@ all: obj
 	@echo "\nRtv1 all rule :"
 	@$(MAKE) $(NAME)
 	@echo ""
+	@mkdir -p /tmp/Screenshots/Screenshot
 
 obj: $(MAGICK)
 	@mkdir -p $(OBJDIR)

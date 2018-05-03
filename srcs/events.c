@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 01:59:21 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:33:38 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int			events(t_env *env)
 						&env->objs.obj[env->objs.curr]);
 		else if (!move_events(env, sym))
 			;
-		// ev_screenshot(env);
+		ev_screen(env, event);
 		tutu(env);
 	}
 	return (1);

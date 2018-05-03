@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 00:36:30 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:46:02 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # include "parser.h"
 # include "parse.h"
 
-# define WIN_X 1357
-# define WIN_Y 867
+# define WIN_X 960
+# define WIN_Y 720
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
