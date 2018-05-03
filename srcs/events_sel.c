@@ -6,15 +6,15 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/15 06:29:51 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 02:04:12 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 02:31:54 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-// static void	events
+// static int	events_sel_obj()
 
-int		events_sel(t_env *env, SDL_Event event, unsigned int sym)
+int			events_sel(t_env *env, SDL_Event event, unsigned int sym)
 {
 	t_ray	tmp;
 
