@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 01:12:59 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 01:59:21 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ int			events(t_env *env)
 		cam->v3cam = vect_norm(cam->v3cam);
 		if (events_random(env, sym, event) || events_sel(env, event, sym))
 			;
-		else if (events_special_move_cam(env, sym, event))
-			;
 		else if (sym == SDLK_SPACE && event.key.state == SDL_RELEASED)
 			env->screen.play = !env->screen.play;
 		else if (event.type == SDL_KEYDOWN && (events_obj_mod(env, sym)
@@ -113,7 +111,7 @@ int			events(t_env *env)
 		else if (event.type == SDL_MOUSEWHEEL && event.wheel.y != 0)
 			mouse_move(env, event, &env->cams.cam[env->cams.curr],
 						&env->objs.obj[env->objs.curr]);
-		else if (!move_events(env, event))
+		else if (!move_events(env, sym))
 			;
 		// ev_screenshot(env);
 		tutu(env);
