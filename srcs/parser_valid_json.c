@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_valid_json.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 09:58:18 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/02 20:57:42 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 int			j_is_valid_obj(t_obj *obj)
 {

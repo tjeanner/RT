@@ -6,11 +6,11 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/03 03:55:41 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/03 04:01:50 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME =		rtv1
+NAME =		rt
 
 SRC =		main.c \
 			vector_math.c \
@@ -86,7 +86,7 @@ endif
 all: obj
 	@echo "Libft all rule :"
 	@make -C $(FT)
-	@echo "\nRtv1 all rule :"
+	@echo "\nRT all rule :"
 	@$(MAKE) $(NAME)
 	@echo ""
 
@@ -125,14 +125,14 @@ norme:
 	cat -e auteur
 
 clean:
-	@echo "Rtv1 clean rule :"
+	@echo "RT clean rule :"
 	rm -rf $(OBJDIR)
 	@echo "\nLibft clean rule :"
 	@make -C $(FT) clean
 	@echo ""
 
 fclean:
-	@echo "Rtv1 fclean rule :"
+	@echo "RT fclean rule :"
 	rm -rf $(OBJDIR)
 	rm -f $(NAME)
 	@echo "\nLibft fclean rule :"

@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 04:51:14 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 23:07:29 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:01:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 t_color	satur_col(t_color a, float n)
 {

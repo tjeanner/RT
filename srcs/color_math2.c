@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/01 02:40:17 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/01 02:42:16 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:01:54 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 int			set_black(t_color *c)
 {

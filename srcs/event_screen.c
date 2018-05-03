@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   event_screen.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/02 18:44:31 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/02 19:09:32 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:01:57 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 /*
 ** Dans After effect : File->import->import multiple files | ET BIM une vidéo.

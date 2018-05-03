@@ -6,11 +6,11 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:17:30 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 03:46:47 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:01:49 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 
 void		stereo_filter(t_env *env)
 {
