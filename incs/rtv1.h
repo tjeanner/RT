@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/02 08:22:41 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:37:38 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define TODEG 180.000 / M_PI
 # define IN_OBJ 1
 # define OUT_OBJ 2
+# define MARGIN 0.00000001
 
 typedef struct s_env	t_env;
 
@@ -88,6 +89,7 @@ typedef struct			s_ray
 	struct s_ray		*incident;
 	char				*objs;
 	int					nb_objs;
+	t_color				col;
 }						t_ray;
 
 typedef struct			s_act
@@ -144,6 +146,7 @@ typedef struct			s_lum
 	t_v					pos;
 	float				coef;
 	t_color				col;
+	t_v					dir;
 }						t_lum;
 
 typedef struct			s_objs
@@ -251,11 +254,13 @@ int						set_white(t_color *c);
 */
 int						set_black(t_color *c);
 t_color					add_color(t_color a, t_color b);
+t_color					sub_color(t_color a, t_color b);
 t_color					mult_color(t_color a, float n);
 t_color					div_color(t_color a, float n);
 int						average_color(t_color *col, float flou);
 void					sature_color(t_color *col, unsigned int max);
 t_color					prod_color(t_color a, t_color b);
+t_color					filter_color(t_color a, t_color b);
 
 /*
 **useless_functions.c

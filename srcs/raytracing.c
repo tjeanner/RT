@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/01 21:30:04 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:38:09 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,7 @@ t_v			get_norm(t_obj obj, t_ray *line)
 			res *= (1.0 + pow(tan(obj.radius * TORAD), 2.0));
 		vect = vect_sous(vect, vect_mult(obj.norm, res));
 	}
-/*	else if (obj.type == TORUS)
-	{
-		res = vect_scal(vect, obj.norm);
-		vect = vect_sous(line->to.pos, vect_mult(obj.norm, res));
-		res = sqrt(obj.radius2 * obj.radius2 - res * res);
-		vect = vect_norm(vect_sous(
-					vect_sous(line->to.pos, vect),
-					vect_mult(vect_sous(obj.o, vect), res / (obj.radius + res))
-					));
-	}*/
 	return (vect_norm(vect_scal(vect, line->from.dir) > 0.000 ? vect_inv(vect) : vect));
-//	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
-//			? vect_norm(vect_inv(vect)) : vect_norm(vect));
 }
 
 int			which_obj_col(t_objs *objs, t_ray *line)
@@ -104,7 +92,11 @@ t_color		get_specular(t_obj obj, t_ray ray)
 		return (get_black());
 	plastic = mult_color(get_white(), obj.mat.plastic);
 	plastic = add_color(plastic, mult_color(obj.col, 1.0 - obj.mat.plastic));
-	return (mult_color(obj.col, pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));
+	if (obj.mat.rough == 1.0)
+		return (mult_color(obj.col,
+			res * obj.k_spec / (obj.k_diff + obj.k_spec)));
+	return (mult_color(obj.col,
+			pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));
 }
 
 t_color		get_diffuse(t_obj obj, t_ray ray)
@@ -125,34 +117,31 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 	t_ray	tutu;
 	t_color	col;
 	double	tmp;
-	double	transp;
 
 	tutu.to.pos = lum.pos;
 	tutu.from.dir = vect_sous(lum.pos, line->to.pos);
 	tmp = get_vect_norm(tutu.from.dir);
+	tutu.from.dir = vect_norm(get_vect_norm(lum.dir) ? vect_inv(lum.dir) : tutu.from.dir);
 	tutu.from.dir = vect_norm(tutu.from.dir);
-	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, 0.00000001));
+	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, MARGIN));
 	tutu.incident = line;
-	transp = 1.0;
+	line->col = get_white();
 	i = -1;
-	col = get_white();
 	while (++i < objs->nb)
 		if (objs->obj[i].type != NONE && (objs->col_fcts[(int)objs->obj[i].type]
 				(tutu.from, objs->obj[i], &res) == 1) &&
 			((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))
 		{
 			if (objs->obj[i].transp == 0.0)
-				return (get_black());
-			if (res.x > 0.0 && res.x < tmp)
-				transp *= objs->obj[i].transp;
-			if (res.y > 0.0 && res.y < tmp)
-				transp *= objs->obj[i].transp;
-			col = prod_color(col, div_color(objs->obj[i].col, 255));
+				return ((line->col = get_black()));
+			lum.coef *= (res.x > 0.0 && res.x < tmp) ? objs->obj[i].transp : 1.0;
+			lum.coef *= (res.y > 0.0 && res.y < tmp) ? objs->obj[i].transp : 1.0;
+			line->col = prod_color(line->col, objs->obj[i].col);
 		}
 	tutu.to.dir = line->to.dir;
-	col = add_color(get_diffuse(objs->obj[obj], tutu),
-										get_specular(objs->obj[obj], tutu));
-	col = mult_color(col, transp);
+	col = get_diffuse(objs->obj[obj], tutu);
+	col = add_color(col, get_specular(objs->obj[obj], tutu));
+	col = prod_color(col, line->col);
 	return (col);
 }
 
@@ -161,7 +150,7 @@ t_color		get_reflect(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	t_ray	refl;
 	t_color	col;
 
-	refl.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, 0.00000001));
+	refl.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, MARGIN));
 	refl.from.dir = vect_norm(vect_reflect(line->from.dir, line->to.dir));
 	refl.total_dist = line->total_dist;
 	refl.n1 = line->n2;
@@ -169,7 +158,9 @@ t_color		get_reflect(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	refl.incident = line;
 	refl.objs = line->objs;
 	refl.nb_objs = line->nb_objs;
-	col = mult_color(get_col(objs, lums, &refl, d), objs->obj[line->obj].reflect);
+	col = mult_color(get_col(objs, lums, &refl, d), 
+			objs->obj[line->obj].reflect /
+			(objs->obj[line->obj].transp + objs->obj[line->obj].reflect));
 	refl.objs = NULL;
 	return (col);
 }
@@ -180,7 +171,7 @@ t_color		get_refract(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	t_ray	*tmp;
 	t_color	col;
 
-	refr.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, -0.00000001));
+	refr.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, -MARGIN));
 	refr.n1 = line->n2;
 	refr.incident = line;
 	refr.total_dist = line->total_dist;
@@ -203,17 +194,20 @@ t_color		get_refract(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 			refr.objs[line->obj] = !line->objs[line->obj];
 		}
 	}
-	if (!refr.objs)
-		refr.n2 = 1.0;
-	else
+	refr.n2 = 1.0;
+	if (refr.objs)
 	{
 		tmp = line;
 		while (tmp && refr.objs[tmp->obj] == OUT_OBJ)
 			tmp = tmp->incident;
 		refr.n2 = tmp ? objs->obj[tmp->obj].refract : 1.0;
 	}
-	refr.from.dir = vect_norm(vect_refract(line->from.dir, line->to.dir, refr.n1 / refr.n2));
-	col = mult_color(get_col(objs, lums, &refr, d), objs->obj[line->obj].transp);
+	refr.from.dir = vect_norm(vect_refract(line->from.dir, line->to.dir,
+														refr.n1 / refr.n2));
+	col = mult_color(get_col(objs, lums, &refr, d),
+			objs->obj[line->obj].transp /
+			(objs->obj[line->obj].transp + objs->obj[line->obj].reflect));
+	col = prod_color(col, objs->obj[line->obj].col);
 	if (refr.objs)
 		free(refr.objs);
 	refr.objs = NULL;
@@ -224,45 +218,38 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 {
 	int		i;
 	t_color	ambi_col;
-	t_color	cols[3];
+	t_color	col;
+	t_obj	obj;
 
 	if (!d || !objs || !lums || which_obj_col(objs, line) == 0)
 		return (get_black());
+	obj = objs->obj[line->obj];
 	if (lums->amb_coef < 1.000)
 	{
-		ambi_col = mult_color(objs->obj[line->obj].col, lums->amb_coef);
-		cols[0] = get_black();
-		cols[1] = get_black();
+		ambi_col = mult_color(obj.col, lums->amb_coef);
+		col = get_black();
 		i = -1;
 		while (++i < lums->nb)
-		{
-			cols[1] = get_lum(objs, line->obj, lums->lum[i], line);
-			cols[0].c.r = fmin(255, cols[0].c.r + cols[1].c.r * lums->lum[i].coef / lums->coefs_sum);
-			cols[0].c.g = fmin(255, cols[0].c.g + cols[1].c.g * lums->lum[i].coef / lums->coefs_sum);
-			cols[0].c.b = fmin(255, cols[0].c.b + cols[1].c.b * lums->lum[i].coef / lums->coefs_sum);
-		}
+			col = add_color(col, mult_color(
+							get_lum(objs, line->obj, lums->lum[i], line),
+							lums->lum[i].coef / lums->coefs_sum));
 //		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == PLANE)
 //			ambi_col = mult_color(ambi_col, checkerboard(line));
 //		if (objs->obj[line->obj].motion == 1)
 //		{
 //			;
 //		}
-		cols[0] = mult_color(cols[0], 1.000 - lums->amb_coef);
-		cols[0] = add_color(cols[0], ambi_col);
+		col = mult_color(col, 1.000 - lums->amb_coef);
+		col = add_color(col, ambi_col);
 	}
 	else
-		cols[0] = objs->obj[line->obj].col;
-//	cols[0] = mult_color(cols[0], 1.0);
-	cols[0] = mult_color(cols[0], (1.0 - objs->obj[line->obj].reflect) * (1.0 - objs->obj[line->obj].transp));
-	if (objs->obj[line->obj].transp > 0.0)
-		cols[0] = add_color(cols[0],
-				mult_color(get_refract(objs, lums, line, d - 1),
-				objs->obj[line->obj].transp));
-	if (objs->obj[line->obj].reflect > 0.0)
-		cols[0] = add_color(cols[0],
-				mult_color(get_reflect(objs, lums, line, d - 1),
-				objs->obj[line->obj].reflect));
-	return (cols[0]);
+		col = obj.col;
+	col = mult_color(col, (1.0 - objs->obj[line->obj].reflect) * (1.0 - objs->obj[line->obj].transp));
+	if (obj.transp > 0.0)
+		col = add_color(col, get_refract(objs, lums, line, d - 1));
+	if (obj.reflect > 0.0)
+		col = add_color(col, get_reflect(objs, lums, line, d - 1));
+	return (col);
 }
 
 void		*rays(void *tmp)
