@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 01:59:21 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/03 01:35:18 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,16 @@ static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
 	return (1);
 }
 
+static void	prep_events(t_env *env)
+{
+	env->cams.cam[env->cams.curr].vcam =
+		vect_norm(env->cams.cam[env->cams.curr].vcam);
+	env->cams.cam[env->cams.curr].v2cam =
+		vect_norm(env->cams.cam[env->cams.curr].v2cam);
+	env->cams.cam[env->cams.curr].v3cam =
+		vect_norm(env->cams.cam[env->cams.curr].v3cam);
+}
+
 int			events(t_env *env)
 {
 	SDL_Event		event;
@@ -96,10 +106,8 @@ int			events(t_env *env)
 	obj = &env->objs.obj[env->objs.curr];
 	if (SDL_PollEvent(&event) != 0 || env->screen.play)
 	{
+		prep_events(env);
 		sym = event.key.keysym.sym;
-		cam->vcam = vect_norm(cam->vcam);
-		cam->v2cam = vect_norm(cam->v2cam);
-		cam->v3cam = vect_norm(cam->v3cam);
 		if (events_random(env, sym, event) || events_sel(env, event, sym))
 			;
 		else if (sym == SDLK_SPACE && event.key.state == SDL_RELEASED)

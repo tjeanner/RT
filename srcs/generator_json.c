@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 01:37:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/02 20:19:48 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 02:06:31 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	j_print_lum(t_env *env, int i, int fd)
 	j_print_color(env->lums.lum[i].col, fd);
 	ft_putstr_fd("\",\n\t\t\t\"intensity\":", fd);
 	ft_putfloat_fd(env->lums.lum[i].coef, fd);
-	if (!get_vect_norm(env->lums.lum[i].dir))
+	if (get_vect_norm(env->lums.lum[i].dir))
 	{
 		ft_putstr_fd(",\n\t\t\t\"type\":\"PARALLEL\"", fd);
 		ft_putstr_fd(",\n\t\t\t\"dir\":", fd);
