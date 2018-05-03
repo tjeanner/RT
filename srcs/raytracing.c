@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:36:22 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ t_v			get_norm(t_obj obj, t_ray *line)
 					));
 	}*/
 	return (vect_norm(vect_scal(vect, line->from.dir) > 0.000 ? vect_inv(vect) : vect));
-//	return (vect = (obj.type == 'p' && vect_scal(vect, line->from.dir) > 0.000)
-//			? vect_norm(vect_inv(vect)) : vect_norm(vect));
 }
 
 int			which_obj_col(t_objs *objs, t_ray *line)
@@ -76,8 +74,13 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	while (++i < objs->nb)
 	{
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(line->from, objs->obj[i], &tutu) == 1 && (tmp > tutu.z || tmp < 0.0) && (ob = i) == i)
-				tmp = tutu.z;
+				(line->from, objs->obj[i], &tutu) == 1)//&& ((tmp > tutu.x || tmp > tutu.y) || tmp < 0.0))
+		{
+			if(tutu.y > 0.0 && (tutu.y < tmp || tmp < 0.0) && (ob = i) == i)
+				tmp = tutu.y;
+			if(tutu.x > 0.0 && (tutu.x < tmp || tmp < 0.0) && (ob = i) == i)
+				tmp = tutu.x;
+		}
 	}
 	if (tmp < 0.0 || objs->nb == 0)
 		return (0);
