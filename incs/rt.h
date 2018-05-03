@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 03:35:59 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 06:13:24 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,21 +282,25 @@ t_v						vect_refract(t_v incident, t_v normal, double k);
 /*
 **color_math.c
 */
-t_color					satur_col(t_color a, float n);
-t_color					get_rand(void);
-t_color					get_white(void);
-t_color					get_black(void);
-int						set_white(t_color *c);
+t_color					add_color(t_color a, t_color b);
+t_color					sub_color(t_color a, t_color b);
+t_color					mult_color(t_color a, float n);
+t_color					div_color(t_color a, float n);
 t_color					prod_color(t_color a, t_color b);
 
 /*
 **color_math2.c
 */
+t_color					get_rand(void);
+t_color					get_black(void);
+t_color					get_white(void);
 int						set_black(t_color *c);
-t_color					add_color(t_color a, t_color b);
-t_color					sub_color(t_color a, t_color b);
-t_color					mult_color(t_color a, float n);
-t_color					div_color(t_color a, float n);
+int						set_white(t_color *c);
+
+/*
+**color_math3.c
+*/
+t_color					satur_col(t_color a, float n);
 int						average_color(t_color *col, float flou);
 
 /*
@@ -313,6 +317,18 @@ int						which_obj_col(t_objs *objs, t_ray *line);
 t_v						get_norm(t_obj obj, t_ray *line);
 t_color					get_col(t_objs *objs, t_lums *lums, t_ray *line,
 								unsigned int d);
+
+/*
+** next_rays.c
+*/
+t_color					get_refract(t_objs *objs, t_lums *lums, t_ray *line,
+								unsigned int d);
+t_color					get_reflect(t_objs *objs, t_lums *lums, t_ray *line,
+								unsigned int d);
+
+/*
+** lum.c
+*/
 t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
 
 /*
@@ -361,7 +377,6 @@ int						get_dist_cone(t_line line, t_obj obj, t_v *res);
 int						get_dist_tube(t_line line, t_obj obj, t_v *res);
 int						get_dist_plan(t_line line, t_obj obj, t_v *res);
 int						get_dist_sphere(t_line line, t_obj obj, t_v *res);
-int						get_dist_torus(t_line line, t_obj obj, t_v *res);
 
 /*
 **filter.c

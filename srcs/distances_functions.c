@@ -6,14 +6,11 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 04:18:28 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/03 05:41:44 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
-//#include "gsl/gsl_math.h"
-//#include "gsl/gsl_poly.h"
-//#include "gsl/gsl_errno.h"
 
 int			resolve(t_v math, t_v *res)
 {
@@ -40,7 +37,8 @@ int			get_dist_cone(t_line line, t_obj obj, t_v *res)
 	opti.x = vect_scal(line.dir, obj.norm);
 	opti.y = vect_scal(obj_o2cam, obj.norm);
 	math.x = opti.x * opti.x - opti_ang;
-	math.y = 2.0 * (opti.x * opti.y - vect_scal(line.dir, obj_o2cam) * opti_ang);
+	math.y = 2.0 *
+				(opti.x * opti.y - vect_scal(line.dir, obj_o2cam) * opti_ang);
 	math.z = opti.y * opti.y - vect_scal(obj_o2cam, obj_o2cam) * opti_ang;
 	return (resolve(math, res));
 }
@@ -53,9 +51,11 @@ int			get_dist_tube(t_line line, t_obj obj, t_v *res)
 	t_v		opti2;
 
 	obj2cam = vect_sous(line.pos, obj.o);
-	opti1 = vect_sous(line.dir, vect_mult(obj.norm, vect_scal(line.dir, obj.norm)));
+	opti1 = vect_sous(line.dir,
+						vect_mult(obj.norm, vect_scal(line.dir, obj.norm)));
 	math.x = vect_scal(opti1, opti1);
-	opti2 = vect_sous(obj2cam, vect_mult(obj.norm, vect_scal(obj2cam, obj.norm)));
+	opti2 = vect_sous(obj2cam,
+						vect_mult(obj.norm, vect_scal(obj2cam, obj.norm)));
 	math.y = 2.0 * vect_scal(opti1, opti2);
 	math.z = vect_scal(opti2, opti2) - obj.radius * obj.radius;
 	return (resolve(math, res));
@@ -82,7 +82,8 @@ int			get_dist_plan(t_line line, t_obj obj, t_v *res)
 	a = vect_norm(obj.norm2);
 	opti_b = get_vect_norm(tmp);
 	opti_a = opti_b * (vect_scal(a, vect_norm(tmp)));
-	opti_b = opti_b * (vect_scal(vect_norm(tmp), vect_norm(vect_prod(a, obj.norm))));
+	opti_b = opti_b *
+			(vect_scal(vect_norm(tmp), vect_norm(vect_prod(a, obj.norm))));
 	if (((int)fabs(opti_b) % (obj.mat.scale * 2) < obj.mat.scale) ^
 		(opti_b < 0.0) ^ ((int)fabs(opti_a) % (obj.mat.scale * 2) <
 			obj.mat.scale) ^ (opti_a < 0.0))
