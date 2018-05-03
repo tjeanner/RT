@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:21:03 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 21:22:57 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,13 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	}
 	else
 		col = obj.col;
-	col = mult_color(col, (1.0 - objs->obj[line->obj].reflect) *
-										(1.0 - objs->obj[line->obj].transp));
+	col = mult_color(col, (1.0 - 0.9 * objs->obj[line->obj].reflect) *
+										(1.0 - 0.9 * objs->obj[line->obj].transp));
 	if (obj.transp > 0.0)
 		col = add_color(col, get_refract(objs, lums, line, d - 1));
 	if (obj.reflect > 0.0)
 		col = add_color(col, get_reflect(objs, lums, line, d - 1));
+//	col = mult_color(col, d / 4.0 / (4.0 + 1.0));
 	return (col);
 }
 
