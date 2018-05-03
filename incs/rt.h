@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:13:24 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 19:51:02 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include "parse.h"
 
 # define WIN_X 1357
-# define WIN_Y 867
+# define WIN_Y 1024
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
@@ -212,7 +212,7 @@ typedef struct			s_par
 
 typedef struct			s_effects
 {
-	char				alias;
+	float				alias;
 	char				stereo;
 	char				*filter;
 	int					seuil;

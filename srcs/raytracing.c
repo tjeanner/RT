@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:21:03 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/03 20:03:53 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,50 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	return (col);
 }
 
+t_color		get_anti_alias_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d, float anti_alias)
+{
+	t_color *cols;
+
+	if (!(cols = (t_color *)malloc(sizeof(t_color) * anti_alias * anti_alias);
+}
+
 void		*rays(void *tmp)
+{
+	int		i;
+	int		y;
+	int		x;
+	t_color	col;
+	t_env *env;
+	t_ray tutu;
+
+	env = ((t_threads *)tmp)->env;
+	y = ((t_threads *)tmp)->start;
+	i = ((t_threads *)tmp)->incr;
+	while (y < WIN_Y)
+	{
+		x = -1;
+		while (++x < WIN_X)
+		{
+			tutu = init_line((double)(x + 0.5), (double)(y + 0.5),
+											env->cams.cam[env->cams.curr]);
+			if (env->effects.alias <= 1)
+				col = get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
+			else
+				col = get_anti_alias_col(&env->objs, &env->lums, &tutu,
+						env->effects.depth, env->effects.alias);
+			if (env->display.sur == 1)
+				((unsigned int *)env->display.surf->pixels)
+								[x + y * env->display.surf->w] = col.color;
+			else
+				((unsigned int *)env->display.surf2->pixels)
+								[x + y * env->display.surf->w] = col.color;
+		}
+		y += i;
+	}
+	return (env);
+}
+/*
+void		*2keeprays(void *tmp)
 {
 	int		i;
 	int		y;
@@ -150,4 +193,4 @@ void		*rays(void *tmp)
 		y += i;
 	}
 	return (env);
-}
+}*/

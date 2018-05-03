@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 06:11:11 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 06:11:43 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 19:07:53 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static void	data_init(t_env *env)
 	env->cams.curr = 0;
 	env->lums.curr = 0;
 	env->state = 0;
+	env->effects.alias = 1.0;
 	env->lums.coefs_sum = 0.0;
 }
 
