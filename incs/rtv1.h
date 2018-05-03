@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 00:36:30 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:28:17 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ typedef struct			s_mat
 	unsigned int		tex;
 	double				rough;
 	double				plastic;
-	double				scale;
+	unsigned int		scale;
 }						t_mat;
 
 typedef struct			s_obj
@@ -149,7 +149,6 @@ typedef struct			s_obj
 	t_v					norm;
 	t_v					norm2;
 	t_color				col;
-//	double				dist;
 	float				k_diff;
 	float				transp;
 	float				k_spec;
@@ -259,15 +258,23 @@ t_ray					init_line(double x, double y, t_cam cam);
 /*
 **vector_math.c
 */
+t_v						vect_sous(t_v a, t_v b);
+double					vect_scal(t_v a, t_v b);
+t_v						vect_prod(t_v a, t_v b);
+t_v						vect_inv(t_v a);
+
+/*
+**vector_math2.c
+*/
 double					get_vect_norm(t_v a);
 t_v						vect_norm(t_v a);
 t_v						vect_mult(t_v a, double n);
 t_v						vect_div(t_v a, double n);
 t_v						vect_add(t_v a, t_v b);
-t_v						vect_sous(t_v a, t_v b);
-double					vect_scal(t_v a, t_v b);
-t_v						vect_prod(t_v a, t_v b);
-t_v						vect_inv(t_v a);
+
+/*
+**vector_math3.c
+*/
 t_v						vect_reflect(t_v incident, t_v normal);
 t_v						vect_refract(t_v incident, t_v normal, double k);
 

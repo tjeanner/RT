@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
+#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/02 18:46:01 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/03 03:28:42 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@ NAME =		rtv1
 
 SRC =		main.c \
 			vector_math.c \
+			vector_math2.c \
+			vector_math3.c \
 			useless_functions.c \
 			events.c \
 			events_sel.c \

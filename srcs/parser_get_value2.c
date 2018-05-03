@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_get_value2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 16:19:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 01:18:45 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 03:27:01 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		j_get_tex(t_json *json, t_obj *obj)
 	{
 		if (!ft_strncmp(p->val.data.str, "CHESS:", 6)
 			&& ft_strlen(p->val.data.str) < 12)
-			obj->mat.scale = ft_atoi(p->val.data.str + 6);
+			obj->mat.scale = fmax(ft_atoi(p->val.data.str + 6), 1);
 		else
 			obj->mat.scale = 200;
 		obj->mat.tex = 1;
