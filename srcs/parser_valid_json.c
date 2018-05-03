@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 09:58:18 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 04:02:04 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/03 04:34:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int			j_is_valid_lum(t_lum *lum)
 
 int			brackets(char *str, int len)
 {
-	char	tab[len];
+	char	*tab;
 	int		i;
 	int		j;
 	int		cpt;
@@ -51,6 +51,8 @@ int			brackets(char *str, int len)
 	i = -1;
 	j = -1;
 	cpt = 0;
+	if (!(tab = (char *)malloc(sizeof(char) * len)))
+		error_mgt(0);
 	while (str[++i])
 		if (str[i] == '"')
 			cpt++;
@@ -58,12 +60,12 @@ int			brackets(char *str, int len)
 			tab[++j] = str[i];
 		else if (str[i] == ']' || str[i] == ')' || str[i] == '}')
 		{
-			if ((tab[j] == '[' && str[i] == ']')
-				|| (tab[j] == '{' && str[i] == '}')
-				|| (tab[j] == '(' && str[i] == ')'))
+			if ((tab[j] == '[' && str[i] == ']') || (tab[j] == '{'
+			&& str[i] == '}') || (tab[j] == '(' && str[i] == ')'))
 				j--;
 			else
 				return (0);
 		}
+	free(tab);
 	return ((j != -1 || cpt % 2) ? 0 : 1);
 }
