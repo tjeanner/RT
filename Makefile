@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/03 21:12:48 by vmercadi         ###   ########.fr        #
+#    Updated: 2018/05/03 23:57:53 by cquillet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,10 +54,9 @@ SRC =		main.c \
 			event_screen.c \
 
 CC =		gcc
-CFLAGS =	-Wall -Wextra -Werror #-Igsl/include
+CFLAGS =	-Wall -Wextra -Werror
 CFLAGS +=	-Ofast -march=native -flto
-CFLAGS +=	-g3 -fsanitize=address
-#LFLAGS =	-Lgsl/lib -lgsl #-lgslcblas
+#CFLAGS +=	-g3 -fsanitize=address
 
 SRCDIR =	srcs
 INCDIR =	incs
