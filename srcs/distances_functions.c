@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 04:03:20 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:04:15 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ int			get_dist_plan(t_line line, t_obj obj, t_v *res)
 	res->z = -1.000 * opti_a / opti_b;
 	res->y = res->z;
 	res->x = res->z;
-	if (obj.mat.tex != 1)
-		return ((int)(opti_a = (res->z > 0.0) ? 1 : 0));
-	return (get_procedural_text(line, obj, res));
+	return ((int)(opti_a = (res->z > 0.0) ? 1 : 0));
 }
 
 int			get_dist_sphere(t_line line, t_obj obj, t_v *res)

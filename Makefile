@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
+#    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/04 05:15:24 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/04 07:16:50 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,6 @@ SRC =		main.c \
 			action.c	\
 			event_screen.c \
 			torus.c	\
-			textures.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror
@@ -86,6 +85,8 @@ else
 MAGICK	=
 endif
 
+.PHONY: all obj film cleanfilm norme clean fclean re
+
 all: obj
 	@echo "Libft all rule :"
 	@make -C $(FT)
@@ -113,7 +114,7 @@ film:
 	@mkdir -p /tmp/Screenshots/videos
 	@brew install ffmpeg
 	@find /tmp/Screenshots/ -type f -name '*.bmp' -exec convert {} {}.jpg \;
-	@ffmpeg -r 25 -f image2 -s 1920x1080 -i /tmp/Screenshots/Screenshot%d.bmp.jpg \
+	@ffmpeg -r 25 -f image2 -s 1080x720 -i /tmp/Screenshots/Screenshot%d.bmp.jpg \
 	-vcodec libx264 -crf 25  -pix_fmt yuv420p /tmp/Screenshots/videos/$(TIME).mp4
 	@rm /tmp/Screenshots/*.bmp
 	@echo "\033[32;3mA video have been created in /tmp/Screenshots/videos/ !\x1b[0m"
