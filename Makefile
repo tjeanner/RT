@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
+#    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/03 23:57:53 by cquillet         ###   ########.fr        #
+#    Updated: 2018/05/04 02:55:30 by hbouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SRC =		main.c \
 			parseur_obj.c \
 			action.c	\
 			event_screen.c \
+			torus.c	\
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror

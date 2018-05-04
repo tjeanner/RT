@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 02:47:53 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:12:33 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_H
-# define RT_H
+#ifndef __RT_H
+# define __RT_H
 
 # include "libft.h"
 # include <fcntl.h>//open
@@ -28,12 +28,11 @@
 # include "parser.h"
 # include "parse.h"
 
-# define WIN_X 800
-# define WIN_Y 400
+# define WIN_X 1080
+# define WIN_Y 720
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
-# define FCTS "sptc"
 # define S "0123456789ABCDEF"
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
@@ -45,7 +44,7 @@ typedef struct s_env	t_env;
 
 typedef enum			e_typeobj
 {
-	SPHERE, PLANE, CYLINDRE, CONE, TORUS, NONE
+	NONE = -1, SPHERE, PLANE, CYLINDRE, CONE, TORUS 
 }						t_typeobj;
 
 typedef enum			e_typeact
@@ -445,6 +444,6 @@ void					j_print_cam(t_env *env, int i, int fd);
 void					j_print_lum(t_env *env, int i, int fd);
 
 
-void					j_init_torus(t_env *env);
+void					create_torus(t_env *env);
 
 #endif

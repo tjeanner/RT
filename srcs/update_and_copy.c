@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 21:03:33 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 00:25:58 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,27 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj)
 	t_obj	*new;
 	int		i;
 
-	(void)obj;
 	i = -1;
 	if (!(new = (t_obj *)malloc(sizeof(t_obj) * (env->objs.nb + 1))))
 		error_mgt(0);
 	while (++i < env->objs.nb)
 		ft_memcpy((void *)&new[i], (void *)&env->objs.obj[i], sizeof(t_obj));
 	ft_bzero((void *)&new[i], sizeof(t_obj));
-	new[i].type = type - 49;
-	new[i].o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
-		vect_mult(env->cams.cam[env->cams.curr].vcam, 4000)),
-		vect_mult(env->cams.cam[env->cams.curr].v2cam, -300));
-	new[i].norm = env->cams.cam[env->cams.curr].v2cam;
-	new[i].radius = (new[i].type == CONE) ? 30 : 150;
-	new[i].mat.rough = 1;
-	new[i].k_diff = 0.7;
-	new[i].col = get_white();
+	if (obj == NULL)
+	{
+		new[i].type = type - 49;
+		new[i].o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
+			vect_mult(env->cams.cam[env->cams.curr].vcam, 2000)),
+			vect_mult(env->cams.cam[env->cams.curr].v2cam, -500));
+		new[i].norm = env->cams.cam[env->cams.curr].v2cam;
+		new[i].radius = (new[i].type == CONE) ? 30 : 150;
+		new[i].mat.rough = 1;
+		new[i].k_diff = 0.7;
+		new[i].col = get_white();
+		new[i].link = 0;
+	}
+	else
+		new[i] = *obj;
 	env->objs.nb++;
 	env->objs.curr = i;
 	ft_memdel((void *)&env->objs.obj);
