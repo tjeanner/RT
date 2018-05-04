@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:04:33 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 18:16:50 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:57:34 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ void				j_get_type(t_json *json, t_obj *obj)
 		obj->type = SPHERE;
 	else if (!ft_strcmp(json->val.data.str, "cone"))
 		obj->type = CONE;
-	// else if (!ft_strcmp(json->val.data.str, "torus"))
-	// 	obj->type = TORUS;
 	else
 		obj->type = -1;
 	p = p->next;

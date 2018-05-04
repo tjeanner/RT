@@ -6,13 +6,13 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/18 18:04:19 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 21:48:48 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 03:11:36 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-static void j_print_scn(t_env *env, int fd)
+static void	j_print_scn(t_env *env, int fd)
 {
 	ft_putstr_fd("{\n\t\"name\":\"", fd);
 	ft_putstr_fd(env->name, fd);
@@ -25,7 +25,7 @@ static void j_print_scn(t_env *env, int fd)
 	ft_putstr_fd(",\n\t\"scene\":{\n\t\t\"cameras\":[", fd);
 }
 
-int		j_print_env(t_env *env, int i)
+int			j_print_env(t_env *env, int i)
 {
 	int		fd;
 	char	*tmp;
@@ -54,7 +54,7 @@ int		j_print_env(t_env *env, int i)
 	return (fd);
 }
 
-void	j_scene_generator(t_env *env)
+void		j_scene_generator(t_env *env)
 {
 	int	i;
 	int fd;

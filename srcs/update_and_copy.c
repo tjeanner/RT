@@ -6,13 +6,13 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/04 00:25:58 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 03:05:48 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-void		update_and_copy_r(t_env *env, int obj)
+void			update_and_copy_r(t_env *env, int obj)
 {
 	t_obj	*new;
 	int		i;
@@ -39,7 +39,24 @@ void		update_and_copy_r(t_env *env, int obj)
 	env->objs.obj = new;
 }
 
-void		update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj)
+static t_obj	set_new_obj(t_env *env, SDL_Keycode type)
+{
+	t_obj	obj;
+
+	obj.type = type - 49;
+	obj.o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
+		vect_mult(env->cams.cam[env->cams.curr].vcam, 2000)),
+		vect_mult(env->cams.cam[env->cams.curr].v2cam, -500));
+	obj.norm = env->cams.cam[env->cams.curr].v2cam;
+	obj.radius = (obj.type == CONE) ? 30 : 150;
+	obj.mat.rough = 1;
+	obj.k_diff = 0.7;
+	obj.col = get_white();
+	obj.link = 0;
+	return (obj);
+}
+
+void			update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj)
 {
 	t_obj	*new;
 	int		i;
@@ -52,16 +69,7 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj)
 	ft_bzero((void *)&new[i], sizeof(t_obj));
 	if (obj == NULL)
 	{
-		new[i].type = type - 49;
-		new[i].o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
-			vect_mult(env->cams.cam[env->cams.curr].vcam, 2000)),
-			vect_mult(env->cams.cam[env->cams.curr].v2cam, -500));
-		new[i].norm = env->cams.cam[env->cams.curr].v2cam;
-		new[i].radius = (new[i].type == CONE) ? 30 : 150;
-		new[i].mat.rough = 1;
-		new[i].k_diff = 0.7;
-		new[i].col = get_white();
-		new[i].link = 0;
+		new[i] = set_new_obj(env, type);
 	}
 	else
 		new[i] = *obj;
