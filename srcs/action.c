@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 13:16:46 by vmercadi          #+#    #+#             */
-/*   Updated: 2018/05/03 04:01:51 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 03:07:45 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Start the actions for all the objects
 */
 
-void	main_action(t_objs *objs, int play)
+void		main_action(t_objs *objs, int play)
 {
 	int		i;
 
@@ -36,9 +36,12 @@ void		action(t_obj *obj)
 {
 	if (!obj->act.movedist.x && !obj->act.movedist.x && !obj->act.movedist.x)
 	{
-		obj->act.movedist.x = (obj->act.max.x - obj->act.min.x) / obj->act.speed;
-		obj->act.movedist.y = (obj->act.max.y - obj->act.min.y) / obj->act.speed;
-		obj->act.movedist.z = (obj->act.max.z - obj->act.min.z) / obj->act.speed;
+		obj->act.movedist.x =
+			(obj->act.max.x - obj->act.min.x) / obj->act.speed;
+		obj->act.movedist.y =
+			(obj->act.max.y - obj->act.min.y) / obj->act.speed;
+		obj->act.movedist.z =
+			(obj->act.max.z - obj->act.min.z) / obj->act.speed;
 		obj->act.angle = 1.0;
 		obj->act.p = 0;
 	}
@@ -50,7 +53,6 @@ void		action(t_obj *obj)
 		act_movaxis(obj);
 	else if (obj->act.action == 3)
 		obj->col = get_rand();
-
 }
 
 /*
@@ -63,6 +65,7 @@ void		act_movaxis(t_obj *obj)
 	t_v		axis;
 	double	dist;
 	double	nb;
+
 	axis = vect_sous(obj->act.max, obj->act.min);
 	dist = get_vect_norm(axis);
 	axis = vect_norm(axis);
@@ -77,22 +80,3 @@ void		act_movaxis(t_obj *obj)
 	else
 		obj->o = vect_sous(obj->o, obj->act.movedist);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
