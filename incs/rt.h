@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 02:41:13 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 03:24:04 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,6 +348,7 @@ int						events(t_env *env);
 int						event_cam_switch(t_env *env, unsigned int sym);
 int						events_sel(t_env *env, SDL_Event event,
 							unsigned int sym);
+int						move_events(t_env *env, unsigned int sym);
 
 /*
 **events_rotation.c
