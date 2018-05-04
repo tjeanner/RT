@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbrbase_fd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 04:28:29 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/02/12 09:20:47 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:21:47 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void		ft_putnbrbase_fd(int n, int base, int fd)
 {
 	char	*tab;
 
-	tab = (char *)malloc(sizeof(char) * base + 1);
+	if (!(tab = (char *)malloc(sizeof(char) * base + 1)))
+		return (NULL);
 	if (n == -2147483648)
 	{
 		ft_putnbrbase_fd(n / base, base, fd);

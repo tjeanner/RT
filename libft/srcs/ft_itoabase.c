@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoabase.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 00:22:34 by hbouchet          #+#    #+#             */
-/*   Updated: 2016/11/23 04:35:34 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:22:26 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ char			*ft_itoabase(int n, int base)
 	char		*tab;
 	size_t		str_len;
 
-	tab = (char *)malloc(sizeof(char) * base + 1);
+	if (!(tab = (char *)malloc(sizeof(char) * base + 1)))
+		return (NULL);
 	tab = ft_base_array(tab, base);
 	str_len = ft_len(n, base);
 	nbr = n;
