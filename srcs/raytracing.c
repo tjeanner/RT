@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 06:04:14 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:13:04 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,12 @@ t_color			get_anti_alias_col(t_env *env, int x, int y)
 	return (average_color(cols, (double)(1.0 / (alias * alias))));
 }
 
-void			*rays(void *tmp)
+void			*raytrace(t_env *env, void *tmp)
 {
 	t_v		nums;
 	t_color	col;
-	t_env	*env;
 	t_ray	tutu;
 
-	env = ((t_threads *)tmp)->env;
 	nums = (t_v){0, ((t_threads *)tmp)->start, ((t_threads *)tmp)->incr};
 	while (nums.y < WIN_Y && (nums.x = -1) < 0)
 	{
@@ -95,10 +93,10 @@ void			*rays(void *tmp)
 		nums.y) : get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
 			if (env->display.sur == 1)
 				((unsigned int *)env->display.surf->pixels)
-					[(int)nums.x + (int)nums.y * env->display.surf->w] = col.color;
+			[(int)nums.x + (int)nums.y * env->display.surf->w] = col.color;
 			else
 				((unsigned int *)env->display.surf2->pixels)
-					[(int)nums.x + (int)nums.y * env->display.surf->w] = col.color;
+			[(int)nums.x + (int)nums.y * env->display.surf->w] = col.color;
 		}
 		nums.y += nums.z;
 	}
