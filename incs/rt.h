@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 02:41:13 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:03:10 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,6 +283,10 @@ t_v						vect_add(t_v a, t_v b);
 t_v						vect_reflect(t_v incident, t_v normal);
 t_v						vect_refract(t_v incident, t_v normal, double k);
 
+/*
+**textures.c
+*/
+int			get_procedural_text(t_line line, t_obj obj, t_v *res);
 /*
 **color_math.c
 */
