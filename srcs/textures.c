@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 04:00:59 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 05:15:06 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 05:27:50 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_v			get_rand_point(t_obj obj, double d)
 {
 	t_v		tmp;
 
-	if (obj.norm.z != 0 && (tmp.y = 1) > 0)
+/*	if (obj.norm.z != 0 && (tmp.y = 1) > 0)
 	{
 		tmp.x = 1;
 		tmp.z = -1.0 * (2.0 + d) /
@@ -33,6 +33,24 @@ t_v			get_rand_point(t_obj obj, double d)
 		tmp.z = 1;
 		tmp.y = -1.0 * (2.0 + d) /
 			obj.norm.y;
+	}*/
+	if (obj.norm.z != 0)
+	{
+		tmp.y = 10.0;
+		tmp.x = 10.0;
+		tmp.z = -1.0 * (obj.norm.y + obj.norm.x + d) / obj.norm.z;
+	}
+	else if (obj.norm.x != 0)
+	{
+		tmp.y = 10.0;
+		tmp.z = 10.0;
+		tmp.x = -1.0 * (obj.norm.y + obj.norm.z + d) / obj.norm.x;
+	}
+	else
+	{
+		tmp.z = 10.0;
+		tmp.x = 10.0;
+		tmp.y = -1.0 * (obj.norm.z + obj.norm.x + d) / obj.norm.y;
 	}
 	return (tmp);
 }
