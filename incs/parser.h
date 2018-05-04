@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/01 02:25:44 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 00:35:40 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:13:22 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,5 @@ void			j_print_vec(t_v v, int fd);
 **parser_free.c
 */
 void			ft_parser_free(t_json *json);
-
-
 
 #endif

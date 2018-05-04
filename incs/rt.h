@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 04:18:17 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:14:47 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 # define __RT_H
 
 # include "libft.h"
-# include <fcntl.h>//open
-# include <sys/types.h>//read
-# include <sys/uio.h>//read
-# include <unistd.h>//read, write, close
-# include <stdlib.h>//malloc, free
-# include <stdio.h>//perror, strerror
-# include <string.h>//strerror
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
 # include "SDL.h"
 # include <string.h>
 # include <stdbool.h>
@@ -43,7 +43,7 @@ typedef struct s_env	t_env;
 
 typedef enum			e_typeobj
 {
-	NONE = -1, SPHERE, PLANE, CYLINDRE, CONE, TORUS 
+	NONE = -1, SPHERE, PLANE, CYLINDRE, CONE, TORUS
 }						t_typeobj;
 
 typedef enum			e_typeact
@@ -285,7 +285,7 @@ t_v						vect_refract(t_v incident, t_v normal, double k);
 /*
 **textures.c
 */
-int			get_procedural_text(t_line line, t_obj obj, t_v *res);
+int						get_procedural_text(t_line line, t_obj obj, t_v *res);
 /*
 **color_math.c
 */
@@ -378,7 +378,8 @@ t_v						rotation(t_v n, t_v r, float t);
 **update_and_copy.c
 */
 void					update_and_copy_r(t_env *env, int obj);
-void					update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj);
+void					update_and_copy_a(t_env *env, SDL_Keycode type,
+															t_obj *obj);
 
 /*
 **distances_functions.c
@@ -418,34 +419,14 @@ void					ev_screenshot(t_env *env);
 **action.c
 */
 void					main_action(t_objs *objs, int play);
-t_act					init_act(int action, t_v axis, int speed, t_v maxmin[2]);
+t_act					init_act(int action, t_v axis, int speed,
+														t_v maxmin[2]);
 void					action(t_obj *obj);
 void					act_movaxis(t_obj *obj);
 int						vect_equal(t_v v1, t_v v2);
 
-
-/*
-** Parse_obj
-*/
-t_tri					*parse_main(t_env *env, char *av);
-void					parse_error(int e, char *s);
-void					init_pobj(t_pobj *pobj, char *av);
-void					parse_redirect(t_pobj *pobj, char *s);
-void					check_f(char **tab);
-void					parse_err(int e, char *s);
-int						ft_isnum(char *str);
-char					*ft_implode(char **tab, char c);
-char					*ft_implode(char **tab, char c);
-char					**decoupe(char *s);
-double					parse_double(char *s);
-t_tri					parse_f(t_pobj *pobj, char **tab);
-t_v						parse_vect(char *s);
-t_v						get_nblines(char *av);
-t_v						init_vect(double x, double y, double z);
-
 void					j_print_cam(t_env *env, int i, int fd);
 void					j_print_lum(t_env *env, int i, int fd);
-
 
 void					create_torus(t_env *env);
 
