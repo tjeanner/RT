@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 04:38:31 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 06:14:18 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 # define IN_OBJ 1
-# define OUT_OBJ 2
+# define OUT_OBJ 0
 # define MARGIN 0.00000001
 
 typedef struct s_env	t_env;
@@ -310,6 +310,7 @@ int						set_white(t_color *c);
 */
 t_color					satur_col(t_color a, float n);
 t_color					average_color(t_color *col, float flou);
+t_color					gamma_korr(t_color a, double gamma);
 
 /*
 **useful_functions.c

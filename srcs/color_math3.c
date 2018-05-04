@@ -46,3 +46,14 @@ t_color		average_color(t_color *col, float flou)
 	free(col);
 	return (colo);
 }
+
+t_color		gamma_korr(t_color a, double gamma)
+{
+	t_color	c;
+
+	c.c.r = (unsigned int)(pow(((double)a.c.r / 255.), gamma) * 255.);
+	c.c.g = (unsigned int)(pow(((double)a.c.g / 255.), gamma) * 255.);
+	c.c.b = (unsigned int)(pow(((double)a.c.b / 255.), gamma) * 255.);
+	c.c.a = (unsigned int)(pow(((double)a.c.a / 255.), gamma) * 255.);
+	return (c);
+}
