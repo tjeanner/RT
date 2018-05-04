@@ -352,6 +352,7 @@ int						events(t_env *env);
 int						event_cam_switch(t_env *env, unsigned int sym);
 int						events_sel(t_env *env, SDL_Event event,
 							unsigned int sym);
+int						move_events(t_env *env, unsigned int sym);
 
 /*
 **events_rotation.c
