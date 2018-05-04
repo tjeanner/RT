@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/04 02:46:39 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:22:20 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ static int	j_set_obj_d(char *key, int type, t_json *j_obj, t_obj *obj)
 	obj->k_diff = 0.7;
 	obj->link = 0;
 	obj->mat.scale = 200;
+	obj->mat.plastic = 1;
 	if (!ft_strcmp(key, "type") && type == TYPE_STRING)
 		j_get_type(j_obj, obj);
-	else if (!ft_strcmp(key, "radius") && type == TYPE_DOUBLE)
-		j_get_radius(j_obj, obj);
 	else if (!ft_strcmp(key, "color") && type == TYPE_STRING)
 		obj->col = j_get_color(j_obj);
 	else if (!ft_strcmp(key, "norm") && type == TYPE_OBJ)
@@ -47,6 +46,8 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 		return ;
 	else if (!ft_strcmp(key, "refract") && type == TYPE_DOUBLE)
 		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 0));
+	else if (!ft_strcmp(key, "radius") && type == TYPE_DOUBLE)
+		j_get_radius(j_obj, obj);
 	else if (!ft_strcmp(key, "roughness") && type == TYPE_DOUBLE)
 		obj->mat.rough = fmin(100, fmax(j_obj->val.data.nb, 1));
 	else if (!ft_strcmp(key, "plasticity") && type == TYPE_DOUBLE)
