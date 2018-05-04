@@ -6,7 +6,7 @@
 /*   By: cquillet <cquillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 05:42:44 by cquillet          #+#    #+#             */
-/*   Updated: 2018/05/03 06:01:09 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:45:08 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_color		get_specular(t_obj obj, t_ray ray)
 	t_v		half;
 	t_v		to_eye;
 	t_color	plastic;
+	t_color	col;
 
 	if (obj.k_spec == 0.0)
 		return (get_black());
@@ -28,10 +29,14 @@ t_color		get_specular(t_obj obj, t_ray ray)
 	plastic = mult_color(get_white(), obj.mat.plastic);
 	plastic = add_color(plastic, mult_color(obj.col, 1.0 - obj.mat.plastic));
 	if (obj.mat.rough == 1.0)
-		return (mult_color(obj.col,
-			res * obj.k_spec / (obj.k_diff + obj.k_spec)));
+		col = mult_color(obj.col, res);
+	else
+		col = mult_color(obj.col, pow(res, obj.mat.rough));
+	return (mult_color(gamma_korr(col, 0.8),
+									obj.k_spec / (obj.k_diff + obj.k_spec)));
+/*			res * obj.k_spec / (obj.k_diff + obj.k_spec)));
 	return (mult_color(obj.col,
-			pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));
+			pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));*/
 }
 
 t_color		get_diffuse(t_obj obj, t_ray ray)
@@ -56,7 +61,7 @@ t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 	tutu.to.pos = lum.pos;
 	tutu.from.dir = vect_sous(lum.pos, line->to.pos);
 	tmp = get_vect_norm(tutu.from.dir);
-	tutu.from.dir = vect_norm(get_vect_norm(lum.dir) ? vect_inv(lum.dir) : tutu.from.dir);
+	tutu.from.dir = vect_norm(get_vect_norm(lum.dir) ? tutu.from.dir : vect_inv(lum.dir));
 	tutu.from.dir = vect_norm(tutu.from.dir);
 	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, MARGIN));
 	tutu.incident = line;
