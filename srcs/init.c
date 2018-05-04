@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 06:11:11 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/04 04:21:23 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:38:45 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,44 +56,14 @@ static void	data_init(t_env *env)
 void		data_init_and_reload(t_env *env)
 {
 	int		i;
-	double	tmp;
-	t_obj	obj;
 
 	data_init(env);
+	init_2nd_vect_planes(env);
 	i = -1;
 	while (++i < env->cams.nb)
 		env->cams.cam[env->cams.curr].v3cam = vect_prod(
 			env->cams.cam[env->cams.curr].vcam,
 			env->cams.cam[env->cams.curr].v2cam);
-	i = -1;
-	while (++i < env->objs.nb)
-	{
-		if (env->objs.obj[i].type == PLANE)
-		{
-			obj = env->objs.obj[i];
-			tmp = -1.0 * vect_scal(obj.norm, obj.o);
-			if (obj.norm.z != 0)
-			{
-				obj.norm2.y = 1;
-				obj.norm2.x = 1;
-				obj.norm2.z = -1.0 * (obj.norm.y + obj.norm.x + tmp) / obj.norm.z;
-			}
-			else if (obj.norm.x != 0)
-			{
-				obj.norm2.y = 1;
-				obj.norm2.z = 1;
-				obj.norm2.x = -1.0 * (obj.norm.y + obj.norm.z + tmp) / obj.norm.x;
-			}
-			else if (obj.norm.y != 0)
-			{
-				obj.norm2.z = 1;
-				obj.norm2.x = 1;
-				obj.norm2.y = -1.0 * (obj.norm.z + obj.norm.x + tmp) / obj.norm.y;
-			}
-			obj.norm2 = vect_norm(vect_sous(obj.norm2, obj.o));
-			env->objs.obj[i] = obj;
-		}
-	}
 	i = -1;
 	while (++i < env->lums.nb)
 		env->lums.coefs_sum += env->lums.lum[i].coef;
