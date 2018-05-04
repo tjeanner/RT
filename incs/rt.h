@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 02:12:33 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:41:13 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ typedef struct			s_par
 
 typedef struct			s_effects
 {
-	char				alias;
+	float				alias;
 	char				stereo;
 	char				*filter;
 	int					seuil;
@@ -305,7 +305,7 @@ int						set_white(t_color *c);
 **color_math3.c
 */
 t_color					satur_col(t_color a, float n);
-int						average_color(t_color *col, float flou);
+t_color					average_color(t_color *col, float flou);
 
 /*
 **useful_functions.c

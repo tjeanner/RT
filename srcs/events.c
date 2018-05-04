@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 00:38:20 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:59:51 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,14 @@ int			events(t_env *env)
 	{
 		prep_events(env);
 		sym = event.key.keysym.sym;
-		if (events_random(env, sym, event) || events_sel(env, event, sym))
+		if (event.type == SDL_KEYDOWN && (sym == SDLK_KP_MINUS || sym == SDLK_KP_PLUS))
+		{
+			if (sym == SDLK_KP_MINUS && env->effects.alias > 1)
+				env->effects.alias /= 2.0;
+			if (sym == SDLK_KP_PLUS && env->effects.alias <= 4)
+				env->effects.alias *= 2.0;
+		}
+		else if (events_random(env, sym, event) || events_sel(env, event, sym))
 			;
 		else if (sym == SDLK_SPACE && event.key.state == SDL_RELEASED)
 			env->screen.play = !env->screen.play;
