@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 04:03:10 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:18:17 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <stdbool.h>
 # include <pthread.h>
 # include "parser.h"
-# include "parse.h"
 
 # define WIN_X 1080
 # define WIN_Y 720

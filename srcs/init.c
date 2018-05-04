@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 06:11:11 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 19:07:53 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:21:23 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ t_env		*init(char *filename)
 	{
 		if (!(env = (t_env *)malloc(sizeof(t_env) * 1)))
 			error_mgt(0);
-		if (ft_strstr((env->file = ft_strdup(filename)), ".json"))
-			j_init(env);
-		else if (ft_strstr(env->file, ".obj"))
-			env->objs.tri = parse_main(env, filename);
+		env->file = ft_strdup(filename);
+		j_init(env);
 		env->screen.time = 0;
 		env->screen.rec = 0;
 		env->screen.play = 1;

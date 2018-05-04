@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lum.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cquillet <cquillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 05:42:44 by cquillet          #+#    #+#             */
-/*   Updated: 2018/05/03 06:01:09 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:22:52 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ t_color		get_specular(t_obj obj, t_ray ray)
 	plastic = mult_color(get_white(), obj.mat.plastic);
 	plastic = add_color(plastic, mult_color(obj.col, 1.0 - obj.mat.plastic));
 	if (obj.mat.rough == 1.0)
+	{
 		return (mult_color(obj.col,
 			res * obj.k_spec / (obj.k_diff + obj.k_spec)));
+	}
 	return (mult_color(obj.col,
-			pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));
+		pow(res, obj.mat.rough) * obj.k_spec / (obj.k_diff + obj.k_spec)));
 }
 
 t_color		get_diffuse(t_obj obj, t_ray ray)
