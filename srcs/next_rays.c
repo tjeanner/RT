@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   next_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cquillet <cquillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 06:10:04 by cquillet          #+#    #+#             */
-/*   Updated: 2018/05/03 17:36:34 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:26:00 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ t_color			get_refract(t_objs *objs, t_lums *lums, t_ray *line,
 	return (col);
 }
 
-t_color		get_reflect(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
+t_color			get_reflect(t_objs *objs, t_lums *lums,
+							t_ray *line, unsigned int d)
 {
 	t_ray	refl;
 	t_color	col;
@@ -77,7 +78,7 @@ t_color		get_reflect(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	refl.incident = line;
 	refl.objs = line->objs;
 	refl.nb_objs = line->nb_objs;
-	col = mult_color(get_col(objs, lums, &refl, d), 
+	col = mult_color(get_col(objs, lums, &refl, d),
 			objs->obj[line->obj].reflect /
 			(objs->obj[line->obj].transp + objs->obj[line->obj].reflect));
 	refl.objs = NULL;
