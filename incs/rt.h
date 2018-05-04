@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 04:14:47 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:38:31 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,6 +285,7 @@ t_v						vect_refract(t_v incident, t_v normal, double k);
 /*
 **textures.c
 */
+void					init_2nd_vect_planes(t_env *env);
 int						get_procedural_text(t_line line, t_obj obj, t_v *res);
 /*
 **color_math.c
