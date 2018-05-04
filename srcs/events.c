@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 20:03:44 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:59:51 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,29 @@
 
 static int	move_events(t_env *env, unsigned int sym)
 {
+	int i;
+	t_color col;
+
+	i = -1;
 	if ((sym == SDLK_1 || sym == SDLK_2 || sym == SDLK_3 || sym == SDLK_4))
 		update_and_copy_a(env, sym, NULL);
 	else if (sym == SDLK_BACKSPACE && env->objs.curr >= 0)
 		update_and_copy_r(env, env->objs.curr);
 	else if (sym == SDLK_BACKSLASH)
 	{
-		if (env->objs.curr >= 0)
+		if (env->objs.curr >= 0 && env->objs.obj[env->objs.curr].link == 0)
 			env->objs.obj[env->objs.curr].col = get_rand();
 		else if (env->objs.curr == -2)
 			env->lums.lum[env->lums.curr].col = get_rand();
+		else if (env->objs.curr >= 0 && env->objs.obj[env->objs.curr].link != 0)
+		{
+			col = get_rand();
+			while (++i < env->objs.nb)
+			{
+				if (env->objs.obj[i].link == env->objs.obj[env->objs.curr].link)
+					env->objs.obj[i].col = col;
+			}
+		}
 	}
 	else if (sym == SDLK_c
 		&& env->lums.amb_coef >= 0.020)
@@ -80,6 +93,8 @@ static int	events_random(t_env *env, unsigned int sym, SDL_Event event)
 	}
 	else if (event.type == SDL_KEYDOWN && sym == SDLK_END)
 		j_scene_generator(env);
+	else if (event.type == SDL_KEYDOWN && sym == SDLK_8)
+		create_torus(env);
 	else
 		return (0);
 	return (1);
@@ -108,7 +123,14 @@ int			events(t_env *env)
 	{
 		prep_events(env);
 		sym = event.key.keysym.sym;
-		if (events_random(env, sym, event) || events_sel(env, event, sym))
+		if (event.type == SDL_KEYDOWN && (sym == SDLK_KP_MINUS || sym == SDLK_KP_PLUS))
+		{
+			if (sym == SDLK_KP_MINUS && env->effects.alias > 1)
+				env->effects.alias /= 2.0;
+			if (sym == SDLK_KP_PLUS && env->effects.alias <= 4)
+				env->effects.alias *= 2.0;
+		}
+		else if (events_random(env, sym, event) || events_sel(env, event, sym))
 			;
 		else if (sym == SDLK_SPACE && event.key.state == SDL_RELEASED)
 			env->screen.play = !env->screen.play;

@@ -6,7 +6,7 @@
 /*   By: cquillet <cquillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 05:27:18 by cquillet          #+#    #+#             */
-/*   Updated: 2018/05/03 05:35:22 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:33:31 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,29 @@ t_color		satur_col(t_color a, float n)
 	return (b);
 }
 
-int			average_color(t_color *col, float flou)
+t_color		average_color(t_color *col, float flou)
 {
-	t_v			colo;
+	t_color		colo;
+	t_v			tmp;
 	int			c;
 
-	if (!flou)
+	colo = get_black();
+	if (flou < 1)
 	{
-		*col = get_black();
-		return (1);
+		tmp.x = col[0].c.r;
+		tmp.y = col[0].c.g;
+		tmp.z = col[0].c.b;
+		c = 0;
+		while (++c < 1.0 / flou)
+		{
+			tmp.x += col[c].c.r;
+			tmp.y += col[c].c.g;
+			tmp.z += col[c].c.b;
+		}
+		colo.c.r = tmp.x * flou;
+		colo.c.g = tmp.y * flou;
+		colo.c.b = tmp.z * flou;
 	}
-	flou *= flou;
-	colo.x = col[0].c.r * flou;
-	colo.y = col[0].c.g * flou;
-	colo.z = col[0].c.b * flou;
-	c = 0;
-	while (++c < 1.0 / flou)
-	{
-		colo.x += col[c].c.r * flou;
-		colo.y += col[c].c.g * flou;
-		colo.z += col[c].c.b * flou;
-	}
-	col[0].c.r = colo.x;
-	col[0].c.g = colo.y;
-	col[0].c.b = colo.z;
-	return (1);
+	free(col);
+	return (colo);
 }

@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 21:07:02 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:41:13 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef __RT_H
 # define __RT_H
 
@@ -27,12 +28,11 @@
 # include "parser.h"
 # include "parse.h"
 
-# define WIN_X 1920
-# define WIN_Y 1080
+# define WIN_X 1080
+# define WIN_Y 720
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
-# define FCTS "sptc"
 # define S "0123456789ABCDEF"
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
@@ -44,7 +44,7 @@ typedef struct s_env	t_env;
 
 typedef enum			e_typeobj
 {
-	SPHERE, PLANE, CYLINDRE, CONE, TORUS, NONE
+	NONE = -1, SPHERE, PLANE, CYLINDRE, CONE, TORUS 
 }						t_typeobj;
 
 typedef enum			e_typeact
@@ -212,7 +212,7 @@ typedef struct			s_par
 
 typedef struct			s_effects
 {
-	char				alias;
+	float				alias;
 	char				stereo;
 	char				*filter;
 	int					seuil;
@@ -305,7 +305,7 @@ int						set_white(t_color *c);
 **color_math3.c
 */
 t_color					satur_col(t_color a, float n);
-int						average_color(t_color *col, float flou);
+t_color					average_color(t_color *col, float flou);
 
 /*
 **useful_functions.c
@@ -443,6 +443,6 @@ void					j_print_cam(t_env *env, int i, int fd);
 void					j_print_lum(t_env *env, int i, int fd);
 
 
-void					j_init_torus(t_env *env);
+void					create_torus(t_env *env);
 
 #endif

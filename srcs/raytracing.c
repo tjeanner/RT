@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:21:03 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 03:10:14 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,23 +101,42 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 			col = add_color(col, mult_color(
 							get_lum(objs, line->obj, lums->lum[i], line),
 							lums->lum[i].coef / lums->coefs_sum));
-//		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == PLANE)
-//			ambi_col = mult_color(ambi_col, checkerboard(line));
-//		if (objs->obj[line->obj].motion == 1)
-//		{
-//			;
-//		}
 		col = add_color(mult_color(col, 1.000 - lums->amb_coef), ambi_col);
 	}
 	else
 		col = obj.col;
 	col = mult_color(col, (1.0 - objs->obj[line->obj].reflect) *
-										(1.0 - objs->obj[line->obj].transp));
+			(1.0 - objs->obj[line->obj].transp));
 	if (obj.transp > 0.0)
 		col = add_color(col, get_refract(objs, lums, line, d - 1));
 	if (obj.reflect > 0.0)
 		col = add_color(col, get_reflect(objs, lums, line, d - 1));
 	return (col);
+}
+
+t_color		get_anti_alias_col(t_env *env, int x, int y)
+{
+	int		i;
+	t_color *cols;
+	t_ray	ray;
+	double	delta;
+	double	alias;
+	double	alias2;
+
+	i = -1;
+	alias = (int)env->effects.alias;
+	alias2 = alias * alias;
+	delta = 1.0 / alias;
+	if (!(cols = (t_color *)malloc(sizeof(t_color) * alias2)))
+		error_mgt(0);
+	while (++i < alias2)
+	{
+		ray = init_line((double)(x + delta / 2.0 + (double)(i % (int)alias) * delta),
+				(double)(y + delta / 2.0 + (double)((int)(i / (int)alias) * delta)),
+				env->cams.cam[env->cams.curr]);
+		cols[i] = get_col(&env->objs, &env->lums, &ray, env->effects.depth);
+	}
+	return (average_color(cols, (double)(1.0 / alias2)));
 }
 
 void		*rays(void *tmp)
@@ -137,15 +156,17 @@ void		*rays(void *tmp)
 		x = -1;
 		while (++x < WIN_X)
 		{
-			tutu = init_line((double)(x + 0.5), (double)(y + 0.5),
-											env->cams.cam[env->cams.curr]);
-			col = get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
+			if (env->effects.alias <= 1)
+				tutu = init_line((double)(x + 0.5 / env->effects.alias),
+		(double)(y + 0.5 / env->effects.alias), env->cams.cam[env->cams.curr]);
+			col = (env->effects.alias != 1) ? get_anti_alias_col(env, x, y) :
+				get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
 			if (env->display.sur == 1)
 				((unsigned int *)env->display.surf->pixels)
-								[x + y * env->display.surf->w] = col.color;
+					[x + y * env->display.surf->w] = col.color;
 			else
 				((unsigned int *)env->display.surf2->pixels)
-								[x + y * env->display.surf->w] = col.color;
+					[x + y * env->display.surf->w] = col.color;
 		}
 		y += i;
 	}
