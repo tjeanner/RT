@@ -49,7 +49,7 @@ void		skip_whitespaces(char **str)
 
 int			init_json(t_json **json)
 {
-	if (!(*json = malloc(sizeof(t_json) * 1)))
+	if (!json || !(*json = malloc(sizeof(t_json) * 1)))
 		error_mgt(0);
 	(*json)->next = NULL;
 	(*json)->key = NULL;

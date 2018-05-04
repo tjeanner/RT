@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 07:01:50 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:13:29 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,7 @@ struct					s_env
 */
 void					data_init_and_reload(t_env *env);
 t_env					*init(char *filename);
+void					*rays(void *tmp);
 
 /*
 **main.c
@@ -305,6 +306,7 @@ int						set_white(t_color *c);
 */
 t_color					satur_col(t_color a, float n);
 t_color					average_color(t_color *col, float flou);
+t_color					gamma_korr(t_color a, double gamma);
 
 /*
 **useful_functions.c
@@ -334,7 +336,7 @@ t_color					get_reflect(t_objs *objs, t_lums *lums, t_ray *line,
 ** lum.c
 */
 t_color					get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line);
-void					*rays(void *tmp);
+void					*raytrace(t_env *env, void *tmp);
 
 /*
 **events.c
