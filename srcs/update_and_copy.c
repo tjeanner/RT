@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 21:03:33 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 00:25:58 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void		update_and_copy_a(t_env *env, SDL_Keycode type, t_obj *obj)
 		new[i].mat.rough = 1;
 		new[i].k_diff = 0.7;
 		new[i].col = get_white();
+		new[i].link = 0;
 	}
 	else
 		new[i] = *obj;

@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 06:21:03 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:13:02 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int			which_obj_col(t_objs *objs, t_ray *line)
 	tmp = -1.0;
 	while (++i < objs->nb)
 	{
+		// printf("%d - %d\n", objs->nb, objs->obj[i].type);
 		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
 				(line->from, objs->obj[i], &tutu) == 1)
 		{
@@ -101,12 +102,6 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 			col = add_color(col, mult_color(
 							get_lum(objs, line->obj, lums->lum[i], line),
 							lums->lum[i].coef / lums->coefs_sum));
-//		if (objs->obj[line->obj].tex == 1 && objs->obj[line->obj].type == PLANE)
-//			ambi_col = mult_color(ambi_col, checkerboard(line));
-//		if (objs->obj[line->obj].motion == 1)
-//		{
-//			;
-//		}
 		col = add_color(mult_color(col, 1.000 - lums->amb_coef), ambi_col);
 	}
 	else

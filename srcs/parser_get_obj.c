@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 16:03:38 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/03 21:18:32 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:46:39 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	j_set_obj_d(char *key, int type, t_json *j_obj, t_obj *obj)
 {
 	obj->mat.rough = 1;
 	obj->k_diff = 0.7;
+	obj->link = 0;
 	obj->mat.scale = 200;
 	if (!ft_strcmp(key, "type") && type == TYPE_STRING)
 		j_get_type(j_obj, obj);
@@ -47,59 +48,19 @@ static void	j_set_obj(char *key, int type, t_json *j_obj, t_obj *obj)
 	else if (!ft_strcmp(key, "refract") && type == TYPE_DOUBLE)
 		obj->refract = fmin(10, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "roughness") && type == TYPE_DOUBLE)
-		obj->mat.rough = fmin(20, fmax(j_obj->val.data.nb, 1));
+		obj->mat.rough = fmin(100, fmax(j_obj->val.data.nb, 1));
 	else if (!ft_strcmp(key, "plasticity") && type == TYPE_DOUBLE)
 		obj->mat.plastic = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "specular") && type == TYPE_DOUBLE)
 		obj->k_spec = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "diffuse") && type == TYPE_DOUBLE)
-		obj->k_spec = fmin(1, fmax(j_obj->val.data.nb, 0));
+		obj->k_diff = fmin(1, fmax(j_obj->val.data.nb, 0));
 	else if (!ft_strcmp(key, "texture") && type == TYPE_STRING)
 		j_get_tex(j_obj, obj);
 	else if (!ft_strcmp(key, "motion") && type == TYPE_OBJ)
 		j_get_motion(j_obj, obj);
 	else
 		error_mgt(5);
-}
-
-void		j_init_torus(t_env *env)
-{
-	int	i;
-	static int nb;
-	double	angle;
-	t_obj	*new;
-	t_v		tmp;
-
-	nb = 0;
-	i = 0;
-	tmp = vect_mult(env->cams.cam[env->cams.curr].v2cam, 500);
-	angle = 20;
-	if (!(new = (t_obj *)malloc(sizeof(t_obj) * 1)))
-		error_mgt(0);
-	while (i < 360 / angle)
-	{
-		ft_bzero((void *)new, sizeof(t_obj));
-		new->type = SPHERE;
-		
-		// new->norm = env->cams.cam[env->cams.curr].v2cam;
-		new->radius = 200;
-		new->mat.rough = 1;
-		new->k_diff = 0.7;
-		new->col = get_white();
-		// angle += 10;
-		rotation(tmp, env->cams.cam[env->cams.curr].vcam, angle);
-		new->o = vect_add(vect_add(env->cams.cam[env->cams.curr].pos,
-			vect_mult(env->cams.cam[env->cams.curr].vcam, 8000)),
-			tmp);
-		update_and_copy_a(env, SDLK_1, new);
-		// env->objs.obj[env->objs.curr].col = get_rand();
-		// env->objs.obj[env->objs.curr].link = nb;
-
-		// env->objs.obj[env->objs.curr].o = ;
-		//vect_mult(env->cams.cam[env->cams.curr].vcam, 500);
-		i++;
-	}
-	nb++;
 }
 
 void		j_get_obj(t_json_arr *tab, t_obj *obj, t_par *par, t_env *env)
