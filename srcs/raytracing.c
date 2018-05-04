@@ -6,85 +6,26 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 03:10:14 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 05:30:16 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-t_ray			init_line(double x, double y, t_cam cam)
+static t_color	eekkkf(t_lums *lums, t_color col, t_objs *objs, t_ray *line)
 {
-	t_ray	ray;
-
-	ray.from.dir = vect_norm(vect_add(vect_mult(cam.vcam, DIST),
-				vect_add(vect_mult(vect_inv(cam.v3cam),
-						(double)((x - WIN_X / 2.0) / get_vect_norm(cam.v3cam))),
-					vect_mult(cam.v2cam, (double)((WIN_Y / 2.0 - y) /
-							get_vect_norm(cam.v2cam))))));
-	ray.from.pos = cam.pos;
-	ray.dist = 0.0;
-	ray.total_dist = 0.0;
-	ray.obj = -1;
-	ray.n2 = 1.0;
-	ray.incident = NULL;
-	ray.objs = NULL;
-	ray.nb_objs = 0;
-	return (ray);
-}
-
-t_v			get_norm(t_obj obj, t_ray *line)
-{
-	double	res;
-	t_v		vect;
-
-	obj.norm = vect_norm(obj.norm);
-	if (obj.type == PLANE)
-		vect = obj.norm;
-	else
-		vect = vect_sous(line->to.pos, obj.o);
-	if (obj.type == CONE || obj.type == CYLINDRE)
-	{
-		res = vect_scal(vect, obj.norm);
-		if (obj.type == CONE)
-			res *= (1.0 + pow(tan(obj.radius * TORAD), 2.0));
-		vect = vect_sous(vect, vect_mult(obj.norm, res));
-	}
-	return (vect_norm(vect_scal(vect, line->from.dir) > 0.000 ? vect_inv(vect) : vect));
-}
-
-int			which_obj_col(t_objs *objs, t_ray *line)
-{
-	double	tmp;
-	t_v		tutu;
-	int		i;
-	int		ob;
+	int i;
 
 	i = -1;
-	tmp = -1.0;
-	while (++i < objs->nb)
-	{
-		if (objs->obj[i].type != NONE && objs->col_fcts[(int)objs->obj[i].type]
-				(line->from, objs->obj[i], &tutu) == 1)
-		{
-			if(tutu.y > 0.0 && (tutu.y < tmp || tmp < 0.0) && (ob = i) == i)
-				tmp = tutu.y;
-			if(tutu.x > 0.0 && (tutu.x < tmp || tmp < 0.0) && (ob = i) == i)
-				tmp = tutu.x;
-		}
-	}
-	if (tmp < 0.0 || objs->nb == 0)
-		return (0);
-	line->obj = ob;
-	line->to.pos = vect_add(line->from.pos, vect_mult(line->from.dir, tmp));
-	line->to.dir = get_norm(objs->obj[ob], line);
-	line->dist = tmp;
-	line->total_dist += line->dist;
-	return (1);
+	while (++i < lums->nb)
+		col = add_color(col, mult_color(
+						get_lum(objs, line->obj, lums->lum[i], line),
+						lums->lum[i].coef / lums->coefs_sum));
+	return (col);
 }
 
-t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
+t_color			get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 {
-	int		i;
 	t_color	ambi_col;
 	t_color	col;
 	t_obj	obj;
@@ -96,11 +37,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	{
 		ambi_col = mult_color(obj.col, lums->amb_coef);
 		col = get_black();
-		i = -1;
-		while (++i < lums->nb)
-			col = add_color(col, mult_color(
-							get_lum(objs, line->obj, lums->lum[i], line),
-							lums->lum[i].coef / lums->coefs_sum));
+		col = eekkkf(lums, col, objs, line);
 		col = add_color(mult_color(col, 1.000 - lums->amb_coef), ambi_col);
 	}
 	else
@@ -114,7 +51,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	return (col);
 }
 
-t_color		get_anti_alias_col(t_env *env, int x, int y)
+t_color			get_anti_alias_col(t_env *env, int x, int y)
 {
 	int		i;
 	t_color *cols;
@@ -131,22 +68,23 @@ t_color		get_anti_alias_col(t_env *env, int x, int y)
 		error_mgt(0);
 	while (++i < alias2)
 	{
-		ray = init_line((double)(x + delta / 2.0 + (double)(i % (int)alias) * delta),
-				(double)(y + delta / 2.0 + (double)((int)(i / (int)alias) * delta)),
-				env->cams.cam[env->cams.curr]);
+		ray = init_line(
+			(double)(x + delta / 2.0 + (double)(i % (int)alias) * delta),
+			(double)(y + delta / 2.0 + (double)((int)(i / (int)alias) * delta)),
+			env->cams.cam[env->cams.curr]);
 		cols[i] = get_col(&env->objs, &env->lums, &ray, env->effects.depth);
 	}
 	return (average_color(cols, (double)(1.0 / alias2)));
 }
 
-void		*rays(void *tmp)
+void			*rays(void *tmp)
 {
 	int		i;
 	int		y;
 	int		x;
 	t_color	col;
-	t_env *env;
-	t_ray tutu;
+	t_env	*env;
+	t_ray	tutu;
 
 	env = ((t_threads *)tmp)->env;
 	y = ((t_threads *)tmp)->start;
