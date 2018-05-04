@@ -6,7 +6,7 @@
 #    By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/04 07:08:08 by vmercadi         ###   ########.fr        #
+#    Updated: 2018/05/04 07:16:50 by vmercadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,6 +84,8 @@ MAGICK	= magick
 else
 MAGICK	=
 endif
+
+.PHONY: all obj film cleanfilm norme clean fclean re
 
 all: obj
 	@echo "Libft all rule :"
