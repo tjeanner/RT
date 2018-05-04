@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 02:13:02 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:13:02 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ t_v			get_norm(t_obj obj, t_ray *line)
 			res *= (1.0 + pow(tan(obj.radius * TORAD), 2.0));
 		vect = vect_sous(vect, vect_mult(obj.norm, res));
 	}
-	return (vect_norm(vect_scal(vect, line->from.dir) > 0.000 ? vect_inv(vect) : vect));
+	return (vect_norm(vect_scal(vect, line->from.dir) > 0.000 ?
+														vect_inv(vect) : vect));
 }
 
 int			which_obj_col(t_objs *objs, t_ray *line)
@@ -106,7 +107,7 @@ t_color		get_col(t_objs *objs, t_lums *lums, t_ray *line, unsigned int d)
 	else
 		col = obj.col;
 	col = mult_color(col, (1.0 - 0.9 * objs->obj[line->obj].reflect) *
-										(1.0 - 0.9 * objs->obj[line->obj].transp));
+									(1.0 - 0.9 * objs->obj[line->obj].transp));
 	if (obj.transp > 0.0)
 		col = add_color(col, get_refract(objs, lums, line, d - 1));
 	if (obj.reflect > 0.0)
