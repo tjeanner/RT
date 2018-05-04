@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 02:48:18 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 19:50:19 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:59:51 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,10 @@ int			events(t_env *env)
 		sym = event.key.keysym.sym;
 		if (event.type == SDL_KEYDOWN && (sym == SDLK_KP_MINUS || sym == SDLK_KP_PLUS))
 		{
-			if (sym == SDLK_KP_MINUS && WIN_Y / 4.0 >= 1.0 / env->effects.alias
-					&& WIN_X / 4.0 >= 1.0 / env->effects.alias)
+			if (sym == SDLK_KP_MINUS && env->effects.alias > 1)
 				env->effects.alias /= 2.0;
 			if (sym == SDLK_KP_PLUS && env->effects.alias <= 4)
 				env->effects.alias *= 2.0;
-			ft_putstr("alias coef now = ");
-			ft_putfloat_fd(env->effects.alias, 1);
-			ft_putchar('\n');
 		}
 		else if (events_random(env, sym, event) || events_sel(env, event, sym))
 			;

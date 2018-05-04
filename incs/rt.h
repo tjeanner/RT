@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 19:51:02 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 02:41:13 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # include "parser.h"
 # include "parse.h"
 
-# define WIN_X 1357
-# define WIN_Y 1024
+# define WIN_X 1025
+# define WIN_Y 456
 # define DIST ((int)WIN_X / tan(30.000 * TORAD))
 # define BPP 32
 # define NB_THREADS 8
@@ -305,7 +305,7 @@ int						set_white(t_color *c);
 **color_math3.c
 */
 t_color					satur_col(t_color a, float n);
-int						average_color(t_color *col, float flou);
+t_color					average_color(t_color *col, float flou);
 
 /*
 **useful_functions.c
