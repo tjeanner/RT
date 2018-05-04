@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 06:11:11 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/04 07:05:13 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:13:59 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,13 @@ void		data_init_and_reload(t_env *env)
 		env->threads[i].incr = NB_THREADS;
 		env->threads[i].env = env;
 	}
+}
+
+void		*rays(void *tmp)
+{
+	t_env	*env;
+
+	env = ((t_threads *)tmp)->env;
+	raytrace(env, tmp);
+	return (env);
 }
