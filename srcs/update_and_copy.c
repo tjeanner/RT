@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 00:33:47 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/04 03:05:48 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:52:19 by hbouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,11 @@ static t_obj	set_new_obj(t_env *env, SDL_Keycode type)
 	obj.radius = (obj.type == CONE) ? 30 : 150;
 	obj.mat.rough = 1;
 	obj.k_diff = 0.7;
-	obj.col = get_white();
+	obj.k_spec = 0;
 	obj.link = 0;
+	obj.col = get_white();
+	obj.refract = 0;
+	obj.reflect = 0;
 	return (obj);
 }
 
