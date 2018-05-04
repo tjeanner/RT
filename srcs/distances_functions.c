@@ -6,7 +6,7 @@
 /*   By: tjeanner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 03:13:21 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/03 05:41:44 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 04:03:20 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int			get_dist_tube(t_line line, t_obj obj, t_v *res)
 int			get_dist_plan(t_line line, t_obj obj, t_v *res)
 {
 	t_v		tmp;
-	t_v		a;
 	double	opti_a;
 	double	opti_b;
 
@@ -76,19 +75,10 @@ int			get_dist_plan(t_line line, t_obj obj, t_v *res)
 		return (0);
 	res->z = -1.000 * opti_a / opti_b;
 	res->y = res->z;
-	if ((res->x = res->z) == res->z && obj.mat.tex != 1)
+	res->x = res->z;
+	if (obj.mat.tex != 1)
 		return ((int)(opti_a = (res->z > 0.0) ? 1 : 0));
-	tmp = vect_sous(vect_add(line.pos, vect_mult(line.dir, res->z)), obj.o);
-	a = vect_norm(obj.norm2);
-	opti_b = get_vect_norm(tmp);
-	opti_a = opti_b * (vect_scal(a, vect_norm(tmp)));
-	opti_b = opti_b *
-			(vect_scal(vect_norm(tmp), vect_norm(vect_prod(a, obj.norm))));
-	if (((int)fabs(opti_b) % (obj.mat.scale * 2) < obj.mat.scale) ^
-		(opti_b < 0.0) ^ ((int)fabs(opti_a) % (obj.mat.scale * 2) <
-			obj.mat.scale) ^ (opti_a < 0.0))
-		return (0);
-	return (1);
+	return (get_procedural_text(line, obj, res));
 }
 
 int			get_dist_sphere(t_line line, t_obj obj, t_v *res)

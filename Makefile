@@ -53,6 +53,7 @@ SRC =		main.c \
 			action.c	\
 			event_screen.c \
 			torus.c	\
+			textures.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror
