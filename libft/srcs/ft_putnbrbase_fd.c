@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 04:28:29 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/04 07:21:47 by vmercadi         ###   ########.fr       */
+/*   Updated: 2018/05/04 08:12:59 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void		ft_putnbrbase_fd(int n, int base, int fd)
 	char	*tab;
 
 	if (!(tab = (char *)malloc(sizeof(char) * base + 1)))
-		return (NULL);
+		return ;
 	if (n == -2147483648)
 	{
 		ft_putnbrbase_fd(n / base, base, fd);
