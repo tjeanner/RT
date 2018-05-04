@@ -6,7 +6,7 @@
 /*   By: cquillet <cquillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 05:42:44 by cquillet          #+#    #+#             */
-/*   Updated: 2018/05/04 05:43:06 by cquillet         ###   ########.fr       */
+/*   Updated: 2018/05/04 05:48:12 by cquillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static double	init_lum_ray(t_ray *ray, t_ray *incident, t_lum lum)
 	ray->from.dir = vect_sous(lum.pos, incident->to.pos);
 	dist = get_vect_norm(ray->from.dir);
 	ray->from.dir = vect_norm(ray->from.dir);
-	ray->from.pos = vect_add(incident->to.pos, vect_mult(incident->to.dir, MARGIN));
+	ray->from.pos = vect_add(incident->to.pos,
+										vect_mult(incident->to.dir, MARGIN));
 	ray->incident = incident;
 	return (dist);
 }
@@ -66,18 +67,19 @@ t_color			get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 	line->col = get_white();
 	i = -1;
 	while (++i < objs->nb)
-		if (objs->obj[i].type != NONE && (objs->col_fcts[(int)objs->obj[i].type]
-				(tutu.from, objs->obj[i], &res) == 1) &&
+		if (objs->obj[i].type != NONE &&
+				(objs->col_fcts[(int)objs->obj[i].type](tutu.from,
+												objs->obj[i], &res) == 1) &&
 			((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))
 		{
 			if (objs->obj[i].transp == 0.0)
 				return ((line->col = get_black()));
-			lum.coef *= (res.x > 0.0 && res.x < tmp) ? objs->obj[i].transp : 1.0;
-			lum.coef *= (res.y > 0.0 && res.y < tmp) ? objs->obj[i].transp : 1.0;
+			lum.coef *= (res.x > 0.0 && res.x < tmp) ? objs->obj[i].transp : 1.;
+			lum.coef *= (res.y > 0.0 && res.y < tmp) ? objs->obj[i].transp : 1.;
 			line->col = prod_color(line->col, objs->obj[i].col);
 		}
 	tutu.to.dir = line->to.dir;
 	col = add_color(get_specular(objs->obj[obj], tutu),
 										get_diffuse(objs->obj[obj], tutu));
-	return (gamma_korr( prod_color(col, line->col), 2.0));
+	return (gamma_korr(prod_color(col, line->col), 2.0));
 }
