@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lum.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 05:42:44 by cquillet          #+#    #+#             */
-/*   Updated: 2018/05/04 04:22:52 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 05:08:27 by vmercadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,32 +47,41 @@ t_color		get_diffuse(t_obj obj, t_ray ray)
 	return (mult_color(obj.col, res * obj.k_diff / (obj.k_diff + obj.k_spec)));
 }
 
+double		get_lum2(t_ray *tutu, t_lum *lum, t_ray *line)
+{
+	double	tmp;
+
+	tutu->to.pos = lum->pos;
+	tutu->from.dir = vect_sous(lum->pos, line->to.pos);
+	tmp = get_vect_norm(tutu->from.dir);
+	tutu->from.dir = vect_norm(get_vect_norm(lum->dir) ?
+										vect_inv(lum->dir) : tutu->from.dir);
+	tutu->from.dir = vect_norm(tutu->from.dir);
+	tutu->from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, MARGIN));
+	tutu->incident = line;
+	line->col = get_white();
+	return (tmp);
+}
+
 t_color		get_lum(t_objs *objs, int obj, t_lum lum, t_ray *line)
 {
 	int		i;
 	t_v		res;
 	t_ray	tutu;
 	t_color	col;
-	double	tmp;
+	double	t;
 
-	tutu.to.pos = lum.pos;
-	tutu.from.dir = vect_sous(lum.pos, line->to.pos);
-	tmp = get_vect_norm(tutu.from.dir);
-	tutu.from.dir = vect_norm(get_vect_norm(lum.dir) ? vect_inv(lum.dir) : tutu.from.dir);
-	tutu.from.dir = vect_norm(tutu.from.dir);
-	tutu.from.pos = vect_add(line->to.pos, vect_mult(line->to.dir, MARGIN));
-	tutu.incident = line;
-	line->col = get_white();
+	t = get_lum2(&tutu, &lum, line);
 	i = -1;
 	while (++i < objs->nb)
-		if (objs->obj[i].type != NONE && (objs->col_fcts[(int)objs->obj[i].type]
-				(tutu.from, objs->obj[i], &res) == 1) &&
-			((res.x > 0.0 && res.x < tmp) || (res.y > 0.0 && res.y < tmp)))
+		if (objs->obj[i].type != NONE && (objs->col_fcts[
+			(int)objs->obj[i].type](tutu.from, objs->obj[i], &res) == 1) &&
+			((res.x > 0.0 && res.x < t) || (res.y > 0.0 && res.y < t)))
 		{
 			if (objs->obj[i].transp == 0.0)
 				return ((line->col = get_black()));
-			lum.coef *= (res.x > 0.0 && res.x < tmp) ? objs->obj[i].transp : 1.0;
-			lum.coef *= (res.y > 0.0 && res.y < tmp) ? objs->obj[i].transp : 1.0;
+			lum.coef *= (res.x > 0.0 && res.x < t) ? objs->obj[i].transp : 1.0;
+			lum.coef *= (res.y > 0.0 && res.y < t) ? objs->obj[i].transp : 1.0;
 			line->col = prod_color(line->col, objs->obj[i].col);
 		}
 	tutu.to.dir = line->to.dir;
