@@ -6,7 +6,7 @@
 /*   By: vmercadi <vmercadi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/08 18:01:28 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 04:38:31 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:01:50 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define TORAD M_PI / 180.000
 # define TODEG 180.000 / M_PI
 # define IN_OBJ 1
-# define OUT_OBJ 2
+# define OUT_OBJ 0
 # define MARGIN 0.00000001
 
 typedef struct s_env	t_env;
@@ -282,11 +282,6 @@ t_v						vect_add(t_v a, t_v b);
 t_v						vect_reflect(t_v incident, t_v normal);
 t_v						vect_refract(t_v incident, t_v normal, double k);
 
-/*
-**textures.c
-*/
-void					init_2nd_vect_planes(t_env *env);
-int						get_procedural_text(t_line line, t_obj obj, t_v *res);
 /*
 **color_math.c
 */
