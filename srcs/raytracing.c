@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 19:12:29 by tjeanner          #+#    #+#             */
-/*   Updated: 2018/05/04 05:30:16 by hbouchet         ###   ########.fr       */
+/*   Updated: 2018/05/04 06:04:14 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,13 @@ t_color			get_anti_alias_col(t_env *env, int x, int y)
 	t_ray	ray;
 	double	delta;
 	double	alias;
-	double	alias2;
 
 	i = -1;
 	alias = (int)env->effects.alias;
-	alias2 = alias * alias;
 	delta = 1.0 / alias;
-	if (!(cols = (t_color *)malloc(sizeof(t_color) * alias2)))
+	if (!(cols = (t_color *)malloc(sizeof(t_color) * alias * alias)))
 		error_mgt(0);
-	while (++i < alias2)
+	while (++i < alias * alias)
 	{
 		ray = init_line(
 			(double)(x + delta / 2.0 + (double)(i % (int)alias) * delta),
@@ -74,39 +72,35 @@ t_color			get_anti_alias_col(t_env *env, int x, int y)
 			env->cams.cam[env->cams.curr]);
 		cols[i] = get_col(&env->objs, &env->lums, &ray, env->effects.depth);
 	}
-	return (average_color(cols, (double)(1.0 / alias2)));
+	return (average_color(cols, (double)(1.0 / (alias * alias))));
 }
 
 void			*rays(void *tmp)
 {
-	int		i;
-	int		y;
-	int		x;
+	t_v		nums;
 	t_color	col;
 	t_env	*env;
 	t_ray	tutu;
 
 	env = ((t_threads *)tmp)->env;
-	y = ((t_threads *)tmp)->start;
-	i = ((t_threads *)tmp)->incr;
-	while (y < WIN_Y)
+	nums = (t_v){0, ((t_threads *)tmp)->start, ((t_threads *)tmp)->incr};
+	while (nums.y < WIN_Y && (nums.x = -1) < 0)
 	{
-		x = -1;
-		while (++x < WIN_X)
+		while (++nums.x < WIN_X)
 		{
 			if (env->effects.alias <= 1)
-				tutu = init_line((double)(x + 0.5 / env->effects.alias),
-		(double)(y + 0.5 / env->effects.alias), env->cams.cam[env->cams.curr]);
-			col = (env->effects.alias != 1) ? get_anti_alias_col(env, x, y) :
-				get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
+				tutu = init_line((double)(nums.x + 0.5 / env->effects.alias),
+(double)(nums.y + 0.5 / env->effects.alias), env->cams.cam[env->cams.curr]);
+			col = (env->effects.alias != 1) ? get_anti_alias_col(env, nums.x,
+		nums.y) : get_col(&env->objs, &env->lums, &tutu, env->effects.depth);
 			if (env->display.sur == 1)
 				((unsigned int *)env->display.surf->pixels)
-					[x + y * env->display.surf->w] = col.color;
+					[(int)nums.x + (int)nums.y * env->display.surf->w] = col.color;
 			else
 				((unsigned int *)env->display.surf2->pixels)
-					[x + y * env->display.surf->w] = col.color;
+					[(int)nums.x + (int)nums.y * env->display.surf->w] = col.color;
 		}
-		y += i;
+		nums.y += nums.z;
 	}
 	return (env);
 }

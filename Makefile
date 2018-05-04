@@ -6,7 +6,7 @@
 #    By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/08 17:59:46 by tjeanner          #+#    #+#              #
-#    Updated: 2018/05/04 05:15:24 by hbouchet         ###   ########.fr        #
+#    Updated: 2018/05/04 07:02:04 by tjeanner         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,6 @@ SRC =		main.c \
 			action.c	\
 			event_screen.c \
 			torus.c	\
-			textures.c \
 
 CC =		gcc
 CFLAGS =	-Wall -Wextra -Werror

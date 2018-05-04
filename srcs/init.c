@@ -6,7 +6,7 @@
 /*   By: hbouchet <hbouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 06:11:11 by hbouchet          #+#    #+#             */
-/*   Updated: 2018/05/04 04:38:45 by tjeanner         ###   ########.fr       */
+/*   Updated: 2018/05/04 07:05:13 by tjeanner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void		data_init_and_reload(t_env *env)
 	int		i;
 
 	data_init(env);
-	init_2nd_vect_planes(env);
 	i = -1;
 	while (++i < env->cams.nb)
 		env->cams.cam[env->cams.curr].v3cam = vect_prod(
